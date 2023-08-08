@@ -8,7 +8,6 @@ public class InputManager : MonoBehaviour
 {
     #region Fields
     public static InputManager Instance { get; private set; }
-
     public PlayerActions PlayerInput { get; private set; }
     #endregion
 
