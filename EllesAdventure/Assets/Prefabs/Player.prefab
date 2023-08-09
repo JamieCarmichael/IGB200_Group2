@@ -105,18 +105,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b907cef93398e842abae2a5f222addc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deceleration: 10
-  walkAcceleration: 5
+  deceleration: 0.25
+  walkAcceleration: 0.5
   maxWalkSpeed: 5
-  runAcceleration: 10
+  runAcceleration: 0.5
   maxRunSpeed: 10
+  playerMesh: {fileID: 419136283850680460}
+  rotateSpeed: 0.5
   groundCheckDistance: 0.1
   groundedLayer:
     serializedVersion: 2
     m_Bits: 1
-  fallingGravity: 19.62
-  playerMesh: {fileID: 419136283850680460}
-  rotateSpeed: 0
+  gravity: 9.81
+  fallMultiplier: 2
 --- !u!1 &2601895572099630445
 GameObject:
   m_ObjectHideFlags: 0
@@ -12881,7 +12882,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 20
+  m_VersionIndex: 26
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
