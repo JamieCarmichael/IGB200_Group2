@@ -111,13 +111,14 @@ MonoBehaviour:
   runAcceleration: 0.5
   maxRunSpeed: 10
   playerMesh: {fileID: 419136283850680460}
-  rotateSpeed: 0.5
+  rotateSpeed: 0.1
+  jumpHeight: 2
+  gravity: 9.81
+  fallMultiplier: 2
   groundCheckDistance: 0.1
   groundedLayer:
     serializedVersion: 2
     m_Bits: 1
-  gravity: 9.81
-  fallMultiplier: 2
 --- !u!1 &2601895572099630445
 GameObject:
   m_ObjectHideFlags: 0
