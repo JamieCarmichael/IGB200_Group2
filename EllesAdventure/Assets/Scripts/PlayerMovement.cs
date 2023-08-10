@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -30,8 +31,6 @@ public class PlayerMovement : MonoBehaviour
     private float speed = 0.0f;
 
     [Header("Rotation")]
-    [Tooltip("The players visuals. Rotated to face the players movement direction.")]
-    [SerializeField] private Transform playerMesh;
     [Tooltip("How many seconds it takes for the player to turn to a new movement direction.")]
     [SerializeField] private float rotateSpeed = 10.0f;
     /// <summary>
@@ -74,10 +73,22 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private float verticalVelocity = 0.0f;
 
+
+    [Header("Animation")]
+    [Tooltip("The players visuals. Rotated to face the players movement direction.")]
+    [SerializeField] private Animator animator;
+    [SerializeField] private string animWalk = "";
+    [SerializeField] private string animRun = "";
+    [SerializeField] private string animJump = "";
+    [SerializeField] private string animFall = "";
+    [SerializeField] private string animLand = "";
+
     /// <summary>
     /// Players character controller
     /// </summary>
     private CharacterController characterController;
+
+
     #endregion
 
     #region Unity Call Methods
@@ -87,8 +98,8 @@ public class PlayerMovement : MonoBehaviour
 
         InputManager.Instance.PlayerInput.InGame.Jump.performed += context => Jump();
 
-        fromDirection = playerMesh.forward;
-        toDirection = playerMesh.forward;
+        fromDirection = transform.forward;
+        toDirection = transform.forward;
     }
 
     private void LateUpdate()
@@ -112,22 +123,36 @@ public class PlayerMovement : MonoBehaviour
         // If the player is not grounded maintain movement.
         if (!isGrounded)
         {
+            animator.SetBool(animFall, true);
+            // Rotate
+            RotatePlayer(Vector2.zero, false);
             return;
         }
+
+        animator.SetBool(animFall, false);
+
 
         // Get Input
         Vector2 moveInput = InputManager.Instance.PlayerInput.InGame.Move.ReadValue<Vector2>();
         moveInput = moveInput.normalized;
         bool hasInput = InputManager.Instance.PlayerInput.InGame.Move.IsInProgress();
 
+        float targetAngle = Mathf.Atan2(moveInput.x, moveInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+        Vector3 moveDirection = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
+        moveInput = new Vector2(moveDirection.x, moveDirection.z);
+
         if (!hasInput)
         {
+            animator.SetBool(animWalk, false);
+            animator.SetBool(animRun, false);
             // No input
             speed = Mathf.Clamp(speed - (maxRunSpeed / deceleration * Time.deltaTime), 0, speed);
             moveInput = horizontailMovement.normalized;
         }
         else if (!InputManager.Instance.PlayerInput.InGame.Sprint.IsInProgress())
         {
+            animator.SetBool(animWalk, true);
+            animator.SetBool(animRun, false);
             // Walking
             if (speed > maxWalkSpeed)
             {
@@ -140,6 +165,8 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            animator.SetBool(animWalk, false);
+            animator.SetBool(animRun, true);
             // Running
             if (speed > maxRunSpeed)
             {
@@ -151,6 +178,9 @@ public class PlayerMovement : MonoBehaviour
             }
 
         }
+
+
+
         horizontailMovement = moveInput * speed;
 
         // Rotate
@@ -169,7 +199,7 @@ public class PlayerMovement : MonoBehaviour
         // Check if input has changed.
         if (toDirection != moveInputVector3 && hasInput)
         {
-            fromDirection = playerMesh.forward;
+            fromDirection = transform.forward;
             toDirection = moveInputVector3;
             rotateTimer = 0.0f;
             isRotating = true;
@@ -180,7 +210,7 @@ public class PlayerMovement : MonoBehaviour
             rotateTimer += Time.deltaTime;
             Vector3 rotationDirection = Vector3.Slerp(fromDirection, toDirection, rotateTimer / rotateSpeed);
 
-            playerMesh.rotation = Quaternion.LookRotation(rotationDirection);
+            transform.rotation = Quaternion.LookRotation(rotationDirection);
             if (rotateTimer >= rotateSpeed)
             {
                 isRotating = false;
@@ -266,8 +296,8 @@ public class PlayerMovement : MonoBehaviour
 
         // Turning
         Vector3 moveDirection = new Vector3(moveInput.x, 0.0f, moveInput.y).normalized;
-        Vector3 rotationDirection = Vector3.RotateTowards(playerMesh.forward, moveDirection, (1 / rotateSpeed * 2) * Time.deltaTime, 0.0f);
-        playerMesh.rotation = Quaternion.LookRotation(rotationDirection);
+        Vector3 rotationDirection = Vector3.RotateTowards(transform.forward, moveDirection, (1 / rotateSpeed * 2) * Time.deltaTime, 0.0f);
+        transform.rotation = Quaternion.LookRotation(rotationDirection);
 
         if (!InputManager.Instance.PlayerInput.InGame.Move.IsInProgress())
         {
