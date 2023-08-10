@@ -25,6 +25,7 @@ public class InputManager : MonoBehaviour
         PlayerInput = new PlayerActions();
 
         PlayerInput.InGame.Enable();
+        PlayerInput.PauseGame.Enable();
     }
 
     private void OnEnable()
