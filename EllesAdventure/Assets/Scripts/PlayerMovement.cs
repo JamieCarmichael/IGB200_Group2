@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -75,31 +74,33 @@ public class PlayerMovement : MonoBehaviour
 
 
     [Header("Animation")]
-    [Tooltip("The players visuals. Rotated to face the players movement direction.")]
+    [Tooltip("The animator used for the player model.")]
     [SerializeField] private Animator animator;
     [SerializeField] private string animWalk = "";
     [SerializeField] private string animRun = "";
-    [SerializeField] private string animJump = "";
     [SerializeField] private string animFall = "";
-    [SerializeField] private string animLand = "";
 
     /// <summary>
     /// Players character controller
     /// </summary>
     private CharacterController characterController;
-
-
-    #endregion
+        #endregion
 
     #region Unity Call Methods
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
 
-        InputManager.Instance.PlayerInput.InGame.Jump.performed += context => Jump();
-
         fromDirection = transform.forward;
         toDirection = transform.forward;
+    }
+    private void OnEnable()
+    {
+        InputManager.Instance.PlayerInput.InGame.Jump.performed += context => Jump();
+    }
+    private void OnDisable()
+    {
+        InputManager.Instance.PlayerInput.InGame.Jump.performed -= context => Jump();
     }
 
     private void LateUpdate()
@@ -114,7 +115,6 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Private Methods
-
     /// <summary>
     /// Finds the horizontal velocity for the player. Maintains movement speed as long as the player is using an input. Changes direction of movement instantly.
     /// </summary>
@@ -128,9 +128,7 @@ public class PlayerMovement : MonoBehaviour
             RotatePlayer(Vector2.zero, false);
             return;
         }
-
         animator.SetBool(animFall, false);
-
 
         // Get Input
         Vector2 moveInput = InputManager.Instance.PlayerInput.InGame.Move.ReadValue<Vector2>();
@@ -178,9 +176,6 @@ public class PlayerMovement : MonoBehaviour
             }
 
         }
-
-
-
         horizontailMovement = moveInput * speed;
 
         // Rotate
@@ -292,7 +287,6 @@ public class PlayerMovement : MonoBehaviour
         // Get Input
         Vector2 moveInput = InputManager.Instance.PlayerInput.InGame.Move.ReadValue<Vector2>();
         moveInput = moveInput.normalized;
-
 
         // Turning
         Vector3 moveDirection = new Vector3(moveInput.x, 0.0f, moveInput.y).normalized;

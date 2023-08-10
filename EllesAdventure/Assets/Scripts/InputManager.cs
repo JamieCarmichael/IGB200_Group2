@@ -31,12 +31,14 @@ public class InputManager : MonoBehaviour
     private void OnEnable()
     {
         PlayerInput.InGame.Enable();
+        PlayerInput.PauseGame.Enable();
     }
     private void OnDisable()
     {
         if (Instance == this)
         {
             PlayerInput.InGame.Disable();
+            PlayerInput.PauseGame.Disable();
         }
     }
     private void OnDestroy()
