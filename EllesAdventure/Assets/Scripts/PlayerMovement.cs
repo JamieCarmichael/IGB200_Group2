@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -20,10 +21,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float runAcceleration = 10.0f;
     [Tooltip("The maximum speed the player can move when running.")]
     [SerializeField] private float maxRunSpeed = 10.0f;
+    [Tooltip("The maximum slope the player can stand on without sliding down.")]
+    [SerializeField] private float maxSlope = 45.0f;
     /// <summary>
     /// The velocity of the players horizontal movement.
     /// </summary>
-    private Vector2 horizontailMovement = Vector2.zero;
+    private Vector3 movementVector = Vector3.zero;
     /// <summary>
     /// The players current speed.
     /// </summary>
@@ -64,14 +67,27 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("The layer that the player will detect as ground.")]
     [SerializeField] LayerMask groundedLayer;
     /// <summary>
-    /// True if the player is on the ground.
-    /// </summary>
-    private bool isGrounded = true;
-    /// <summary>
     /// The players verticle velocity. Used for jumping and gravity.
     /// </summary>
     private float verticalVelocity = 0.0f;
 
+    /*
+    Is grounded checks if the player is twice the groundCheckDistance from the ground. If they are then they stop the animation and can move.
+    Touch ground then checks if the player is one times the groundCheckDistance from the ground. They then stop the falling. 
+    This combination allows the player to slightly leave the ground when moving along different slops without becoming ungrounded.
+     */
+    /// <summary>
+    /// True if the player is near the ground. 
+    /// </summary>
+    private bool isGrounded = true;
+    /// <summary>
+    /// True if the player is touching the ground
+    /// </summary>
+    bool touchingGround = false;
+    /// <summary>
+    /// The hit info from the ground check.
+    /// </summary>
+    RaycastHit groundHitInfo;
 
     [Header("Animation")]
     [Tooltip("The animator used for the player model.")]
@@ -106,11 +122,11 @@ public class PlayerMovement : MonoBehaviour
     private void LateUpdate()
     {
         CollisionCheck();
-        Move();
         CheckGround();
+        Move();
 
         // Move
-        characterController.Move(new Vector3(horizontailMovement.x, verticalVelocity, horizontailMovement.y) * Time.deltaTime);
+        characterController.Move(new Vector3(movementVector.x, movementVector.y + verticalVelocity, movementVector.z) * Time.deltaTime);
     }
     #endregion
 
@@ -145,7 +161,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool(animRun, false);
             // No input
             speed = Mathf.Clamp(speed - (maxRunSpeed / deceleration * Time.deltaTime), 0, speed);
-            moveInput = horizontailMovement.normalized;
+            moveInput = new Vector2(movementVector.x, movementVector.z).normalized;
         }
         else if (!InputManager.Instance.PlayerInput.InGame.Sprint.IsInProgress())
         {
@@ -176,10 +192,23 @@ public class PlayerMovement : MonoBehaviour
             }
 
         }
-        horizontailMovement = moveInput * speed;
+
+        // Movement Accounting for angle of ground.
+        Vector3 moveInputVector3 = new Vector3(moveInput.x, 0.0f, moveInput.y);
+        float angle = Vector3.Angle(Vector3.up, groundHitInfo.normal);
+        if (angle > maxSlope)
+        {
+            Vector3 left = Vector3.Cross(groundHitInfo.normal, Vector3.up);
+            Vector3 slope = Vector3.Cross(groundHitInfo.normal, left);
+            movementVector = slope.normalized * maxWalkSpeed;
+        }
+        else
+        {
+            movementVector = Vector3.ProjectOnPlane(moveInputVector3, groundHitInfo.normal) * speed;
+        }
 
         // Rotate
-        RotatePlayer(moveInput, hasInput);
+        RotatePlayer(moveInputVector3, hasInput);
     }
 
     /// <summary>
@@ -187,10 +216,9 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     /// <param name="moveInput">The current player input</param>
     /// <param name="hasInput">If the player is currently making an input</param>
-    private void RotatePlayer(Vector2 moveInput, bool hasInput)
+    private void RotatePlayer(Vector3 moveInputVector3, bool hasInput)
     {
         // Turning
-        Vector3 moveInputVector3 = new Vector3(moveInput.x, 0.0f, moveInput.y).normalized;
         // Check if input has changed.
         if (toDirection != moveInputVector3 && hasInput)
         {
@@ -213,7 +241,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
     /// <summary>
     /// Checks if the player is grounded. And applies gravity to the players.
     /// </summary>
@@ -221,22 +248,26 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 checkOrigin = gameObject.transform.position;
         checkOrigin.y += characterController.radius;
-        Vector3 checkEnd = checkOrigin;
-        checkEnd.y -= groundCheckDistance;
 
-        isGrounded = Physics.CheckCapsule(checkOrigin, checkEnd, characterController.radius, groundedLayer, QueryTriggerInteraction.Ignore);
+        isGrounded = Physics.SphereCast(checkOrigin, characterController.radius, Vector3.down, out groundHitInfo, groundCheckDistance * 2, groundedLayer, QueryTriggerInteraction.Ignore);
 
-        if (isGrounded && verticalVelocity < 0.0f)
+        touchingGround = isGrounded;
+        if (touchingGround)
+        {
+            touchingGround = Vector3.Distance(checkOrigin, groundHitInfo.point) < characterController.radius + groundCheckDistance;
+        }
+
+        if (touchingGround && verticalVelocity < 0.0f)
         {
             // Grounded and falling
             verticalVelocity = 0;
         }
-        else if (!isGrounded && verticalVelocity > 0.0f)
+        else if (!isGrounded && verticalVelocity > 0.0f + groundCheckDistance)
         {
             // Jumping
             verticalVelocity -= gravity * Time.deltaTime;
         }
-        else if (!isGrounded)
+        else if (!touchingGround)
         {
             // Falling
             verticalVelocity -= gravity * fallMultiplier * Time.deltaTime;
@@ -296,17 +327,17 @@ public class PlayerMovement : MonoBehaviour
         if (!InputManager.Instance.PlayerInput.InGame.Move.IsInProgress())
         {
             // No input
-            horizontailMovement = Vector2.MoveTowards(horizontailMovement, Vector2.zero, (maxRunSpeed / deceleration) * Time.deltaTime);
+            movementVector = Vector2.MoveTowards(movementVector, Vector2.zero, (maxRunSpeed / deceleration) * Time.deltaTime);
         }
         else if (!InputManager.Instance.PlayerInput.InGame.Sprint.IsInProgress())
         {
             // Walking
-            horizontailMovement = Vector2.MoveTowards(horizontailMovement, moveInput * maxWalkSpeed, (maxWalkSpeed / walkAcceleration) * Time.deltaTime);
+            movementVector = Vector2.MoveTowards(movementVector, moveInput * maxWalkSpeed, (maxWalkSpeed / walkAcceleration) * Time.deltaTime);
         }
         else
         {
             // Running
-            horizontailMovement = Vector2.MoveTowards(horizontailMovement, moveInput * maxRunSpeed, (maxRunSpeed / runAcceleration) * Time.deltaTime);
+            movementVector = Vector2.MoveTowards(movementVector, moveInput * maxRunSpeed, (maxRunSpeed / runAcceleration) * Time.deltaTime);
         }
     }
     #endregion
