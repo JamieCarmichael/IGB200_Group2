@@ -259,11 +259,11 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void CollisionCheck()
     {
-        // 
-        if (characterController.collisionFlags == CollisionFlags.Sides)
-        {
-            horizontailMovement = Vector2.zero;
-        }
+        // Run into wall
+        //if (characterController.collisionFlags == CollisionFlags.Sides)
+        //{
+        //    horizontailMovement = Vector2.zero;
+        //}
         // Hit head
         if (characterController.collisionFlags == CollisionFlags.Above && verticalVelocity > 0)
         {
