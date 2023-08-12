@@ -8,6 +8,8 @@ public class Pickup : MonoBehaviour, IIntertactable
 {
     #region Fields
     public Collider ThisCollider { get; private set; }
+    [Tooltip("The object that indicates when this object is being looked at.")]
+    [SerializeField] private GameObject lookAtObject;
     #endregion
 
     #region Unity Call Functions
@@ -27,17 +29,17 @@ public class Pickup : MonoBehaviour, IIntertactable
     #region IIntertactable
     public void Interact()
     {
-        Debug.Log(gameObject.name + " has been interacted with.");    
+        gameObject.SetActive(false);
     }
 
     public void StartLookAt()
     {
-        Debug.Log(gameObject.name + " start look at.");
+        lookAtObject.SetActive(true);
     }
 
     public void StopLookAt()
     {
-        Debug.Log(gameObject.name + " stop look at.");
+        lookAtObject.SetActive(false);
     }
     #endregion
 }

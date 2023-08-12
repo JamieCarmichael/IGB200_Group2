@@ -128,6 +128,7 @@ public class PlayerInteract : MonoBehaviour
         InputManager.Instance.PlayerInput.InGame.Disable();
 
         Vector3 closestPoint = interactable.ThisCollider.ClosestPoint(transform.position);
+        closestPoint.y = interactable.ThisCollider.gameObject.transform.position.y;
         Vector3 toVector = closestPoint - transform.position;
         Vector3 direction = toVector.normalized;
         float distance = toVector.magnitude - stoppingDistance;
