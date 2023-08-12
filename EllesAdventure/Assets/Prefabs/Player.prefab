@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 6583016714712921538}
   - component: {fileID: 8686189581662546988}
   - component: {fileID: 6845875503587334929}
+  - component: {fileID: 8984690542345762672}
   m_Layer: 6
   m_Name: Elle
   m_TagString: Untagged
@@ -110,6 +111,7 @@ MonoBehaviour:
   maxWalkSpeed: 5
   runAcceleration: 0.5
   maxRunSpeed: 10
+  maxSlope: 45
   rotateSpeed: 0.1
   jumpHeight: 2
   gravity: 9.81
@@ -122,6 +124,25 @@ MonoBehaviour:
   animWalk: isWalking
   animRun: isJogging
   animFall: isFalling
+--- !u!114 &8984690542345762672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935052765830162921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae16700a230036b4ea6b45c9d641bb1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactRange: 3
+  stoppingDistance: 0.5
+  interactLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  animator: {fileID: 7804261757546250638}
+  animPickUp: ellePickUp
 --- !u!1 &2601895572099630445
 GameObject:
   m_ObjectHideFlags: 0
@@ -147,8 +168,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2601895572099630445}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.52573115, y: -0, z: -0, w: 0.85065085}
-  m_LocalPosition: {x: 0, y: 5, z: -2.5}
+  m_LocalRotation: {x: 0.4575816, y: 0.000000015299362, z: -0.000000007873326, w: 0.88916767}
+  m_LocalPosition: {x: 0, y: 7, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -360,8 +381,45 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 23172e678d085344eaacafb7029a9505,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6496344670743321579}
   m_SourcePrefab: {fileID: 100100000, guid: 23172e678d085344eaacafb7029a9505, type: 3}
+--- !u!1 &3595476416830390606 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 23172e678d085344eaacafb7029a9505,
+    type: 3}
+  m_PrefabInstance: {fileID: 4405887204681153567}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6496344670743321579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3595476416830390606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10873d959a89dd4db22e831673f1d04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RunEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8984690542345762672}
+        m_TargetAssemblyTypeName: PlayerInteract, Assembly-CSharp
+        m_MethodName: StopInteractAnimation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &4228425319461690356 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 23172e678d085344eaacafb7029a9505,

@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -38,11 +38,11 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// The movement direction before the latest direction.
     /// </summary>
-    Vector3 fromDirection = Vector3.zero;
+    private Vector3 fromDirection = Vector3.zero;
     /// <summary>
     /// The current direction that the player is moving in.
     /// </summary>
-    Vector3 toDirection = Vector3.zero;
+    private Vector3 toDirection = Vector3.zero;
     /// <summary>
     /// True if the mesh is in the pregress of rotating.
     /// </summary>
@@ -63,9 +63,9 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Check Grounded")]
     [Tooltip("The distance from the ground that the player will detect the ground and stop falling/be able to jump.")]
-    [SerializeField] float groundCheckDistance = 0.1f;
+    [SerializeField] private float groundCheckDistance = 0.1f;
     [Tooltip("The layer that the player will detect as ground.")]
-    [SerializeField] LayerMask groundedLayer;
+    [SerializeField] private LayerMask groundedLayer;
     /// <summary>
     /// The players verticle velocity. Used for jumping and gravity.
     /// </summary>
@@ -83,11 +83,11 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// True if the player is touching the ground
     /// </summary>
-    bool touchingGround = false;
+    private bool touchingGround = false;
     /// <summary>
     /// The hit info from the ground check.
     /// </summary>
-    RaycastHit groundHitInfo;
+    private RaycastHit groundHitInfo;
 
     [Header("Animation")]
     [Tooltip("The animator used for the player model.")]
@@ -100,7 +100,12 @@ public class PlayerMovement : MonoBehaviour
     /// Players character controller
     /// </summary>
     private CharacterController characterController;
-        #endregion
+
+    /// <summary>
+    /// If true the player moves normally.
+    /// </summary>
+    private bool canMove = true;
+    #endregion
 
     #region Unity Call Methods
     private void Start()
@@ -109,6 +114,7 @@ public class PlayerMovement : MonoBehaviour
 
         fromDirection = transform.forward;
         toDirection = transform.forward;
+        characterController.slopeLimit = maxSlope;
     }
     private void OnEnable()
     {
@@ -121,12 +127,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void LateUpdate()
     {
-        CollisionCheck();
-        CheckGround();
-        Move();
+        if (canMove)
+        {
+            CollisionCheck();
+            CheckGround();
+            Move();
 
-        // Move
-        characterController.Move(new Vector3(movementVector.x, movementVector.y + verticalVelocity, movementVector.z) * Time.deltaTime);
+            // Move
+            characterController.Move(new Vector3(movementVector.x, movementVector.y + verticalVelocity, movementVector.z) * Time.deltaTime);
+        }
     }
     #endregion
 
@@ -141,7 +150,7 @@ public class PlayerMovement : MonoBehaviour
         {
             animator.SetBool(animFall, true);
             // Rotate
-            RotatePlayer(Vector2.zero, false);
+            RotatePlayer(Vector2.zero, false, rotateSpeed);
             return;
         }
         animator.SetBool(animFall, false);
@@ -208,7 +217,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Rotate
-        RotatePlayer(moveInputVector3, hasInput);
+        RotatePlayer(moveInputVector3, hasInput, rotateSpeed);
     }
 
     /// <summary>
@@ -216,7 +225,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     /// <param name="moveInput">The current player input</param>
     /// <param name="hasInput">If the player is currently making an input</param>
-    private void RotatePlayer(Vector3 moveInputVector3, bool hasInput)
+    private void RotatePlayer(Vector3 moveInputVector3, bool hasInput, float timeToRotate)
     {
         // Turning
         // Check if input has changed.
@@ -231,10 +240,10 @@ public class PlayerMovement : MonoBehaviour
         if (isRotating)
         {
             rotateTimer += Time.deltaTime;
-            Vector3 rotationDirection = Vector3.Slerp(fromDirection, toDirection, rotateTimer / rotateSpeed);
+            Vector3 rotationDirection = Vector3.Slerp(fromDirection, toDirection, rotateTimer / timeToRotate);
 
             transform.rotation = Quaternion.LookRotation(rotationDirection);
-            if (rotateTimer >= rotateSpeed)
+            if (rotateTimer >= timeToRotate)
             {
                 isRotating = false;
             }
@@ -300,6 +309,37 @@ public class PlayerMovement : MonoBehaviour
         {
             verticalVelocity = 0;
         }
+    }
+    #endregion
+
+    #region Public Methods
+    /// <summary>
+    /// Stops regular movement and moves the player to a position.
+    /// </summary>
+    /// <param name="direction">The direction to the destination.</param>
+    /// <param name="distance">The distance to the destination.</param>
+    /// <returns></returns>
+    public IEnumerator MoveTo(Vector3 direction, float distance)
+    {
+        canMove = false;
+        float timeToMove = distance / maxWalkSpeed;
+
+        float moveTimer = 0.0f;
+        Vector3 movePostion = Vector3.zero;
+
+        animator.SetBool(animWalk, true);
+        while (moveTimer < timeToMove)
+        {
+            moveTimer += Time.deltaTime;
+            RotatePlayer(direction, true, timeToMove);
+
+            movePostion = direction * maxWalkSpeed * Time.deltaTime;
+            characterController.Move(movePostion);
+            yield return null;
+        }
+        movementVector = Vector3.zero;
+        animator.SetBool(animWalk, false);
+        canMove = true;
     }
     #endregion
 
