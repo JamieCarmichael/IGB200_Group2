@@ -106,16 +106,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b907cef93398e842abae2a5f222addc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deceleration: 0.1
+  deceleration: 0.25
   walkAcceleration: 0.25
-  maxWalkSpeed: 4
-  runAcceleration: 0.5
-  maxRunSpeed: 8
+  maxWalkSpeed: 6
+  runAcceleration: 0.25
+  maxRunSpeed: 12
   maxSlope: 45
-  rotateSpeed: 0.1
-  jumpHeight: 2
+  rotateSpeed: 0.25
+  jumpHeight: 2.4
   gravity: 15
-  fallMultiplier: 2
+  fallMultiplier: 1.5
   groundCheckDistance: 0.1
   groundedLayer:
     serializedVersion: 2
@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae16700a230036b4ea6b45c9d641bb1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactRange: 3
+  interactRange: 2
   stoppingDistance: 0.5
   interactLayer:
     serializedVersion: 2
@@ -168,8 +168,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2601895572099630445}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.45758158, y: 0.00000001661447, z: -0.000000008550102, w: 0.88916767}
-  m_LocalPosition: {x: 0, y: 7, z: -5}
+  m_LocalRotation: {x: 0.40965605, y: 3e-45, z: -1e-45, w: 0.9122401}
+  m_LocalPosition: {x: 0, y: 9, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 7, z: -5}
+  m_FollowOffset: {x: 0, y: 9, z: -8}
   m_XDamping: 0
   m_YDamping: 0
   m_ZDamping: 0
