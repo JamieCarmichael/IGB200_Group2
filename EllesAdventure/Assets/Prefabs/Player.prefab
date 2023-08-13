@@ -106,15 +106,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b907cef93398e842abae2a5f222addc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deceleration: 0.25
-  walkAcceleration: 0.5
-  maxWalkSpeed: 5
+  deceleration: 0.1
+  walkAcceleration: 0.25
+  maxWalkSpeed: 4
   runAcceleration: 0.5
-  maxRunSpeed: 10
+  maxRunSpeed: 8
   maxSlope: 45
   rotateSpeed: 0.1
   jumpHeight: 2
-  gravity: 9.81
+  gravity: 15
   fallMultiplier: 2
   groundCheckDistance: 0.1
   groundedLayer:
@@ -168,7 +168,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2601895572099630445}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4575816, y: 0.000000015299362, z: -0.000000007873326, w: 0.88916767}
+  m_LocalRotation: {x: 0.45758158, y: 0.00000001661447, z: -0.000000008550102, w: 0.88916767}
   m_LocalPosition: {x: 0, y: 7, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
