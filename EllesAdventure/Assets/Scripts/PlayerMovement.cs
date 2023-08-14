@@ -341,6 +341,32 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool(animWalk, false);
         canMove = true;
     }
+
+
+    public void HitEdge(Vector3 collisionPoint, GameObject other)
+    {
+        Vector3 a = movementVector;
+        Vector3 b = other.transform.forward;
+        if (Vector3.Dot(a, b) > 0)
+        {
+            Debug.Log("Towards");
+        }
+        else
+        {
+            Debug.Log("Away");
+        }
+
+        if (GetComponent<Collider>().bounds.center.y > collisionPoint.y)
+        {
+            Debug.DrawLine(collisionPoint, Vector3.up, Color.red, 2.0f);
+            Debug.Log("Under");
+        }
+        else
+        {
+            Debug.DrawLine(collisionPoint, Vector3.up, Color.green, 2.0f);
+            Debug.Log("Above");
+        }
+    }
     #endregion
 
     #region Not In Use
