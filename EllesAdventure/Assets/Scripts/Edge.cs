@@ -7,6 +7,7 @@ using UnityEngine;
 public class Edge : MonoBehaviour 
 {
     #region Fields
+    [SerializeField] private bool canClimb = true;
 
     private Collider thisCollider;
     #endregion
@@ -17,25 +18,24 @@ public class Edge : MonoBehaviour
         thisCollider = GetComponent<Collider>();
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.TryGetComponent<PlayerMovement>(out PlayerMovement playerMovement))
-        {
-            Vector3 collisionPoint = thisCollider.ClosestPoint(other.bounds.center);
-
-            playerMovement.EnterEdge(collisionPoint, gameObject);
-        }
-    }
-
-    //private void OnTriggerEnter(Collider other)
+    //private void OnTriggerStay(Collider other)
     //{
     //    if (other.TryGetComponent<PlayerMovement>(out PlayerMovement playerMovement))
     //    {
     //        Vector3 collisionPoint = thisCollider.ClosestPoint(other.bounds.center);
 
-    //        playerMovement.EnterEdge(collisionPoint, gameObject);
+    //        playerMovement.EnterEdge(collisionPoint, gameObject, canClimb);
     //    }
     //}
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent<PlayerMovement>(out PlayerMovement playerMovement))
+        {
+            Vector3 collisionPoint = thisCollider.ClosestPoint(other.bounds.center);
+
+            playerMovement.EnterEdge(collisionPoint, gameObject, canClimb);
+        }
+    }
     private void OnTriggerExit(Collider other)
     {
         if (other.TryGetComponent<PlayerMovement>(out PlayerMovement playerMovement))
