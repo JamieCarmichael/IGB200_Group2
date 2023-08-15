@@ -17,15 +17,33 @@ public class Edge : MonoBehaviour
         thisCollider = GetComponent<Collider>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.TryGetComponent<PlayerMovement>(out PlayerMovement playerMovement))
         {
             Vector3 collisionPoint = thisCollider.ClosestPoint(other.bounds.center);
 
-            playerMovement.HitEdge(collisionPoint, gameObject);
+            playerMovement.EnterEdge(collisionPoint, gameObject);
         }
+    }
 
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.TryGetComponent<PlayerMovement>(out PlayerMovement playerMovement))
+    //    {
+    //        Vector3 collisionPoint = thisCollider.ClosestPoint(other.bounds.center);
+
+    //        playerMovement.EnterEdge(collisionPoint, gameObject);
+    //    }
+    //}
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent<PlayerMovement>(out PlayerMovement playerMovement))
+        {
+            Vector3 collisionPoint = thisCollider.ClosestPoint(other.bounds.center);
+
+            playerMovement.ExitEdge();
+        }
     }
     #endregion
 }

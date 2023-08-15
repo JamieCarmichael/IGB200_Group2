@@ -216,6 +216,14 @@ public class PlayerMovement : MonoBehaviour
             movementVector = Vector3.ProjectOnPlane(moveInputVector3, groundHitInfo.normal) * speed;
         }
 
+        Debug.Log(onEdge);
+        if (onEdge)
+        {
+
+            Debug.Log("hit");
+            OnEdge(moveInputVector3, hasInput);
+        }
+
         // Rotate
         RotatePlayer(moveInputVector3, hasInput, rotateSpeed);
     }
@@ -266,7 +274,7 @@ public class PlayerMovement : MonoBehaviour
             touchingGround = Vector3.Distance(checkOrigin, groundHitInfo.point) < characterController.radius + groundCheckDistance;
         }
 
-        if (touchingGround && verticalVelocity < 0.0f)
+        if ((touchingGround && verticalVelocity < 0.0f) || isHanging)
         {
             // Grounded and falling
             verticalVelocity = 0;
@@ -341,32 +349,110 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool(animWalk, false);
         canMove = true;
     }
+    #endregion
 
+    #region Edges
+    public bool onEdge = false;
+    Vector3 collisionPoint;
+    GameObject collisionObject;
+    private bool isHanging = false;
 
-    public void HitEdge(Vector3 collisionPoint, GameObject other)
+    private void OnEdge(Vector3 moveInputVector3, bool hasInput)
     {
+
+        Debug.Log("hit");
+        Vector2 moveInput = InputManager.Instance.PlayerInput.InGame.Move.ReadValue<Vector2>();
+
         Vector3 a = movementVector;
-        Vector3 b = other.transform.forward;
-        if (Vector3.Dot(a, b) > 0)
-        {
-            Debug.Log("Towards");
-        }
-        else
-        {
-            Debug.Log("Away");
-        }
+        Vector3 b = collisionObject.transform.forward;
+
 
         if (GetComponent<Collider>().bounds.center.y > collisionPoint.y)
         {
             Debug.DrawLine(collisionPoint, Vector3.up, Color.red, 2.0f);
             Debug.Log("Under");
+            
+            movementVector = moveInputVector3 * speed;
         }
         else
         {
             Debug.DrawLine(collisionPoint, Vector3.up, Color.green, 2.0f);
             Debug.Log("Above");
+
+            if (hasInput)
+            {
+                verticalVelocity = Mathf.Sqrt((characterController.height / 4 * 3) * 2 * gravity);
+                movementVector = collisionObject.transform.forward * maxWalkSpeed;
+                Debug.Log("Climbing");
+                isHanging = false;
+            }
+            else
+            {
+                characterController.enabled = false;
+
+                transform.position = collisionPoint + Vector3.down;
+                movementVector = Vector3.zero;
+                verticalVelocity = 0.0f;
+                Debug.Log("Hanging");
+                characterController.enabled = true;
+
+                isHanging = true;
+            }
+
+            //if (Vector3.Dot(a, b) > 0)
+            //{
+            //    Debug.Log("Towards");
+            //    if (hasInput)
+            //    {
+            //        verticalVelocity = Mathf.Sqrt((characterController.height / 4 * 3) * 2 * gravity);
+            //        movementVector = collisionObject.transform.forward * maxWalkSpeed;
+            //        Debug.Log("Climbing");
+            //        isHanging = false;
+            //    }
+            //    else
+            //    {
+            //        characterController.enabled = false;
+
+            //        transform.position = collisionPoint + Vector3.down;
+            //        movementVector = Vector3.zero;
+            //        verticalVelocity = 0.0f;
+            //        Debug.Log("Hanging");
+            //        characterController.enabled = true;
+
+            //        isHanging = true;
+            //    }
+            //}
+
+            //else
+            //{
+            //    Debug.Log("Away");
+            //    characterController.enabled = false;
+
+            //    transform.position = collisionPoint + Vector3.down;
+            //    movementVector = Vector3.zero;
+            //    verticalVelocity = 0.0f;
+            //    Debug.Log("Hanging");
+            //    characterController.enabled = true;
+
+            //    isHanging = true;
+            //}
         }
+
+
+
     }
+
+    public void EnterEdge(Vector3 collisionPoint, GameObject other)
+    {
+        onEdge = true;
+        collisionObject = other;
+        this.collisionPoint = collisionPoint;
+    }
+    public void ExitEdge()
+    {
+        onEdge = false;
+    }
+
     #endregion
 
     #region Not In Use
