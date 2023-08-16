@@ -2,9 +2,9 @@ using UnityEngine;
 
 /// <summary>
 /// Made By: Jamie Carmichael
-/// Details: Allows an object to be pciked up by the player when they interact with it.
+/// Details: A switch that interacts with another object.
 /// </summary>
-public class Pickup : MonoBehaviour, IIntertactable
+public class Lever : MonoBehaviour, IIntertactable
 {
     #region Fields
     public Collider ThisCollider { get; private set; }
@@ -19,7 +19,13 @@ public class Pickup : MonoBehaviour, IIntertactable
     private bool intertactable = true;
 
     [Tooltip("The object that indicates when this object is being looked at.")]
-    [SerializeField] private GameObject lookAtObject;
+    private GameObject lookAtObject;
+
+    [SerializeField] private GameObject gate;
+
+    [SerializeField] private float openTime = 1.0f;
+
+    [SerializeField] private NPCMove nPCMove;
     #endregion
 
     #region Unity Call Functions
@@ -39,17 +45,29 @@ public class Pickup : MonoBehaviour, IIntertactable
     #region IIntertactable
     public void Interact()
     {
-        gameObject.SetActive(false);
+        gameObject.GetComponent<Animator>().SetTrigger("Open");
+        Invoke("OpenGate", openTime);
+    }
+
+    private void OpenGate()
+    {
+        gate.GetComponent<Animator>().SetTrigger("Open");
+        Invoke("MoveNPC", openTime);
+    }
+
+    private void MoveNPC()
+    {
+        nPCMove.Move();
     }
 
     public void StartLookAt()
     {
-        lookAtObject.SetActive(true);
+        //lookAtObject.SetActive(true);
     }
 
     public void StopLookAt()
     {
-        lookAtObject.SetActive(false);
+        //lookAtObject.SetActive(false);
     }
     #endregion
 }

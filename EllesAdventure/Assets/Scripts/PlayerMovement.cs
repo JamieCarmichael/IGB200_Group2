@@ -249,9 +249,9 @@ public class PlayerMovement : MonoBehaviour
         if (isRotating)
         {
             rotateTimer += Time.deltaTime;
-            Vector3 rotationDirection = Vector3.Slerp(fromDirection, toDirection, rotateTimer / timeToRotate);
 
-            transform.rotation = Quaternion.LookRotation(rotationDirection);
+            float angle = Vector3.Angle(fromDirection, toDirection) / timeToRotate;
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(toDirection), angle * Time.deltaTime);
             if (rotateTimer >= timeToRotate)
             {
                 isRotating = false;

@@ -8,7 +8,12 @@ public interface IIntertactable
     /// <summary>
     /// The collider for the interactable object.
     /// </summary>
-    public Collider ThisCollider { get;}
+    public Collider ThisCollider { get; }
+
+    /// <summary>
+    /// If true this object can be interacted with.
+    /// </summary>
+    public bool Intertactable { get; }
 
     /// <summary>
     /// To be called when interacting with an object.

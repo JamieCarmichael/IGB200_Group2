@@ -135,12 +135,15 @@ public class PlayerInteract : MonoBehaviour
 
         yield return playerMovement.MoveTo(direction, distance);
 
-        interactAnimationRunning = true;
-        animator.SetTrigger(animPickUp);
-
-        while (interactAnimationRunning)
+        if (interactable.GetType()  != typeof(TalkToNPC))
         {
-            yield return null;
+           interactAnimationRunning = true;
+            animator.SetTrigger(animPickUp);
+
+            while (interactAnimationRunning)
+            {
+                yield return null;
+            }
         }
 
         interactable.Interact();
