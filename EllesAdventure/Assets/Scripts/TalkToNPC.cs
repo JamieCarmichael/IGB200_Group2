@@ -25,6 +25,8 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     public bool dialogue1 = true;
     public bool dialogue2 = false;
 
+    [SerializeField] private Transform player;
+
     #endregion
 
     #region Unity Call Functions
@@ -60,6 +62,7 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     #region IIntertactable
     public void Interact()
     {
+        transform.rotation = Quaternion.LookRotation(player.position - transform.position);
         MakeDialogue();
     }
 
