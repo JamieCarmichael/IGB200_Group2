@@ -3266,6 +3266,12 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1563044510}
+    - target: {fileID: 3081211349995147200, guid: fa7584a14247614409c4ca71de702883,
+        type: 3}
+      propertyPath: endDialiogueChain.Array.data[0]
+      value: "Ah! Thanks Elle. You\u2019re a real lifesaver now I can get back to
+        work fitting the sink into the kitchen. "
+      objectReference: {fileID: 0}
     - target: {fileID: 7646676190339781277, guid: fa7584a14247614409c4ca71de702883,
         type: 3}
       propertyPath: m_Name
@@ -3759,12 +3765,12 @@ PrefabInstance:
     - target: {fileID: 6564214640506286604, guid: 349855483907aab418e2ca8b95904dff,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -3e-45
+      value: 1e-45
       objectReference: {fileID: 0}
     - target: {fileID: 6564214640506286604, guid: 349855483907aab418e2ca8b95904dff,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 1e-45
+      value: -0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5846,12 +5852,12 @@ PrefabInstance:
     - target: {fileID: 5161462802299450628, guid: 353fa9580879ac8498f61ae7f05412bb,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -3e-45
+      value: 1e-45
       objectReference: {fileID: 0}
     - target: {fileID: 5161462802299450628, guid: 353fa9580879ac8498f61ae7f05412bb,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 1e-45
+      value: -0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
