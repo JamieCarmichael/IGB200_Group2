@@ -1,5 +1,7 @@
 using UnityEngine;
 using TMPro;
+using System;
+using UnityEngine.Events;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -15,13 +17,41 @@ public class DialogueManager : MonoBehaviour
     [Tooltip("The text mesh pro text object that the dialogue is displayed in.")]
     [SerializeField] private TextMeshProUGUI textField;
 
+    /// <summary>
+    /// True if there is dialogue being displayed.
+    /// </summary>
     private bool dialogueDisplayed = false;
-
-    private string[] dialogueChain = new string[0];
+    /// <summary>
+    /// The current dialogue object.
+    /// </summary>
+    private Dialogue currentDialogue;
+    /// <summary>
+    /// The index of the next dialogue to be displayed.
+    /// </summary>
     private int dialogueIndex = 0; 
 
+    /// <summary>
+    /// The players movement script.
+    /// </summary>
     private PlayerMovement playerMovement;
+    /// <summary>
+    /// The players interaction script.
+    /// </summary>
     private PlayerInteract playerInteract;
+
+    /// <summary>
+    /// A Dialogue object. Contains the strings for the conversation and an event to be called at the end.
+    /// </summary>
+    [Serializable]
+    public struct Dialogue
+    {
+        [Tooltip("The array of dialogue messages in a conversation.")]
+        [TextArea]
+        public string[] dialiogueChain;
+
+        [Tooltip("The event called when the dialogue has finished.")]
+        public UnityEvent endEvent;
+    }
     #endregion
 
     #region Unity Call Functions
@@ -35,8 +65,8 @@ public class DialogueManager : MonoBehaviour
 
         Instance = this;
 
-        playerInteract = FindObjectOfType<PlayerInteract>();
-        playerMovement = FindObjectOfType<PlayerMovement>();
+        playerInteract = PlayerManager.Instance.PlayerTransform.GetComponent<PlayerInteract>();
+        playerMovement = PlayerManager.Instance.PlayerTransform.GetComponent<PlayerMovement>();
     }
     #endregion
 
@@ -44,19 +74,19 @@ public class DialogueManager : MonoBehaviour
     /// <summary>
     /// Show the dialogue object.
     /// </summary>
-    /// <param name="text">The text to display.</param>
-    public void DisplayDialogue(string[] newdialogueChain)
+    /// <param name="newDialogue"></param>
+    public void DisplayDialogue(Dialogue newDialogue)
     {
         if (dialogueDisplayed)
         {
             return;
         }
 
-        dialogueChain = newdialogueChain;
+        currentDialogue = newDialogue;
         dialogueObject.SetActive(true);
         dialogueDisplayed = true;
         dialogueIndex = 0;
-        NextDialogue();  
+        NextDialogue();
 
         playerInteract.enabled = false;
         playerMovement.enabled = false;
@@ -67,22 +97,26 @@ public class DialogueManager : MonoBehaviour
     #endregion
 
     #region Private Methods
+    /// <summary>
+    /// Display the text for the next dialogue option.
+    /// </summary>
     private void NextDialogue()
     {
-        if (dialogueIndex >= dialogueChain.Length)
+        if (dialogueIndex >= currentDialogue.dialiogueChain.Length)
         {
-            HideDialogue();
+            FinishDialogue();
             return;
         }
 
-        textField.text = dialogueChain[dialogueIndex];
+        textField.text = currentDialogue.dialiogueChain[dialogueIndex];
 
         dialogueIndex++;
     }
+
     /// <summary>
-    /// Hide the dialogue object.
+    /// Hide the dialogue object. Calls the event at the end of the dialogue.
     /// </summary>
-    private void HideDialogue()
+    private void FinishDialogue()
     {
         dialogueObject.SetActive(false);
         dialogueDisplayed = false;
@@ -91,6 +125,7 @@ public class DialogueManager : MonoBehaviour
         playerInteract.enabled = true;
         playerMovement.enabled = true;
 
+        currentDialogue.endEvent.Invoke();
 
         InputManager.Instance.PlayerInput.InGame.Interact.performed -= context => NextDialogue();
     }

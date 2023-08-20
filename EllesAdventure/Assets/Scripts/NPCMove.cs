@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 /// <summary>
 /// Made By: Jamie Carmichael
-/// Details: 
+/// Details: Moves an NPC around in the world.
 /// </summary>
 public class NPCMove : MonoBehaviour 
 {

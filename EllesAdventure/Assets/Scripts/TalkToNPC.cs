@@ -7,26 +7,13 @@ using UnityEngine;
 public class TalkToNPC : MonoBehaviour, IIntertactable
 {
     #region Fields
-
-    public Collider ThisCollider { get; private set; }
-    public bool Intertactable 
-    {
-        get
-        {
-            return intertactable;
-        }
-    }
-
-    private bool intertactable = true;
-
-    [SerializeField] private string[] startDialiogueChain;
-    [SerializeField] private string[] endDialiogueChain;
+    [Tooltip("The dialogue said in the first interaction.")]
+    [SerializeField] private DialogueManager.Dialogue startDialiogueChain;
+    [Tooltip("The dialogue said in the second interaction.")]
+    [SerializeField] private DialogueManager.Dialogue endDialiogueChain;
 
     public bool dialogue1 = true;
     public bool dialogue2 = false;
-
-    [SerializeField] private Transform player;
-
     #endregion
 
     #region Unity Call Functions
@@ -60,9 +47,19 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     #endregion
 
     #region IIntertactable
+    public Collider ThisCollider { get; private set; }
+    public bool Intertactable
+    {
+        get
+        {
+            return intertactable;
+        }
+    }
+    private bool intertactable = true;
+
     public void Interact()
     {
-        transform.rotation = Quaternion.LookRotation(player.position - transform.position);
+        transform.rotation = Quaternion.LookRotation(PlayerManager.Instance.PlayerTransform.position - transform.position);
         MakeDialogue();
     }
 

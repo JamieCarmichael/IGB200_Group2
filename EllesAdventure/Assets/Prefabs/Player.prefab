@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 383029648402967398}
+  - component: {fileID: 4426714216258715659}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -33,6 +34,19 @@ Transform:
   - {fileID: 5161462802299450628}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4426714216258715659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519112211791674154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a50fea1071be2f45abf87ef8fe23059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTransform: {fileID: 6583016714712921538}
 --- !u!1 &1935052765830162921
 GameObject:
   m_ObjectHideFlags: 0
@@ -169,7 +183,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2601895572099630445}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40965605, y: -3e-45, z: 1e-45, w: 0.9122401}
+  m_LocalRotation: {x: 0.40965605, y: 1e-45, z: -0, w: 0.9122401}
   m_LocalPosition: {x: 0, y: 9, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

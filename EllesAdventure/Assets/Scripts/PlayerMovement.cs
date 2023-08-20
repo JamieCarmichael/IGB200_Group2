@@ -105,6 +105,28 @@ public class PlayerMovement : MonoBehaviour
     /// If true the player moves normally.
     /// </summary>
     private bool canMove = true;
+
+    //[Header("Edges")]
+    /// <summary>
+    /// The player is touching an edge.
+    /// </summary>
+    private bool onEdge = false;
+    /// <summary>
+    /// The point that the player is touching the edge.
+    /// </summary>
+    private Vector3 edgeTouchPoint;
+    /// <summary>
+    /// The edge object being touched.
+    /// </summary>
+    private GameObject edgeObject;
+    /// <summary>
+    /// The player is currently hanging from an edge.
+    /// </summary>
+    private bool isHanging = false;
+    /// <summary>
+    /// The current edge can be climbed.
+    /// </summary>
+    private bool canClimbEdge = false;
     #endregion
 
     #region Unity Call Methods
@@ -240,6 +262,7 @@ public class PlayerMovement : MonoBehaviour
         // Check if input has changed.
         if (toDirection != moveInputVector3 && hasInput)
         {
+            moveInputVector3.y = 0.0f;
             fromDirection = transform.forward;
             toDirection = moveInputVector3;
             rotateTimer = 0.0f;
@@ -347,18 +370,12 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Edges
-    public bool onEdge = false;
-    Vector3 collisionPoint;
-    GameObject collisionObject;
-    private bool isHanging = false;
-    private bool canClimbEdge = false;
-
     private void OnEdge(Vector3 moveInputVector3)
     {
         Vector2 moveInput = InputManager.Instance.PlayerInput.InGame.Move.ReadValue<Vector2>();
 
         Vector3 thisForward = transform.forward;
-        Vector3 edgeForawrd = collisionObject.transform.forward;
+        Vector3 edgeForawrd = edgeObject.transform.forward;
 
         if (!canClimbEdge)
         {
@@ -367,7 +384,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Hit with feet
-        if (GetComponent<Collider>().bounds.center.y > collisionPoint.y)
+        if (GetComponent<Collider>().bounds.center.y > edgeTouchPoint.y)
         {
             if (verticalVelocity > 0.0f)
             {
@@ -384,8 +401,8 @@ public class PlayerMovement : MonoBehaviour
                 if (moveInput.y > 0)
                 {
                     // Hanging climb up button pressed.
-                    Vector3 extents = collisionObject.GetComponent<Collider>().bounds.extents;
-                    Vector3 climbPos = collisionPoint + (collisionObject.transform.up * extents.y) + (collisionObject.transform.forward * extents.z) ;
+                    Vector3 extents = edgeObject.GetComponent<Collider>().bounds.extents;
+                    Vector3 climbPos = edgeTouchPoint + (edgeObject.transform.up * extents.y) + (edgeObject.transform.forward * extents.z) ;
                     StartCoroutine(ClimbTo(climbPos));
 
                     isHanging = false;
@@ -400,7 +417,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     // Hanging no input.
                     characterController.enabled = false;
-                    transform.position = collisionPoint + Vector3.down;
+                    transform.position = edgeTouchPoint + Vector3.down;
                     movementVector = Vector3.zero;
                     characterController.enabled = true;
 
@@ -423,8 +440,8 @@ public class PlayerMovement : MonoBehaviour
     public void EnterEdge(Vector3 newCollisionPoint, GameObject other, bool canClimb)
     {
         onEdge = true;
-        collisionObject = other;
-        collisionPoint = newCollisionPoint;
+        edgeObject = other;
+        edgeTouchPoint = newCollisionPoint;
         canClimbEdge = canClimb;
     }
     /// <summary>

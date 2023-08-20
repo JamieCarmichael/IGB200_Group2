@@ -72,15 +72,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startDialiogueChain:
-  - "Hey Elle you're normally really handy and helpful, would you mind getting that
-    gate open over there? My toolbox fell in there and I can\u2019t get the thing
-    open. "
+    dialiogueChain:
+    - "Hey Elle you're normally really handy and helpful, would you mind getting
+      that gate open over there? My toolbox fell in there and I can\u2019t get the
+      thing open. "
+    EndEvent:
+      m_PersistentCalls:
+        m_Calls: []
   endDialiogueChain:
-  - "Ah! Thanks Elle. You\u2019re a real lifesaver now I can get back to work fitting
-    the sink into the kitten. "
+    dialiogueChain:
+    - "Ah! Thanks Elle. You\u2019re a real lifesaver now I can get back to work fitting
+      the sink into the kitchen."
+    EndEvent:
+      m_PersistentCalls:
+        m_Calls: []
   dialogue1: 1
   dialogue2: 0
-  player: {fileID: 0}
 --- !u!114 &8209048669225806010
 MonoBehaviour:
   m_ObjectHideFlags: 0
