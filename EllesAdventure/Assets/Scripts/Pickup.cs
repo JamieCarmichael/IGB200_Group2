@@ -7,7 +7,16 @@ using UnityEngine;
 public class Pickup : MonoBehaviour, IIntertactable
 {
     #region Fields
-    public Collider ThisCollider { get; private set; }
+    public string InteractAminationString
+    {
+        get
+        {
+            return interactAminationString;
+        }
+    }
+
+    [SerializeField] private string interactAminationString;
+
     public bool Intertactable
     {
         get
@@ -15,17 +24,18 @@ public class Pickup : MonoBehaviour, IIntertactable
             return intertactable;
         }
     }
-
     private bool intertactable = true;
 
     [Tooltip("The object that indicates when this object is being looked at.")]
     [SerializeField] private GameObject lookAtObject;
+
+    private Collider thisCollider;
     #endregion
 
     #region Unity Call Functions
     private void Start()
     {
-        ThisCollider = gameObject.GetComponent<Collider>();
+        thisCollider = GetComponent<Collider>();
     }
     #endregion
 
@@ -37,8 +47,12 @@ public class Pickup : MonoBehaviour, IIntertactable
     #endregion
 
     #region IIntertactable
+
+
     public void Interact()
     {
+        PlayerManager.Instance.AddToInventory(gameObject);
+
         gameObject.SetActive(false);
     }
 
@@ -50,6 +64,13 @@ public class Pickup : MonoBehaviour, IIntertactable
     public void StopLookAt()
     {
         lookAtObject.SetActive(false);
+    }
+
+    public Vector3 GetClosestPoint(Vector3 playerPos)
+    {
+        Vector3 closestPoint = thisCollider.ClosestPoint(playerPos);
+        closestPoint.y = transform.position.y;
+        return closestPoint;
     }
     #endregion
 }

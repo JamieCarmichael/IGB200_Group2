@@ -7,7 +7,19 @@ using UnityEngine;
 public class Lever : MonoBehaviour, IIntertactable
 {
     #region Fields
-    public Collider ThisCollider { get; private set; }
+    private Collider thisCollider;
+
+    public string InteractAminationString
+    {
+        get
+        {
+            return interactAminationString;
+        }
+    }
+
+    [SerializeField] private string interactAminationString;
+
+
     public bool Intertactable
     {
         get
@@ -26,12 +38,17 @@ public class Lever : MonoBehaviour, IIntertactable
     [SerializeField] private float openTime = 1.0f;
 
     [SerializeField] private NPCMove nPCMove;
+
+    [SerializeField] private GameObject requiredItem;
+
+    [SerializeField] private bool useRequiredItem = false;
+
     #endregion
 
     #region Unity Call Functions
     private void Start()
     {
-        ThisCollider = gameObject.GetComponent<Collider>();
+        thisCollider = gameObject.GetComponent<Collider>();
     }
     #endregion
 
@@ -45,6 +62,14 @@ public class Lever : MonoBehaviour, IIntertactable
     #region IIntertactable
     public void Interact()
     {
+        if (requiredItem != null)
+        {
+            if (!PlayerManager.Instance.UseItem(requiredItem, useRequiredItem))
+            {
+                return;
+            }
+        }
+
         gameObject.GetComponent<Animator>().SetTrigger("Open");
         Invoke("OpenGate", openTime);
     }
@@ -57,7 +82,10 @@ public class Lever : MonoBehaviour, IIntertactable
 
     private void MoveNPC()
     {
-        nPCMove.Move();
+        if (nPCMove != null)
+        {
+            nPCMove.Move();
+        }
     }
 
     public void StartLookAt()
@@ -68,6 +96,13 @@ public class Lever : MonoBehaviour, IIntertactable
     public void StopLookAt()
     {
         //lookAtObject.SetActive(false);
+    }
+
+    public Vector3 GetClosestPoint(Vector3 playerPos)
+    {
+        Vector3 closestPoint = thisCollider.ClosestPoint(playerPos);
+        closestPoint.y = transform.position.y;
+        return closestPoint;
     }
     #endregion
 }

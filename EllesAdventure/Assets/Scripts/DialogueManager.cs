@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -91,7 +92,7 @@ public class DialogueManager : MonoBehaviour
         playerInteract.enabled = false;
         playerMovement.enabled = false;
 
-        InputManager.Instance.PlayerInput.InGame.Interact.performed += context => NextDialogue();
+        InputManager.Instance.PlayerInput.InGame.Interact.performed += NextDialogue;
     }
 
     #endregion
@@ -114,6 +115,15 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Display the text for the next dialogue option.
+    /// </summary>
+    /// <param name="obj"></param>
+    private void NextDialogue(InputAction.CallbackContext obj)
+    {
+        NextDialogue();
+    }
+
+    /// <summary>
     /// Hide the dialogue object. Calls the event at the end of the dialogue.
     /// </summary>
     private void FinishDialogue()
@@ -127,7 +137,7 @@ public class DialogueManager : MonoBehaviour
 
         currentDialogue.endEvent.Invoke();
 
-        InputManager.Instance.PlayerInput.InGame.Interact.performed -= context => NextDialogue();
+        InputManager.Instance.PlayerInput.InGame.Interact.performed -= NextDialogue;
     }
     #endregion
 }

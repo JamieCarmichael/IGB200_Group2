@@ -6,9 +6,9 @@ using UnityEngine;
 public interface IIntertactable
 {
     /// <summary>
-    /// The collider for the interactable object.
+    /// The string for the animation trigger for this interation.
     /// </summary>
-    public Collider ThisCollider { get; }
+    public string InteractAminationString { get; }
 
     /// <summary>
     /// If true this object can be interacted with.
@@ -27,4 +27,11 @@ public interface IIntertactable
     /// Called when the player stops looking at this object.
     /// </summary>
     public void StopLookAt();
+
+    /// <summary>
+    /// The position that the player will move to when interacting with this.
+    /// </summary>
+    /// <returns></returns>
+    public Vector3 GetClosestPoint(Vector3 playerPos);
+
 }

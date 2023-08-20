@@ -430,6 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a293f9a769216a4fa2d30f4d066cd3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactAminationString: ellePickUp
   gate: {fileID: 0}
   openTime: 1
   nPCMove: {fileID: 0}

@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -140,11 +142,11 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnEnable()
     {
-        InputManager.Instance.PlayerInput.InGame.Jump.performed += context => Jump();
+        InputManager.Instance.PlayerInput.InGame.Jump.performed += Jump;
     }
     private void OnDisable()
     {
-        InputManager.Instance.PlayerInput.InGame.Jump.performed -= context => Jump();
+        InputManager.Instance.PlayerInput.InGame.Jump.performed -= Jump;
     }
 
     private void LateUpdate()
@@ -326,6 +328,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void Jump(InputAction.CallbackContext obj)
+    {
+        Jump();
+    }
+
     /// <summary>
     /// Checks if the player collided with something and stops velocity on that plane.
     /// </summary>
@@ -345,24 +352,40 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="direction">The direction to the destination.</param>
     /// <param name="distance">The distance to the destination.</param>
     /// <returns></returns>
-    public IEnumerator MoveTo(Vector3 direction, float distance)
+    public IEnumerator MoveTo(Vector3 closestPoint, float stoppingDistance)
     {
         canMove = false;
+
+        Vector3 toVector = closestPoint - transform.position;
+        Vector3 direction = toVector.normalized;
+        float distance = toVector.magnitude - stoppingDistance;
+
         float timeToMove = distance / maxWalkSpeed;
 
         float moveTimer = 0.0f;
         Vector3 movePostion = Vector3.zero;
 
         animator.SetBool(animWalk, true);
+
+
+        if (timeToMove < 0.0f)
+        {
+            timeToMove = -timeToMove;
+        }
+
+
         while (moveTimer < timeToMove)
         {
             moveTimer += Time.deltaTime;
-            RotatePlayer(direction, true, timeToMove);
+            RotatePlayer(toVector, true, timeToMove);
 
             movePostion = direction * maxWalkSpeed * Time.deltaTime;
             characterController.Move(movePostion);
             yield return null;
         }
+
+
+
         movementVector = Vector3.zero;
         animator.SetBool(animWalk, false);
         canMove = true;

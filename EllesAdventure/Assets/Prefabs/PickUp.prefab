@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f339ebfcb20eed4d86896c71dab80c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactAminationString: ellePickUp
   lookAtObject: {fileID: 9089120544228345911}
 --- !u!135 &87321658003064147
 SphereCollider:

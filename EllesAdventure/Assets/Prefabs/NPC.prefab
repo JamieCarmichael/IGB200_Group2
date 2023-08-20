@@ -71,23 +71,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b386b339a7221224c99ce9e9c62cafc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startDialiogueChain:
+  startDialogue:
     dialiogueChain:
     - "Hey Elle you're normally really handy and helpful, would you mind getting
       that gate open over there? My toolbox fell in there and I can\u2019t get the
       thing open. "
-    EndEvent:
+    endEvent:
       m_PersistentCalls:
         m_Calls: []
-  endDialiogueChain:
+  endDialogue:
     dialiogueChain:
     - "Ah! Thanks Elle. You\u2019re a real lifesaver now I can get back to work fitting
-      the sink into the kitchen."
-    EndEvent:
+      the sink into the kitchen. "
+    endEvent:
       m_PersistentCalls:
         m_Calls: []
+  itemDialogue:
+    dialiogueChain:
+    - Thanks for the item.
+    endEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  itemNeeded: {fileID: 0}
+  dialogueItem: 0
   dialogue1: 1
   dialogue2: 0
+  interactAminationString: 
 --- !u!114 &8209048669225806010
 MonoBehaviour:
   m_ObjectHideFlags: 0

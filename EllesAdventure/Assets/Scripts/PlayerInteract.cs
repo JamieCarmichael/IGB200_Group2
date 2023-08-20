@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -27,7 +28,6 @@ public class PlayerInteract : MonoBehaviour
     [Header("Animation")]
     [Tooltip("The animator used for the player model.")]
     [SerializeField] private Animator animator;
-    [SerializeField] private string animPickUp = "";
     /// <summary>
     /// If true the interact animation is running.
     /// </summary>
@@ -41,11 +41,11 @@ public class PlayerInteract : MonoBehaviour
     }
     private void OnEnable()
     {
-        InputManager.Instance.PlayerInput.InGame.Interact.performed += context => Interact();
+        InputManager.Instance.PlayerInput.InGame.Interact.performed += Interact;
     }
     private void OnDisable()
     {
-        InputManager.Instance.PlayerInput.InGame.Interact.performed -= context => Interact();
+        InputManager.Instance.PlayerInput.InGame.Interact.performed -= Interact;
     }
     private void Update()
     {
@@ -117,6 +117,14 @@ public class PlayerInteract : MonoBehaviour
             StartCoroutine(InteractWithObject());
         }
     }
+    
+
+
+
+    private void Interact(InputAction.CallbackContext obj)
+    {
+        Interact();
+    }
 
     /// <summary>
     /// Runs the player interacting with an object over a period of time. 
@@ -127,18 +135,14 @@ public class PlayerInteract : MonoBehaviour
     {
         InputManager.Instance.PlayerInput.InGame.Disable();
 
-        Vector3 closestPoint = interactable.ThisCollider.ClosestPoint(transform.position);
-        closestPoint.y = interactable.ThisCollider.gameObject.transform.position.y;
-        Vector3 toVector = closestPoint - transform.position;
-        Vector3 direction = toVector.normalized;
-        float distance = toVector.magnitude - stoppingDistance;
+        Vector3 closestPoint = interactable.GetClosestPoint(transform.position);
 
-        yield return playerMovement.MoveTo(direction, distance);
+        yield return playerMovement.MoveTo(closestPoint, stoppingDistance);
 
-        if (interactable.GetType()  != typeof(TalkToNPC))
+        if (interactable.InteractAminationString != string.Empty)
         {
-           interactAnimationRunning = true;
-            animator.SetTrigger(animPickUp);
+            interactAnimationRunning = true;
+            animator.SetTrigger(interactable.InteractAminationString);
 
             while (interactAnimationRunning)
             {

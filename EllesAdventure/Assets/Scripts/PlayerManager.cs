@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -9,8 +10,17 @@ public class PlayerManager : MonoBehaviour
     #region Fields
     public static PlayerManager Instance { get; private set; }
 
-    [SerializeField] private Transform playerTransform;   
+    [Tooltip("The players tarnsform. ")]
+    [SerializeField] private Transform playerTransform;
 
+    /// <summary>
+    /// The inventroy of items the player has.
+    /// </summary>
+    private List<GameObject> inventory = new List<GameObject>();
+
+    /// <summary>
+    /// The players tarnsform.
+    /// </summary>
     public Transform PlayerTransform
     {
         get { return playerTransform; }
@@ -31,7 +41,32 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
     #region Public Methods
+    public void AddToInventory(GameObject newObject)
+    {
+        inventory.Add(newObject);
+    }
 
+    /// <summary>
+    /// Try to use an item from the inventory. If it is used return true.
+    /// </summary>
+    /// <param name="itemToUse">The item to use.</param>
+    /// <param name="removeObject">If true the item is removed from inventroy.</param>
+    /// <returns>The item is used.</returns>
+    public bool UseItem(GameObject itemToUse, bool removeObject)
+    {
+        if (inventory.Contains(itemToUse))
+        {
+            if (removeObject)
+            {
+                inventory.Remove(itemToUse);
+            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     #endregion
 
     #region Private Methods
