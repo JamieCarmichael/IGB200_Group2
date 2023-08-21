@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -25,6 +27,8 @@ public class PlayerManager : MonoBehaviour
     {
         get { return playerTransform; }
     }
+
+    private Dictionary<string, int> inventoryDictionary = new Dictionary<string, int>();
     #endregion
 
     #region Unity Call Functions
@@ -41,30 +45,41 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
     #region Public Methods
-    public void AddToInventory(GameObject newObject)
-    {
-        inventory.Add(newObject);
-    }
 
-    /// <summary>
-    /// Try to use an item from the inventory. If it is used return true.
-    /// </summary>
-    /// <param name="itemToUse">The item to use.</param>
-    /// <param name="removeObject">If true the item is removed from inventroy.</param>
-    /// <returns>The item is used.</returns>
-    public bool UseItem(GameObject itemToUse, bool removeObject)
+    public void AddToInventory(string name)
     {
-        if (inventory.Contains(itemToUse))
+        if (!inventoryDictionary.TryAdd(name, 1))
+        {
+            inventoryDictionary[name] += 1;
+        }
+        PrintInventory();
+    }
+    public bool UseItem(string name, int number, bool removeObject)
+    {
+        if (inventoryDictionary.ContainsKey(name) && inventoryDictionary[name] >= number)
         {
             if (removeObject)
             {
-                inventory.Remove(itemToUse);
+                inventoryDictionary[name] -= number;
             }
+            PrintInventory();
             return true;
         }
         else
         {
+            PrintInventory();
             return false;
+        }
+    }
+
+    public void PrintInventory()
+    {
+        for (int i = 0; i < inventoryDictionary.Count; i++)
+        {
+            int a = inventoryDictionary.ElementAt(i).Value;
+            string b = inventoryDictionary.ElementAt(i).Key;
+
+            Debug.Log($"{b} : {a}");
         }
     }
     #endregion

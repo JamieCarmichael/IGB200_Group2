@@ -39,7 +39,9 @@ public class Lever : MonoBehaviour, IIntertactable
 
     [SerializeField] private NPCMove nPCMove;
 
-    [SerializeField] private GameObject requiredItem;
+    [SerializeField] private string requiredItem;
+
+    [SerializeField] private int numberOfItmesNeeded; 
 
     [SerializeField] private bool useRequiredItem = false;
 
@@ -64,7 +66,7 @@ public class Lever : MonoBehaviour, IIntertactable
     {
         if (requiredItem != null)
         {
-            if (!PlayerManager.Instance.UseItem(requiredItem, useRequiredItem))
+            if (!PlayerManager.Instance.UseItem(requiredItem, numberOfItmesNeeded, useRequiredItem))
             {
                 return;
             }

@@ -15,7 +15,9 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     [Tooltip("The dialogue said in the second interaction.")]
     [SerializeField] private DialogueManager.Dialogue itemDialogue;
     [Tooltip("Item needed for dialogue.")]
-    [SerializeField] private GameObject itemNeeded;
+    [SerializeField] private string itemNeeded;
+    [Tooltip("How many items are needed.")]
+    [SerializeField] private int numberOfItemsdNeeded;
 
     public bool dialogueItem = false;
     public bool dialogue1 = true;
@@ -41,7 +43,7 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     #region Private Methods
     private void MakeDialogue()
     {
-        if (dialogueItem && PlayerManager.Instance.UseItem(itemNeeded, true))
+        if (dialogueItem && PlayerManager.Instance.UseItem(itemNeeded, numberOfItemsdNeeded, true))
         {
             DialogueManager.Instance.DisplayDialogue(itemDialogue);
             dialogueItem = false;
