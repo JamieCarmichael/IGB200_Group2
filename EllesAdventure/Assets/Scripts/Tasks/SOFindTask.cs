@@ -6,8 +6,8 @@ using UnityEngine;
 /// Details: 
 /// </summary>
 
-[Serializable]
-public class FindTask : ITask
+[CreateAssetMenu(fileName = "NewSOFindTask", menuName = "ScriptableObjects/SOFindTask")]
+public class SOFindTask : SOTask
 {
     [Serializable]
     public struct Item
@@ -19,11 +19,11 @@ public class FindTask : ITask
     #region Fields
     [SerializeField] private Item item;
 
-    [SerializeField] private string name;
+    [SerializeField] private string taskName;
 
     [SerializeField] private string description;
 
-    private bool isComplete;
+    public bool isComplete = false;
     #endregion
 
     #region Properties
@@ -35,9 +35,9 @@ public class FindTask : ITask
         }
     }
 
-    public override string Name
+    public override string TaskName
     {
-        get { return name; }
+        get { return taskName; }
     }
 
     public override string Description
@@ -60,6 +60,11 @@ public class FindTask : ITask
         isComplete = PlayerManager.Instance.UseItem(item.itemName, item.numberOfItems, true);
 
         return IsComplete;
+    }
+
+    public override void StartTask()
+    {
+        isComplete = false;
     }
     #endregion
 

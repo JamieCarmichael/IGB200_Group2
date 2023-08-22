@@ -1,18 +1,27 @@
 using UnityEngine;
-using System;
+
 /// <summary>
 /// Made By: Jamie Carmichael
 /// Details: 
 /// </summary>
 
-
-[Serializable]
-public class DoTask : ITask
+[CreateAssetMenu(fileName = "NewSODoTask", menuName = "ScriptableObjects/SODoTask")]
+public class SODoTask : SOTask
 {
     #region Fields
-    [SerializeField] private ITask[] tasks;
 
-    [SerializeField] private string name;
+    [TextArea]
+    [SerializeField] private string[] giveTaskDialogue;
+
+    [TextArea]
+    [SerializeField] private string[] duringTaskDialogue;
+
+    [TextArea]
+    [SerializeField] private string[] finishTaskDialogue;
+
+    [SerializeField] private SOTask[] tasks;
+
+    [SerializeField] private string taskName;
     #endregion
 
     #region Properties
@@ -31,9 +40,9 @@ public class DoTask : ITask
         }
     }
 
-    public override string Name
+    public override string TaskName
     {
-        get { return name; }
+        get { return taskName; }
     }
 
     public override string Description
@@ -57,9 +66,24 @@ public class DoTask : ITask
     {
         for (int i = 0; i < tasks.Length; i++)
         {
-            tasks[i].TryComplete();
+            if (tasks[i].GetType() == typeof(SOFindTask))
+            {
+                tasks[i].TryComplete();
+            }
         }
         return IsComplete;
+    }
+
+    public override void StartTask()
+    {
+        GiveTaskDialogue = giveTaskDialogue;
+        DuringTaskDialogue = duringTaskDialogue;
+        FinishTaskDialogue = finishTaskDialogue;
+
+        for (int i = 0; i < tasks.Length; i++)
+        {
+            tasks[i].StartTask();
+        }
     }
     #endregion
 }

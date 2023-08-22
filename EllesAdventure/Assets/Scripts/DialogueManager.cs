@@ -1,7 +1,5 @@
 using UnityEngine;
 using TMPro;
-using System;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 /// <summary>
@@ -25,7 +23,7 @@ public class DialogueManager : MonoBehaviour
     /// <summary>
     /// The current dialogue object.
     /// </summary>
-    private Dialogue currentDialogue;
+    private string[] currentDialogue;
     /// <summary>
     /// The index of the next dialogue to be displayed.
     /// </summary>
@@ -40,19 +38,6 @@ public class DialogueManager : MonoBehaviour
     /// </summary>
     private PlayerInteract playerInteract;
 
-    /// <summary>
-    /// A Dialogue object. Contains the strings for the conversation and an event to be called at the end.
-    /// </summary>
-    [Serializable]
-    public struct Dialogue
-    {
-        [Tooltip("The array of dialogue messages in a conversation.")]
-        [TextArea]
-        public string[] dialiogueChain;
-
-        [Tooltip("The event called when the dialogue has finished.")]
-        public UnityEvent endEvent;
-    }
     #endregion
 
     #region Unity Call Functions
@@ -76,7 +61,7 @@ public class DialogueManager : MonoBehaviour
     /// Show the dialogue object.
     /// </summary>
     /// <param name="newDialogue"></param>
-    public void DisplayDialogue(Dialogue newDialogue)
+    public void DisplayDialogue(string[] newDialogue)
     {
         if (dialogueDisplayed)
         {
@@ -103,13 +88,13 @@ public class DialogueManager : MonoBehaviour
     /// </summary>
     private void NextDialogue()
     {
-        if (dialogueIndex >= currentDialogue.dialiogueChain.Length)
+        if (dialogueIndex >= currentDialogue.Length)
         {
             FinishDialogue();
             return;
         }
 
-        textField.text = currentDialogue.dialiogueChain[dialogueIndex];
+        textField.text = currentDialogue[dialogueIndex];
 
         dialogueIndex++;
     }
@@ -134,8 +119,6 @@ public class DialogueManager : MonoBehaviour
 
         playerInteract.enabled = true;
         playerMovement.enabled = true;
-
-        currentDialogue.endEvent.Invoke();
 
         InputManager.Instance.PlayerInput.InGame.Interact.performed -= NextDialogue;
     }

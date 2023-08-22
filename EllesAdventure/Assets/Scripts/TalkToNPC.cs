@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -7,28 +9,24 @@ using UnityEngine;
 public class TalkToNPC : MonoBehaviour, IIntertactable
 {
     #region Fields
-    [Tooltip("The dialogue said in the first interaction.")]
-    [SerializeField] private DialogueManager.Dialogue startDialogue;
-    [Tooltip("The dialogue said in the second interaction.")]
-    [SerializeField] private DialogueManager.Dialogue endDialogue;
+    [TextArea]
+    [Tooltip("The dialogue said before the NPC has a task.")]
+    [SerializeField] private string[] beforeTaskDialogue;
+    [TextArea]
+    [Tooltip("The dialogue said after a task has been completed for this NPC.")]
+    [SerializeField] private string[] afterTaskDialogue;
 
-    [Tooltip("The dialogue said in the second interaction.")]
-    [SerializeField] private DialogueManager.Dialogue itemDialogue;
-    [Tooltip("Item needed for dialogue.")]
-    [SerializeField] private string itemNeeded;
-    [Tooltip("How many items are needed.")]
-    [SerializeField] private int numberOfItemsdNeeded;
-
-    public bool dialogueItem = false;
-    public bool dialogue1 = true;
-    public bool dialogue2 = false;
+    public bool taskEnabled = false;
+    private bool taskStarted = false;
+    private bool taskComplete = false;
 
     private Collider thisCollider;
 
-    
-    public ITask task = new DoTask();
-    public DoTask task2 = new DoTask();
-    public FindTask task3 = new FindTask();
+    public SOTask task;
+
+    [SerializeField] private UnityEvent startTaskEvent;
+    [SerializeField] private UnityEvent finishTaskEvent;
+
     #endregion
 
     #region Unity Call Functions
@@ -39,39 +37,53 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     #endregion
 
     #region Public Methods
-    public void ChangeDialogue()
+    public void TaskFinished()
     {
-        dialogue2 = true;
+        taskComplete = true;
+    }
+
+    public void EnableTask()
+    {
+        taskEnabled = true;
     }
     #endregion
 
     #region Private Methods
     private void MakeDialogue()
     {
-        if (dialogueItem && PlayerManager.Instance.UseItem(itemNeeded, numberOfItemsdNeeded, true))
+        if (taskEnabled)
         {
-            DialogueManager.Instance.DisplayDialogue(itemDialogue);
-            dialogueItem = false;
+            if (!taskStarted)
+            {
+                DialogueManager.Instance.DisplayDialogue(task.GiveTaskDialogue);
+                taskStarted = true;
+                task.StartTask();
+                startTaskEvent.Invoke();
+            }
+            else if (!taskComplete)
+            {
+                DialogueManager.Instance.DisplayDialogue(task.DuringTaskDialogue);
+            }
+            else
+            {
+                DialogueManager.Instance.DisplayDialogue(task.FinishTaskDialogue);
+                taskEnabled = false;
+                finishTaskEvent.Invoke();
+            }
         }
 
-        else if (dialogue1)
+        else if (!taskComplete)
         {
-            DialogueManager.Instance.DisplayDialogue(startDialogue);
-            dialogue1 = false;
+            DialogueManager.Instance.DisplayDialogue(beforeTaskDialogue);
         }
-        else if (dialogue2)
+        else
         {
-            DialogueManager.Instance.DisplayDialogue(endDialogue);
-            dialogue2 = false;
+            DialogueManager.Instance.DisplayDialogue(afterTaskDialogue);
         }
     }
     #endregion
 
     #region IIntertactable
-    public void EnableDialogueItem()
-    {
-        dialogueItem = true;
-    }
 
     public string InteractAminationString
     {
@@ -96,6 +108,12 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     public void Interact()
     {
         transform.rotation = Quaternion.LookRotation(PlayerManager.Instance.PlayerTransform.position - transform.position);
+
+        if (taskEnabled && taskStarted)
+        {
+            taskComplete = task.TryComplete();
+        }
+
         MakeDialogue();
     }
 

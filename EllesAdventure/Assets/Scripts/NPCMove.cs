@@ -40,7 +40,6 @@ public class NPCMove : MonoBehaviour
     public void Move()
     {
         moving = true;
-        talk.dialogue2 = true;
         agent.SetDestination(walkToPosition.transform.position);
 
     }

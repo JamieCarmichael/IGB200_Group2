@@ -8,7 +8,7 @@ using UnityEngine;
 public class TaskManager : MonoBehaviour 
 {
     #region Fields
-    public List<ITask> tasks = new List<ITask>();
+    public List<SOTask> tasks = new List<SOTask>();
     #endregion
 
     #region Unity Call Functions
