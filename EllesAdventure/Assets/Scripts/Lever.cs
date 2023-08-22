@@ -64,7 +64,7 @@ public class Lever : MonoBehaviour, IIntertactable
     #region IIntertactable
     public void Interact()
     {
-        if (requiredItem != null)
+        if (requiredItem != string.Empty)
         {
             if (!PlayerManager.Instance.UseItem(requiredItem, numberOfItmesNeeded, useRequiredItem))
             {
