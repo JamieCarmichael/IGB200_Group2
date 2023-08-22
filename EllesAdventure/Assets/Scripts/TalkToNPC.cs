@@ -24,6 +24,11 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     public bool dialogue2 = false;
 
     private Collider thisCollider;
+
+    
+    public ITask task = new DoTask();
+    public DoTask task2 = new DoTask();
+    public FindTask task3 = new FindTask();
     #endregion
 
     #region Unity Call Functions
