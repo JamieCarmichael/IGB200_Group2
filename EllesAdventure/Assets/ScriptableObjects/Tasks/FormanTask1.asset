@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18103475ad3df9c4cbfca2179a13b27a, type: 3}
+  m_Name: FormanTask1
+  m_EditorClassIdentifier: 
+  startTaskDialogue:
+  - Can you go and collect that notepad for me.
+  duringTaskDialogue:
+  - Have you got the notepad.
+  completeTaskDialogue:
+  - Good now use the notepad to take notes.
+  tasks:
+  - {fileID: 11400000, guid: 9bfda70f5a55be0418ba61db7c9a7ce8, type: 2}
+  taskName: Get Notepad

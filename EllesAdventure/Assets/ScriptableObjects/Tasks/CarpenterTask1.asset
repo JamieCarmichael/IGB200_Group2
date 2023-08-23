@@ -10,20 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 18103475ad3df9c4cbfca2179a13b27a, type: 3}
-  m_Name: ToolmanTask
+  m_Name: CarpenterTask1
   m_EditorClassIdentifier: 
-  GiveTaskDialogue:
-  - I need tools.
-  DuringTaskDialogue:
-  - Please find tools.
-  FinishTaskDialogue:
-  - Thanks for tools.
-  giveTaskDialogue:
-  - Need tools
+  startTaskDialogue:
+  - Can you get me 2 wood
   duringTaskDialogue:
-  - Get me tools
-  finishTaskDialogue:
-  - Thanks for tools
+  - Find the wood now.
+  completeTaskDialogue:
+  - Thanks for the wood.
   tasks:
-  - {fileID: 11400000, guid: 22a9b55d84eeb974eb63481a5e48995c, type: 2}
-  taskName: Find tools
+  - {fileID: 11400000, guid: ddc60a1b8fff46446809c6fd752d2ddc, type: 2}
+  taskName: Help Carpenter

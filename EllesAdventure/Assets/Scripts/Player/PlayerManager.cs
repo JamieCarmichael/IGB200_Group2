@@ -1,11 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine.Rendering;
 
 /// <summary>
 /// Made By: Jamie Carmichael
 /// Details: Holds data for the player that needs to be accessable by other objects.
+///             Players inventroy is held on this script.
 /// </summary>
 public class PlayerManager : MonoBehaviour 
 {
@@ -16,11 +15,6 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private Transform playerTransform;
 
     /// <summary>
-    /// The inventroy of items the player has.
-    /// </summary>
-    private List<GameObject> inventory = new List<GameObject>();
-
-    /// <summary>
     /// The players tarnsform.
     /// </summary>
     public Transform PlayerTransform
@@ -28,6 +22,9 @@ public class PlayerManager : MonoBehaviour
         get { return playerTransform; }
     }
 
+    /// <summary>
+    /// The Dictionary containing the players inventory.
+    /// </summary>
     private Dictionary<string, int> inventoryDictionary = new Dictionary<string, int>();
     #endregion
 
@@ -45,15 +42,24 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
     #region Public Methods
-
+    /// <summary>
+    /// Adds an item to the inventory. Adds 1 of the item.
+    /// </summary>
+    /// <param name="name">The item being added.</param>
     public void AddToInventory(string name)
     {
         if (!inventoryDictionary.TryAdd(name, 1))
         {
             inventoryDictionary[name] += 1;
         }
-        PrintInventory();
     }
+    /// <summary>
+    /// Use an item from the players inventroy.
+    /// </summary>
+    /// <param name="name">The name of the item</param>
+    /// <param name="number">How many of the item are being used.</param>
+    /// <param name="removeObject">If true the item is removed from the inventory when used.</param>
+    /// <returns>True if the item was successfully used.</returns>
     public bool UseItem(string name, int number, bool removeObject)
     {
         if (inventoryDictionary.ContainsKey(name) && inventoryDictionary[name] >= number)
@@ -61,31 +67,25 @@ public class PlayerManager : MonoBehaviour
             if (removeObject)
             {
                 inventoryDictionary[name] -= number;
+                if (inventoryDictionary[name] <= 0)
+                {
+                    inventoryDictionary.Remove(name);
+                }
             }
-            PrintInventory();
             return true;
         }
         else
         {
-            PrintInventory();
             return false;
         }
     }
 
-    public void PrintInventory()
+    /// <summary>
+    /// The dictionary of objects contained within the inventory.
+    /// </summary>
+    public Dictionary<string, int> InventoryDictionary
     {
-        for (int i = 0; i < inventoryDictionary.Count; i++)
-        {
-            int a = inventoryDictionary.ElementAt(i).Value;
-            string b = inventoryDictionary.ElementAt(i).Key;
-
-            Debug.Log($"{b} : {a}");
-        }
+        get { return inventoryDictionary; }
     }
     #endregion
-
-    #region Private Methods
-
-    #endregion
-
 }

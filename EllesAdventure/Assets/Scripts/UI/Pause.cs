@@ -10,6 +10,8 @@ public class Pause : MonoBehaviour
     #region Fields
     [Tooltip("The UI panel that is the visual for the pause menu.")]
     [SerializeField] private GameObject pausePanel;
+    [Tooltip("Objects to be disabled when the game is paused.")]
+    [SerializeField] private GameObject[] UIObjectsToHide;
 
     /// <summary>
     /// If ture the game is paused.
@@ -56,6 +58,11 @@ public class Pause : MonoBehaviour
             Time.timeScale = 0.0f;
             pausePanel.SetActive(true);
             InputManager.Instance.PlayerInput.InGame.Disable();
+
+            for (int i = 0; i < UIObjectsToHide.Length; i++)
+            {
+                UIObjectsToHide[i].SetActive(false);
+            }
         }
         else
         {
@@ -65,6 +72,11 @@ public class Pause : MonoBehaviour
             Time.timeScale = 1.0f;
             pausePanel.SetActive(false);
             InputManager.Instance.PlayerInput.InGame.Enable();
+
+            for (int i = 0; i < UIObjectsToHide.Length; i++)
+            {
+                UIObjectsToHide[i].SetActive(true);
+            }
         }
     }
     #endregion

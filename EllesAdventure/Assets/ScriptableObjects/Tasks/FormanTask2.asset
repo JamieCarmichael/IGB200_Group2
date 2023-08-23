@@ -10,23 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 18103475ad3df9c4cbfca2179a13b27a, type: 3}
-  m_Name: FormanTask
+  m_Name: FormanTask2
   m_EditorClassIdentifier: 
-  GiveTaskDialogue:
-  - Help people
-  DuringTaskDialogue:
-  - Keep working
-  FinishTaskDialogue:
-  - Thanks for helping
-  - I open gate.
-  giveTaskDialogue:
-  - Help People
+  startTaskDialogue:
+  - Now go and help people.
   duringTaskDialogue:
   - Hurry
-  finishTaskDialogue:
-  - Good Work Helping
-  - I open Gate
+  completeTaskDialogue:
+  - Good work helping evenyone.
+  - I'll open the gate and we can leave now.
   tasks:
   - {fileID: 11400000, guid: 50cf92fb39d1da448b32cfa2bef7ce93, type: 2}
   - {fileID: 11400000, guid: 3eed7c34417e66343ad8fbbe7bb418ea, type: 2}
+  - {fileID: 11400000, guid: 5ad569f294abcaa46b8802579adf31fa, type: 2}
   taskName: Help People

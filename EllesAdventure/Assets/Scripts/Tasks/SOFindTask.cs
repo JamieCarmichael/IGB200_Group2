@@ -3,12 +3,15 @@ using UnityEngine;
 
 /// <summary>
 /// Made By: Jamie Carmichael
-/// Details: 
+/// Details: A task that is a collection task. The player will need to return a number of an item to the NPC.
 /// </summary>
 
 [CreateAssetMenu(fileName = "NewSOFindTask", menuName = "ScriptableObjects/SOFindTask")]
 public class SOFindTask : SOTask
 {
+    /// <summary>
+    /// An item name and how many of the item there are.
+    /// </summary>
     [Serializable]
     public struct Item
     {
@@ -17,13 +20,15 @@ public class SOFindTask : SOTask
     }
 
     #region Fields
+    [Tooltip("The item that is needed. The string and number of the item.")]
     [SerializeField] private Item item;
-
+    [Tooltip("The name of the task being done. This is displayed in the notepad and should be descriptive.")]
     [SerializeField] private string taskName;
 
-    [SerializeField] private string description;
-
-    public bool isComplete = false;
+    /// <summary>
+    /// Has this task been completed.
+    /// </summary>
+    private bool isComplete = false;
     #endregion
 
     #region Properties
@@ -38,14 +43,6 @@ public class SOFindTask : SOTask
     public override string TaskName
     {
         get { return taskName; }
-    }
-
-    public override string Description
-    {
-        get
-        {
-            return description;
-        }
     }
     #endregion
 

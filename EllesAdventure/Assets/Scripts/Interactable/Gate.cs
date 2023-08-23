@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Made By: Jamie Carmichael
-/// Details: A switch that interacts with another object.
+/// Details: Gate object. Can Be opened and have an event run after opening.
 /// </summary>
-public class Lever : MonoBehaviour, IIntertactable
+public class Gate : MonoBehaviour, IIntertactable 
 {
     #region Fields
     private Collider thisCollider;
@@ -17,6 +18,7 @@ public class Lever : MonoBehaviour, IIntertactable
         }
     }
 
+    [Tooltip("The string for the trigger to run the animation for this interaction.")]
     [SerializeField] private string interactAminationString;
 
 
@@ -28,22 +30,13 @@ public class Lever : MonoBehaviour, IIntertactable
         }
     }
 
-    private bool intertactable = true;
-
-    [Tooltip("The object that indicates when this object is being looked at.")]
-    private GameObject lookAtObject;
-
-    [SerializeField] private GameObject gate;
-
+    [Tooltip("If true this object can be interacted with.")]
+    [SerializeField] private bool intertactable = false; 
+    [Tooltip("The is how long the gate takes to open. After this time the after open event runs.")]
     [SerializeField] private float openTime = 1.0f;
+    [Tooltip("This event is called after the gate has finished opening.")]
+    [SerializeField] private UnityEvent afterOpenEvent;
 
-    [SerializeField] private NPCMove nPCMove;
-
-    [SerializeField] private string requiredItem;
-
-    [SerializeField] private int numberOfItmesNeeded; 
-
-    [SerializeField] private bool useRequiredItem = false;
 
     #endregion
 
@@ -54,40 +47,29 @@ public class Lever : MonoBehaviour, IIntertactable
     }
     #endregion
 
-    #region Public Methods
-    #endregion
+    #region Class Methods
+    /// <summary>
+    /// Open this gate.
+    /// </summary>
+    public void OpenGate()
+    {
+        gameObject.GetComponent<Animator>().SetTrigger("Open");
+        Invoke("AfterOpenGate", openTime);
+    }
 
-    #region Private Methods
-
+    /// <summary>
+    /// This is invoked after the gate has finished opening.
+    /// </summary>
+    private void AfterOpenGate()
+    {
+        afterOpenEvent.Invoke();
+    }
     #endregion
 
     #region IIntertactable
     public void Interact()
     {
-        if (requiredItem != string.Empty)
-        {
-            if (!PlayerManager.Instance.UseItem(requiredItem, numberOfItmesNeeded, useRequiredItem))
-            {
-                return;
-            }
-        }
-
-        gameObject.GetComponent<Animator>().SetTrigger("Open");
-        Invoke("OpenGate", openTime);
-    }
-
-    private void OpenGate()
-    {
-        gate.GetComponent<Animator>().SetTrigger("Open");
-        Invoke("MoveNPC", openTime);
-    }
-
-    private void MoveNPC()
-    {
-        if (nPCMove != null)
-        {
-            nPCMove.Move();
-        }
+        OpenGate();
     }
 
     public void StartLookAt()

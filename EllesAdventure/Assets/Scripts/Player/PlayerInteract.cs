@@ -70,6 +70,7 @@ public class PlayerInteract : MonoBehaviour
     /// <returns></returns>
     private IIntertactable FindInteractable()
     {
+        // Find the closest interactable object.
         Collider[] interactableArray = Physics.OverlapSphere(transform.position, interactRange, interactLayer);
         if (interactableArray.Length == 0)
         {
@@ -92,9 +93,14 @@ public class PlayerInteract : MonoBehaviour
             }
         }
 
+        // Sets which interactable is being looked at.
         IIntertactable newInteractable = interactableArray[select].GetComponent<IIntertactable>();
         if (newInteractable != interactable)
         {
+            if (!newInteractable.Intertactable)
+            {
+                newInteractable = null;
+            }
             if (interactable != null)
             {
                 interactable.StopLookAt();
@@ -117,10 +123,10 @@ public class PlayerInteract : MonoBehaviour
             StartCoroutine(InteractWithObject());
         }
     }
-    
 
-
-
+    /// <summary>
+    /// Checks if there is something to interact with and then interacts with it. To be used from the Input Event.
+    /// </summary>
     private void Interact(InputAction.CallbackContext obj)
     {
         Interact();
