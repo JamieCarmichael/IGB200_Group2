@@ -59,6 +59,7 @@ GameObject:
   - component: {fileID: 8686189581662546988}
   - component: {fileID: 6845875503587334929}
   - component: {fileID: 8984690542345762672}
+  - component: {fileID: 2961242446931671715}
   m_Layer: 6
   m_Name: Elle
   m_TagString: Untagged
@@ -133,7 +134,7 @@ MonoBehaviour:
   groundCheckDistance: 0.1
   groundedLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   animator: {fileID: 7804261757546250638}
   animWalk: isWalking
   animRun: isJogging
@@ -151,11 +152,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactRange: 2
-  stoppingDistance: 0.5
+  stoppingDistance: 0.1
   interactLayer:
     serializedVersion: 2
     m_Bits: 128
   animator: {fileID: 7804261757546250638}
+--- !u!114 &2961242446931671715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935052765830162921}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 164df246f30a4e54aafbad863c4bcd7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 7804261757546250638}
+  animClimb: isWalking
+  climbSpeed: 2
+  getOffLadderDiatance: 0.2
 --- !u!1 &2601895572099630445
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,7 +198,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2601895572099630445}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40965605, y: 1e-45, z: -0, w: 0.9122401}
+  m_LocalRotation: {x: 0.40965605, y: -1e-45, z: 1e-45, w: 0.9122401}
   m_LocalPosition: {x: 0, y: 9, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

@@ -26,6 +26,10 @@ public class PlayerManager : MonoBehaviour
     /// The Dictionary containing the players inventory.
     /// </summary>
     private Dictionary<string, int> inventoryDictionary = new Dictionary<string, int>();
+
+    private PlayerMovement playerMovement;
+    private PlayerInteract playerInteract;
+    private PlayerMovementLadder playerMovementLadder;
     #endregion
 
     #region Unity Call Functions
@@ -38,6 +42,9 @@ public class PlayerManager : MonoBehaviour
         }
 
         Instance = this;
+        playerMovement = GetComponentInChildren<PlayerMovement>();
+        playerInteract = GetComponentInChildren<PlayerInteract>();
+        playerMovementLadder = GetComponentInChildren<PlayerMovementLadder>();
     }
     #endregion
 
@@ -86,6 +93,28 @@ public class PlayerManager : MonoBehaviour
     public Dictionary<string, int> InventoryDictionary
     {
         get { return inventoryDictionary; }
+    }
+
+    /// <summary>
+    /// Sets the current player movement to use a ladder.
+    /// </summary>
+    /// <param name="ladder">The ladder to be used.</param>
+    public void ClimbLadder(Ladder ladder)
+    {
+        playerMovementLadder.enabled = true;
+        playerMovement.enabled = false;
+        playerInteract.enabled = false;
+        playerMovementLadder.AttachToLadder(ladder);
+    }
+
+    /// <summary>
+    /// Sets up the current player movement to be normal movement.
+    /// </summary>
+    public void StandardMovement()
+    {
+        playerMovementLadder.enabled = false;
+        playerMovement.enabled = true;
+        playerInteract.enabled = true;
     }
     #endregion
 }
