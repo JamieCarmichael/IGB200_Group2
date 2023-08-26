@@ -34,9 +34,20 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private float speed = 0.0f;
 
-    [Header("Rotation")]
-    [Tooltip("How many seconds it takes for the player to turn to a new movement direction.")]
-    [SerializeField] private float rotateSpeed = 10.0f;
+    [Header("Looking")]
+    [Tooltip("The transform that the camera is looking at.")]
+    [SerializeField] Transform lookAtTransform;
+    [Tooltip("The speed that the player turns horizontally")]
+    [SerializeField] private float horizontalTurnSpeed = 10.0f;
+    [Tooltip("The speed that the player turns vertically")]
+    [SerializeField] private float verticalTurnSpeed = 10.0f;
+    [Tooltip("The minimum and maximum angles that the player can look on the vertical axis.")]
+    [SerializeField] Vector2 verticalClamp = new Vector2(-85.0f, 85.0f);
+
+    /// <summary>
+    /// The cameras rotation on the X axis.
+    /// </summary>
+    private float verticalCameraAngle;
     /// <summary>
     /// The movement direction before the latest direction.
     /// </summary>
@@ -69,7 +80,7 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("The layer that the player will detect as ground.")]
     [SerializeField] private LayerMask groundedLayer;
     /// <summary>
-    /// The players verticle velocity. Used for jumping and gravity.
+    /// The players vertical velocity. Used for jumping and gravity.
     /// </summary>
     private float verticalVelocity = 0.0f;
 
@@ -90,31 +101,6 @@ public class PlayerMovement : MonoBehaviour
     /// The hit info from the ground check.
     /// </summary>
     private RaycastHit groundHitInfo;
-
-
-    [Header("Looking")]
-    [Tooltip("The transform that the camera is looking at.")]
-    [SerializeField] Transform lookAtTransform;
-    [Tooltip("The mouses sensitivity. X is horizontal movement. Y is verticle Movement.")]
-    [SerializeField] Vector2 mouseSensitivity = new Vector2(10.0f, 10.0f);
-    [Tooltip("The minimum and maximum angles that the player can look on the verticle axis.")]
-    [SerializeField] Vector2 verticleClamp = new Vector2(-85.0f, 85.0f);
-
-    /// <summary>
-    /// The cameras rotation on the X axis.
-    /// </summary>
-    private float verticleCameraAngle;
-    #endregion
-
-    #region Properties
-    /// <summary>
-    /// The mouses sensitivity. X is horizontal movement. Y is verticle Movement.
-    /// </summary>
-    public Vector2 MouseSensitivity
-    {
-        get { return mouseSensitivity; }
-        set { mouseSensitivity = value; }
-    }
 
 
     [Header("Animation")]
@@ -167,7 +153,7 @@ public class PlayerMovement : MonoBehaviour
         characterController.slopeLimit = maxSlope;
 
 
-        verticleCameraAngle = transform.rotation.y;
+        verticalCameraAngle = transform.rotation.y;
     }
     private void OnEnable()
     {
@@ -284,17 +270,17 @@ public class PlayerMovement : MonoBehaviour
     /// Rotate the player to face the current movement direction.
     /// </summary>
     /// </summary>
-    /// <param name="moveInput">The current player input</param>
+    /// <param name="directionVector">The direction to turn towards.</param>
     /// <param name="hasInput">If the player is currently making an input</param>
-    private void RotatePlayer(Vector3 moveInputVector3, bool hasInput, float timeToRotate)
+    private void RotatePlayer(Vector3 directionVector, bool hasInput, float timeToRotate)
     {
         // Turning
         // Check if input has changed.
-        if (toDirection != moveInputVector3 && hasInput)
+        if (toDirection != directionVector && hasInput)
         {
-            moveInputVector3.y = 0.0f;
+            directionVector.y = 0.0f;
             fromDirection = transform.forward;
-            toDirection = moveInputVector3;
+            toDirection = directionVector;
             rotateTimer = 0.0f;
             isRotating = true;
         }
@@ -378,11 +364,11 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="rotation"></param>
     private void Look(Vector2 rotation)
     {
-        transform.rotation *= Quaternion.Euler(Vector3.up * rotation.x * mouseSensitivity.x * Time.deltaTime);
+        transform.rotation *= Quaternion.Euler(Vector3.up * rotation.x * horizontalTurnSpeed * Time.deltaTime);
 
-        verticleCameraAngle -= rotation.y * mouseSensitivity.y * Time.deltaTime;
-        verticleCameraAngle = Mathf.Clamp(verticleCameraAngle, verticleClamp.x, verticleClamp.y);
-        lookAtTransform.localRotation = Quaternion.Euler(verticleCameraAngle, 0.0f, 0.0f);
+        verticalCameraAngle -= rotation.y * verticalTurnSpeed * Time.deltaTime;
+        verticalCameraAngle = Mathf.Clamp(verticalCameraAngle, verticalClamp.x, verticalClamp.y);
+        lookAtTransform.localRotation = Quaternion.Euler(verticalCameraAngle, 0.0f, 0.0f);
 
     }
     #endregion
@@ -555,45 +541,6 @@ public class PlayerMovement : MonoBehaviour
         movementVector = Vector3.zero;
         animator.SetBool(animWalk, false);
         canMove = true;
-    }
-    #endregion
-
-    #region Not In Use
-    /// <summary>
-    /// Finds the horizontal velocity for the player. Sets speed and direction with a single vector that changes to try and match the current input.
-    /// </summary>
-    private void DirectionalMovement()
-    {
-        // If the player is not grounded maintain movement.
-        if (!isGrounded)
-        {
-            return;
-        }
-
-        // Get Input
-        Vector2 moveInput = InputManager.Instance.PlayerInput.InGame.Move.ReadValue<Vector2>();
-        moveInput = moveInput.normalized;
-
-        // Turning
-        Vector3 moveDirection = new Vector3(moveInput.x, 0.0f, moveInput.y).normalized;
-        Vector3 rotationDirection = Vector3.RotateTowards(transform.forward, moveDirection, (1 / rotateSpeed * 2) * Time.deltaTime, 0.0f);
-        transform.rotation = Quaternion.LookRotation(rotationDirection);
-
-        if (!InputManager.Instance.PlayerInput.InGame.Move.IsInProgress())
-        {
-            // No input
-            movementVector = Vector2.MoveTowards(movementVector, Vector2.zero, (maxRunSpeed / deceleration) * Time.deltaTime);
-        }
-        else if (!InputManager.Instance.PlayerInput.InGame.Sprint.IsInProgress())
-        {
-            // Walking
-            movementVector = Vector2.MoveTowards(movementVector, moveInput * maxWalkSpeed, (maxWalkSpeed / walkAcceleration) * Time.deltaTime);
-        }
-        else
-        {
-            // Running
-            movementVector = Vector2.MoveTowards(movementVector, moveInput * maxRunSpeed, (maxRunSpeed / runAcceleration) * Time.deltaTime);
-        }
     }
     #endregion
 }
