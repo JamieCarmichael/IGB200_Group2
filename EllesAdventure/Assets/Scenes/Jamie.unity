@@ -828,41 +828,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: '#CameraLights'
       objectReference: {fileID: 0}
-    - target: {fileID: 6564214640506286604, guid: 349855483907aab418e2ca8b95904dff,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -20
-      objectReference: {fileID: 0}
-    - target: {fileID: 6564214640506286604, guid: 349855483907aab418e2ca8b95904dff,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 6564214640506286604, guid: 349855483907aab418e2ca8b95904dff,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 6564214640506286604, guid: 349855483907aab418e2ca8b95904dff,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9122401
-      objectReference: {fileID: 0}
-    - target: {fileID: 6564214640506286604, guid: 349855483907aab418e2ca8b95904dff,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.40965605
-      objectReference: {fileID: 0}
-    - target: {fileID: 6564214640506286604, guid: 349855483907aab418e2ca8b95904dff,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6564214640506286604, guid: 349855483907aab418e2ca8b95904dff,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12243,36 +12208,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5161462802299450628, guid: 353fa9580879ac8498f61ae7f05412bb,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -20
-      objectReference: {fileID: 0}
-    - target: {fileID: 5161462802299450628, guid: 353fa9580879ac8498f61ae7f05412bb,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 5161462802299450628, guid: 353fa9580879ac8498f61ae7f05412bb,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5161462802299450628, guid: 353fa9580879ac8498f61ae7f05412bb,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6583016714712921538, guid: 353fa9580879ac8498f61ae7f05412bb,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -20
-      objectReference: {fileID: 0}
-    - target: {fileID: 6583016714712921538, guid: 353fa9580879ac8498f61ae7f05412bb,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

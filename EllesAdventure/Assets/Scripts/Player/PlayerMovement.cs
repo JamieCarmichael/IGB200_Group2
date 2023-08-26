@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cinemachine;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -90,6 +91,32 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private RaycastHit groundHitInfo;
 
+
+    [Header("Looking")]
+    [Tooltip("The transform that the camera is looking at.")]
+    [SerializeField] Transform lookAtTransform;
+    [Tooltip("The mouses sensitivity. X is horizontal movement. Y is verticle Movement.")]
+    [SerializeField] Vector2 mouseSensitivity = new Vector2(10.0f, 10.0f);
+    [Tooltip("The minimum and maximum angles that the player can look on the verticle axis.")]
+    [SerializeField] Vector2 verticleClamp = new Vector2(-85.0f, 85.0f);
+
+    /// <summary>
+    /// The cameras rotation on the X axis.
+    /// </summary>
+    private float verticleCameraAngle;
+    #endregion
+
+    #region Properties
+    /// <summary>
+    /// The mouses sensitivity. X is horizontal movement. Y is verticle Movement.
+    /// </summary>
+    public Vector2 MouseSensitivity
+    {
+        get { return mouseSensitivity; }
+        set { mouseSensitivity = value; }
+    }
+
+
     [Header("Animation")]
     [Tooltip("The animator used for the player model.")]
     [SerializeField] private Animator animator;
@@ -138,6 +165,9 @@ public class PlayerMovement : MonoBehaviour
         fromDirection = transform.forward;
         toDirection = transform.forward;
         characterController.slopeLimit = maxSlope;
+
+
+        verticleCameraAngle = transform.rotation.y;
     }
     private void OnEnable()
     {
@@ -154,6 +184,10 @@ public class PlayerMovement : MonoBehaviour
         {
             CollisionCheck();
             CheckGround();
+
+
+            Look(InputManager.Instance.PlayerInput.InGame.Aim.ReadValue<Vector2>());
+
             Move();
 
             // Move
@@ -172,8 +206,6 @@ public class PlayerMovement : MonoBehaviour
         if (!isGrounded && !onEdge)
         {
             animator.SetBool(animFall, true);
-            // Rotate
-            RotatePlayer(Vector2.zero, false, rotateSpeed);
             movementVector.y = 0.0f;
             return;
         }
@@ -246,9 +278,6 @@ public class PlayerMovement : MonoBehaviour
         {
             OnEdge(moveInputVector3);
         }
-
-        // Rotate
-        RotatePlayer(moveInputVector3, hasInput, rotateSpeed);
     }
 
     /// <summary>
@@ -341,6 +370,20 @@ public class PlayerMovement : MonoBehaviour
         {
             verticalVelocity = 0;
         }
+    }
+
+    /// <summary>
+    /// Handles inputs for looking around. Rotates the player and looksm up and down.
+    /// </summary>
+    /// <param name="rotation"></param>
+    private void Look(Vector2 rotation)
+    {
+        transform.rotation *= Quaternion.Euler(Vector3.up * rotation.x * mouseSensitivity.x * Time.deltaTime);
+
+        verticleCameraAngle -= rotation.y * mouseSensitivity.y * Time.deltaTime;
+        verticleCameraAngle = Mathf.Clamp(verticleCameraAngle, verticleClamp.x, verticleClamp.y);
+        lookAtTransform.localRotation = Quaternion.Euler(verticleCameraAngle, 0.0f, 0.0f);
+
     }
     #endregion
 
