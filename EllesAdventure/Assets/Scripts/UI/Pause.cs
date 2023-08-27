@@ -36,6 +36,24 @@ public class Pause : MonoBehaviour
 
     #region Pause Methods
     /// <summary>
+    /// Stops the game. Used when the game is complete. Stops all inputs.
+    /// </summary>
+    public void StopGame()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        isPaused = true;
+        Time.timeScale = 0.0f;
+        InputManager.Instance.PlayerInput.InGame.Disable();
+        InputManager.Instance.PlayerInput.PauseGame.Disable();
+
+        for (int i = 0; i < UIObjectsToHide.Length; i++)
+        {
+            UIObjectsToHide[i].SetActive(false);
+        }
+    }
+
+    /// <summary>
     /// Will toggle from pause to unpausing the game.
     /// Shows UI panel, stops time, stops inputs, sets cursor visability.
     /// </summary>
