@@ -586,17 +586,17 @@ PrefabInstance:
     - target: {fileID: 383029648402967398, guid: 353fa9580879ac8498f61ae7f05412bb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.236133
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 383029648402967398, guid: 353fa9580879ac8498f61ae7f05412bb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.000002
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 383029648402967398, guid: 353fa9580879ac8498f61ae7f05412bb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -15.303064
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 383029648402967398, guid: 353fa9580879ac8498f61ae7f05412bb,
         type: 3}
@@ -637,11 +637,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 6845875503587334929, guid: 353fa9580879ac8498f61ae7f05412bb,
-        type: 3}
-      propertyPath: maxSlope
-      value: 85
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4865,11 +4860,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7602800028970132578, guid: a6668826d818dfa448ea42f81cdddf16,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1417397091}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6668826d818dfa448ea42f81cdddf16, type: 3}
 --- !u!1 &547892098
 GameObject:
@@ -12951,35 +12942,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 34490429}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1417397087 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7602800028970132578, guid: a6668826d818dfa448ea42f81cdddf16,
-    type: 3}
-  m_PrefabInstance: {fileID: 536949233}
-  m_PrefabAsset: {fileID: 0}
---- !u!136 &1417397091
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1417397087}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 3
-  m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &1434344763 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5305975627707473, guid: b1f3b2f662e6afa458440356090e540b,

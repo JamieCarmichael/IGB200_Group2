@@ -7,18 +7,18 @@ using UnityEngine;
 public class Edge : MonoBehaviour 
 {
     #region Fields
-    [SerializeField] private bool canClimb = true;
+    //[SerializeField] private bool canClimb = true;
     /// <summary>
     /// The collider attached to this edge.
     /// </summary>
-    private Collider thisCollider;
+    //private Collider thisCollider;
     #endregion
 
     #region Unity Call Functions
-    private void Start()
-    {
-        thisCollider = GetComponent<Collider>();
-    }
+    //private void Start()
+    //{
+    //    thisCollider = GetComponent<Collider>();
+    //}
     //private void OnTriggerEnter(Collider other)
     //{
     //    // Tell the player they are touching this edge.
