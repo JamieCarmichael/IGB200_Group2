@@ -77,20 +77,25 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundCheckDistance = 0.1f;
     [Tooltip("The layer that the player will detect as ground.")]
     [SerializeField] private LayerMask groundedLayer;
+    [Tooltip("If the player is below this height the are sent back to the last position they were grounded.")]
+    [SerializeField] private float minYHieght = -5.0f;
     /// <summary>
     /// The players vertical velocity. Used for jumping and gravity.
     /// </summary>
     private float verticalVelocity = 0.0f;
 
-    /*
-    Is grounded checks if the player is twice the groundCheckDistance from the ground. If they are then they stop the animation and can move.
-    Touch ground then checks if the player is one times the groundCheckDistance from the ground. They then stop the falling. 
-    This combination allows the player to slightly leave the ground when moving along different slops without becoming ungrounded.
-     */
     /// <summary>
-    /// True if the player is near the ground. 
+    /// True if the player is touching the ground. 
     /// </summary>
     private bool isGrounded = true;
+    /// <summary>
+    /// The last position that the player was on the ground
+    /// </summary>
+    private Vector3 lastGroundedPosition = Vector3.zero;
+    /// <summary>
+    /// Has the ground last ground position be adjusted to be within play area.
+    /// </summary>
+    private bool groundSet = false;
 
     [Header("Animation")]
     [Tooltip("The animator used for the player model.")]
@@ -143,6 +148,8 @@ public class PlayerMovement : MonoBehaviour
 
             // Move
             characterController.Move(new Vector3(movementVector.x, movementVector.y + verticalVelocity, movementVector.z) * Time.deltaTime);
+
+            CheckWithinPlayArea();
         }
     }
     #endregion
@@ -282,6 +289,41 @@ public class PlayerMovement : MonoBehaviour
         {
             // Falling
             verticalVelocity -= gravity * fallMultiplier * Time.deltaTime;
+        }
+
+
+    }
+
+    /// <summary>
+    /// Check if the player is in the play area.
+    /// Move player back to the last grounded position if Elle is below min Y.
+    /// </summary>
+    private void CheckWithinPlayArea()
+    {
+        if (isGrounded)
+        {
+            // set postion when touching ground.
+            lastGroundedPosition = transform.position;
+            groundSet = false;
+        }
+        else if (!groundSet)
+        {
+            // Move position back to away from edge.
+            groundSet = true;
+
+            Vector3 dir = (lastGroundedPosition - transform.position);
+            dir.y = 0.0f;
+            dir = dir.normalized;
+            lastGroundedPosition = lastGroundedPosition + (dir * characterController.radius * 2);
+            lastGroundedPosition.y += characterController.radius * 2;
+        }
+        // Reset position
+        if (transform.position.y < minYHieght)
+        {
+            transform.position = lastGroundedPosition;
+            speed = 0.0f;
+            verticalVelocity = 0.0f;
+            movementVector = Vector3.zero;
         }
     }
 
