@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -16,13 +17,11 @@ public class Notepad : MonoBehaviour
     /// </summary>
     private List<SODoTask> activeTasks = new List<SODoTask>();
 
-    [Tooltip("The text field that shows information in the notepad.")]
-    [SerializeField] private TextMeshProUGUI textField;
     [Tooltip("The UI object that enables the notepad to be seen.")]
     [SerializeField] private GameObject notebookObject;
 
-    [Tooltip("How many characters can make up an item name. Spaces will be added to make all item names this long.")]
-    [SerializeField] private int itemStringLength = 20;
+    //[Tooltip("How many characters can make up an item name. Spaces will be added to make all item names this long.")]
+    //[SerializeField] private int itemStringLength = 20;
 
     /// <summary>
     /// If true the player has the notepad and it will be shown in the pause menu.
@@ -34,8 +33,31 @@ public class Notepad : MonoBehaviour
     /// </summary>
     public enum Pages
     {
-        Tasks, Inventroy
+        Tasks, Inventroy, Profile, Map
     }
+
+    [SerializeField] private GameObject nextButton;
+    [SerializeField] private GameObject previousButton;
+
+    [Header("Tasks")]
+    [SerializeField] private GameObject tasksPanel;
+    [SerializeField] private TextMeshProUGUI taskName;
+    [SerializeField] private TextMeshProUGUI taskDescription;
+
+    private int currentTask = 0;
+
+
+    [Header("Inventory")]
+    [SerializeField] private GameObject inventoryPanel;
+
+
+    [Header("Profile")]
+    [SerializeField] private GameObject profilePanel;
+
+
+    [Header("Map")]
+    [SerializeField] private GameObject mapPanel;
+
 
     /// <summary>
     /// The currrent page opened in the notepad.
@@ -57,6 +79,12 @@ public class Notepad : MonoBehaviour
             case Pages.Inventroy:
                 ShowInventory();
                 break; 
+            case Pages.Profile:
+                ShowProfiles();
+                break;
+            case Pages.Map:
+                ShowMap();
+                break;
             default:
                 break;
         }
@@ -71,6 +99,7 @@ public class Notepad : MonoBehaviour
     public void AquireNotepad(bool isAquired)
     {
         notepadAquired = isAquired;
+        gameObject.SetActive(notepadAquired);
     }
     /// <summary>
     /// Add a task to the player tasks.
@@ -88,6 +117,59 @@ public class Notepad : MonoBehaviour
     {
         activeTasks.Remove(task);
     }
+
+    /// <summary>
+    /// .Show the players tasks.
+    /// </summary>
+    public void ShowTasks()
+    {
+        ShowTasks(currentTask);
+    }
+
+    private void ShowTasks(int taskNumber)
+    {
+        if (taskNumber >= activeTasks.Count || taskNumber < 0)
+        {
+            taskNumber = 0;
+        }
+        page = Pages.Tasks;
+
+        tasksPanel.SetActive(true);
+        inventoryPanel.SetActive(false);
+        profilePanel.SetActive(false);
+        mapPanel.SetActive(false);
+
+        if (activeTasks.Count == 0)
+        {
+            taskName.text = "No Task";
+            taskDescription.text = "";
+            return;
+        }
+
+        taskName.text = activeTasks[taskNumber].TaskName;
+        taskDescription.text = activeTasks[taskNumber].Description;
+
+        // Set page buttons
+        if (taskNumber >= activeTasks.Count - 1)
+        {
+            nextButton.SetActive(false);
+        }
+        else
+        {
+            nextButton.SetActive(true);
+        }
+        if (taskNumber <= 0)
+        {
+            previousButton.SetActive(false);
+        }
+        else
+        {
+            previousButton.SetActive(true);
+        }
+
+    }
+
+
     /// <summary>
     /// Show the players inventory.
     /// </summary>
@@ -95,28 +177,79 @@ public class Notepad : MonoBehaviour
     {
         page = Pages.Inventroy;
 
+        tasksPanel.SetActive(false);
+        inventoryPanel.SetActive(true);
+        profilePanel.SetActive(false);
+        mapPanel.SetActive(false);
+
+
         Dictionary<string, int> inventoryDictionary = PlayerManager.Instance.InventoryDictionary;
 
-        textField.text = "";
+        //textField.text = "";
 
-        foreach (KeyValuePair<string, int> item in inventoryDictionary)
+        //foreach (KeyValuePair<string, int> item in inventoryDictionary)
+        //{
+        //    int paddingSpace = itemStringLength - item.Key.Length;
+        //    textField.text += item.Key + string.Concat(System.Linq.Enumerable.Repeat(" ", paddingSpace)) + "\t" + item.Value + "\n";
+        //}
+    }
+
+
+    public void ShowProfiles()
+    {
+        page = Pages.Profile;
+
+        tasksPanel.SetActive(false);
+        inventoryPanel.SetActive(false);
+        profilePanel.SetActive(true);
+        mapPanel.SetActive(false);
+    }
+
+    public void ShowMap()
+    {
+        page = Pages.Map;
+
+        tasksPanel.SetActive(false);
+        inventoryPanel.SetActive(false);
+        profilePanel.SetActive(false);
+        mapPanel.SetActive(true);
+
+    }
+
+    public void NextButton()
+    {
+        switch (page)
         {
-            int paddingSpace = itemStringLength - item.Key.Length;
-            textField.text += item.Key + string.Concat(System.Linq.Enumerable.Repeat(" ", paddingSpace)) + "\t" + item.Value + "\n";
+            case Pages.Tasks:
+                currentTask += 1;
+                ShowTasks(currentTask);
+                break;
+            case Pages.Inventroy:
+                break;
+            case Pages.Profile:
+                break;
+            case Pages.Map:
+                break;
+            default:
+                break;
         }
     }
-    /// <summary>
-    /// .Show the players tasks.
-    /// </summary>
-    public void ShowTasks()
+    public void PreviousButton()
     {
-        page = Pages.Tasks;
-
-        textField.text = "";
-
-        foreach (SODoTask task in activeTasks)
+        switch (page)
         {
-            textField.text += task.TaskName + "\n" + task.Description;
+            case Pages.Tasks:
+                currentTask -= 1;
+                ShowTasks(currentTask);
+                break;
+            case Pages.Inventroy:
+                break;
+            case Pages.Profile:
+                break;
+            case Pages.Map:
+                break;
+            default:
+                break;
         }
     }
     #endregion
