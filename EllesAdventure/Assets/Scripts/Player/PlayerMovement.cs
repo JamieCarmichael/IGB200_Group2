@@ -89,6 +89,11 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private bool isGrounded = true;
     /// <summary>
+    /// True if the player is touching the ground. 
+    /// </summary>
+    public bool IsGrounded {  get { return isGrounded; } }
+
+    /// <summary>
     /// The last position that the player was on the ground
     /// </summary>
     private Vector3 lastGroundedPosition = Vector3.zero;
@@ -159,15 +164,7 @@ public class PlayerMovement : MonoBehaviour
     /// Finds the horizontal velocity for the player. Maintains movement speed as long as the player is using an input. Changes direction of movement instantly.
     /// </summary>
     private void Move()
-    {
-        // If the player is not grounded maintain movement.
-        //if (!isGrounded && !onEdge)
-        //{
-        //    animator.SetBool(animFall, true);
-        //    movementVector.y = 0.0f;
-        //    return;
-        //}    
-        
+    {    
         if (!isGrounded)
         {
             animator.SetBool(animFall, true);
@@ -226,11 +223,6 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 moveInputVector3 = new Vector3(moveInput.x, 0.0f, moveInput.y);
         movementVector = moveInputVector3 * speed;
-
-        //if (onEdge)
-        //{
-        //    OnEdge(moveInputVector3);
-        //}
     }
 
     /// <summary>
@@ -414,151 +406,5 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool(animWalk, false);
         canMove = true;
     }
-    #endregion
-
-    #region Edges
-    ////[Header("Edges")]
-    ///// <summary>
-    ///// The player is touching an edge.
-    ///// </summary>
-    //private bool onEdge = false;
-    ///// <summary>
-    ///// The point that the player is touching the edge.
-    ///// </summary>
-    //private Vector3 edgeTouchPoint;
-    ///// <summary>
-    ///// The edge object being touched.
-    ///// </summary>
-    //private GameObject edgeObject;
-    ///// <summary>
-    ///// The player is currently hanging from an edge.
-    ///// </summary>
-    //private bool isHanging = false;
-    ///// <summary>
-    ///// The current edge can be climbed.
-    ///// </summary>
-    //private bool canClimbEdge = false;
-
-    //private void OnEdge(Vector3 moveInputVector3)
-    //{
-    //    Vector2 moveInput = InputManager.Instance.PlayerInput.InGame.Move.ReadValue<Vector2>();
-
-    //    Vector3 thisForward = transform.forward;
-    //    Vector3 edgeForawrd = edgeObject.transform.forward;
-
-    //    if (!canClimbEdge)
-    //    {
-    //        movementVector = moveInputVector3 * speed;
-    //        return;
-    //    }
-
-    //    // Hit with feet
-    //    if (GetComponent<Collider>().bounds.center.y > edgeTouchPoint.y)
-    //    {
-    //        if (verticalVelocity > 0.0f)
-    //        {
-    //            verticalVelocity = 0.0f;
-    //        }
-    //        movementVector = moveInputVector3 * speed;
-    //    }
-    //    // Hit with upper body.
-    //    else
-    //    {
-    //        verticalVelocity = 0.0f;
-    //        if (Vector3.Dot(thisForward, edgeForawrd) > 0)
-    //        {
-    //            if (moveInput.y > 0)
-    //            {
-    //                // Hanging climb up button pressed.
-    //                Vector3 extents = edgeObject.GetComponent<Collider>().bounds.extents;
-    //                Vector3 climbPos = edgeTouchPoint + (edgeObject.transform.up * extents.y) + (edgeObject.transform.forward * extents.z) ;
-    //                StartCoroutine(ClimbTo(climbPos));
-
-    //                isHanging = false;
-    //            }
-    //            else if (moveInput.y < 0)
-    //            {
-    //                // Hanging drop down button pressed.
-    //                movementVector = moveInputVector3 * speed;
-    //                isHanging = false;
-    //            }
-    //            else
-    //            {
-    //                // Hanging no input.
-    //                characterController.enabled = false;
-    //                transform.position = edgeTouchPoint + Vector3.down;
-    //                movementVector = Vector3.zero;
-    //                characterController.enabled = true;
-
-    //                isHanging = true;
-    //            }
-    //        }
-    //        else
-    //        {
-    //            // Moving away from edge
-    //            isHanging = false;
-    //        }
-    //    }
-    //}
-
-    ///// <summary>
-    ///// Called when the player enters an edge collider. 
-    ///// </summary>
-    ///// <param name="newCollisionPoint"></param>
-    ///// <param name="other"></param>
-    //public void EnterEdge(Vector3 newCollisionPoint, GameObject other, bool canClimb)
-    //{
-    //    onEdge = true;
-    //    edgeObject = other;
-    //    edgeTouchPoint = newCollisionPoint;
-    //    canClimbEdge = canClimb;
-    //}
-    ///// <summary>
-    ///// Called when the player exits a Edge Collider.
-    ///// </summary>
-    //public void ExitEdge()
-    //{
-    //    onEdge = false;
-    //}
-
-    ///// <summary>
-    ///// Moves the player to the top of the ledge they are climbing.
-    ///// </summary>
-    ///// <param name="newPosition">The position at the top of the ledge.</param>
-    ///// <returns></returns>
-    //private IEnumerator ClimbTo(Vector3 newPosition)
-    //{
-    //    canMove = false;
-    //    Vector3 toVector = newPosition - transform.position;
-    //    float timeToMove = toVector.magnitude / maxWalkSpeed;
-
-    //    float moveTimer = 0.0f;
-    //    Vector3 movePostion = Vector3.zero;
-
-    //    animator.SetBool(animWalk, true);
-    //    // Climb up ledge.
-    //    while (moveTimer < timeToMove)
-    //    {
-    //        moveTimer += Time.deltaTime;
-    //        movePostion = toVector.normalized * maxWalkSpeed * Time.deltaTime;
-    //        characterController.Move(movePostion);
-    //        yield return null;
-    //    }
-
-    //    // Step forward from top of ledge.
-    //    toVector = transform.forward;
-    //    timeToMove = (characterController.radius * 2) / maxWalkSpeed;
-    //    moveTimer = 0.0f;
-    //    while (moveTimer < timeToMove)
-    //    {
-    //        moveTimer += Time.deltaTime;
-    //        movePostion = toVector.normalized * maxWalkSpeed * Time.deltaTime;
-    //        characterController.Move(movePostion);
-    //        yield return null;
-    //    }
-    //    movementVector = Vector3.zero;
-    //    animator.SetBool(animWalk, false);
-    //    canMove = true;
-    //}
     #endregion
 }

@@ -71,5 +71,12 @@ public class PlayerManager : MonoBehaviour
         playerMovement.enabled = true;
         playerInteract.enabled = true;
     }
+
+    public void OnEdge()
+    {
+        playerMovementLadder.enabled = false;
+        playerMovement.enabled = false;
+        playerInteract.enabled = false;
+    }
     #endregion
 }
