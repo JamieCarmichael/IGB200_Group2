@@ -26,6 +26,9 @@ public class PlayerManager : MonoBehaviour
     private PlayerMovementLadder playerMovementLadder;
     private Inventory inventory;
 
+    /// <summary>
+    /// The players inventory.
+    /// </summary>
     public Inventory playerInventory { get { return inventory; } }
     #endregion
 

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// Made By: Jamie Carmichael
 /// Details: A UI object that displays information for the player.
 ///             Should be part of the pause menu.
-///             Contains tasks and inventory.
+///             Contains tasks, inventory, profiles and a map.
 /// </summary>
 public class Notepad : MonoBehaviour 
 {
@@ -34,36 +34,64 @@ public class Notepad : MonoBehaviour
     {
         Tasks, Inventroy, Profile, Map
     }
+
     [Header("Buttons")]
+    [Tooltip("The button to go to the next item in a page.")]
     [SerializeField] private GameObject nextButton;
+    [Tooltip("The button to go to the previous item on a page.")]
     [SerializeField] private GameObject previousButton;
 
     [Header("Tasks")]
+    [Tooltip("The panel that the tasks UI is on.")]
     [SerializeField] private GameObject tasksPanel;
+    [Tooltip("The TMP text field for the tasks name.")]
     [SerializeField] private TextMeshProUGUI taskName;
+    [Tooltip("The TMP text field for the tasks description.")]
     [SerializeField] private TextMeshProUGUI taskDescription;
+    [Tooltip("The text displayed if there are no active tasks.")]
     [SerializeField] private string noTaskText = "No Task";
+    /// <summary>
+    /// The current task being viewed.
+    /// </summary>
     private int currentTask = 0;
 
 
     [Header("Inventory")]
+    [Tooltip("The panel that the inventory UI is on.")]
     [SerializeField] private GameObject inventoryPanel;
+    [Tooltip("The array of inventory spaces that the inventory can be displayed on.")]
     [SerializeField] private InventorySpace[] inventroySpaces;
+    [Tooltip("The TMP text field that shows the item description.")]
     [SerializeField] private TextMeshProUGUI inventoryDescription;
 
 
     [Header("Profile")]
+    [Tooltip("The panel that the profile UI is on.")]
     [SerializeField] private GameObject profilePanel;
+    [Tooltip("The Image that the profile image is shown on.")]
     [SerializeField] private Image profileImage;
+    [Tooltip("The TMP text field that the profile informaion is dislayed in.")]
     [SerializeField] private TextMeshProUGUI profileInfoText;
+    [Tooltip("The TMP text field that the profile bio is shown in.")]
     [SerializeField] private TextMeshProUGUI profileDescriptionText;
+    [Tooltip("The list of NPC profiles.")]
     [SerializeField] private List<NPCProfile> profileList;
-
+    /// <summary>
+    /// The current profile being viewed.
+    /// </summary>
     private int currentProfile = 0;
 
     [Header("Map")]
+    [Tooltip("The panel that the Map UI is on.")]
     [SerializeField] private GameObject mapPanel;
-
+    [Tooltip("The icon showing where the player is.")]
+    [SerializeField] private RectTransform playerIconTransform;
+    [Tooltip("The rect transform for the map image.")]
+    [SerializeField] private RectTransform mapTransform;
+    [Tooltip("The top right of the play area. Play area should be a square.")]
+    [SerializeField] private Vector3 topRight;
+    [Tooltip("The bottom left of the play area. Play area should be a square.")]
+    [SerializeField] private Vector3 bottomLeft;
 
     /// <summary>
     /// The currrent page opened in the notepad.
@@ -136,7 +164,7 @@ public class Notepad : MonoBehaviour
     }
 
     /// <summary>
-    /// .Show the players tasks.
+    /// Show the players tasks.
     /// </summary>
     public void ShowTasks()
     {
@@ -148,12 +176,13 @@ public class Notepad : MonoBehaviour
         {
             currentTask = 0;
         }
-            
-
-
         ShowTasks(currentTask);
     }
 
+    /// <summary>
+    /// Show the players tasks.
+    /// </summary>
+    /// <param name="taskNumber"></param>
     private void ShowTasks(int taskNumber)
     {
         if (taskNumber >= activeTasks.Count)
@@ -214,10 +243,10 @@ public class Notepad : MonoBehaviour
         inventoryPanel.SetActive(true);
         profilePanel.SetActive(false);
         mapPanel.SetActive(false);
-
+        // Set page buttons
         nextButton.SetActive(false);
         previousButton.SetActive(false);
-
+        // Get inventory
         List<InventoryObject> inventory = PlayerManager.Instance.playerInventory.InventoryList;
 
         inventoryDescription.text = "";
@@ -236,12 +265,18 @@ public class Notepad : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set the description in the inventory panel of the notepad.
+    /// </summary>
+    /// <param name="item"></param>
     public void SetInventoryDiscription(SOInventoryItem item)
     {
         inventoryDescription.text = item.itemName + "\n" + item.itemDescription;
     }
 
-
+    /// <summary>
+    /// Show the profile page.
+    /// </summary>
     public void ShowProfiles()
     {
         if (currentProfile >= profileList.Count)
@@ -252,12 +287,13 @@ public class Notepad : MonoBehaviour
         {
             currentProfile = 0;
         }
-
-
-
         ShowProfiles(currentProfile);
     }
 
+    /// <summary>
+    /// Show the profile page.
+    /// </summary>
+    /// <param name="profileNumber"></param>
     public void ShowProfiles(int profileNumber)
     {
 
@@ -301,6 +337,9 @@ public class Notepad : MonoBehaviour
         profileDescriptionText.text = profileList[profileNumber].bio;
     }
 
+    /// <summary>
+    /// Show the map page.
+    /// </summary>
     public void ShowMap()
     {
         page = Pages.Map;
@@ -310,8 +349,20 @@ public class Notepad : MonoBehaviour
         profilePanel.SetActive(false);
         mapPanel.SetActive(true);
 
+        nextButton.SetActive(false);
+        previousButton.SetActive(false);
+
+        // Get the players position and place the player icon on that position on the map.
+        Vector3 relitivePosition = PlayerManager.Instance.PlayerTransform.position - bottomLeft; // The players position relitive to the bottom left of the play area.
+        Vector3 normalizedPos = relitivePosition / (topRight - bottomLeft).x; // Player position in play area between 0 and 1.
+        Vector2 normalPosV2 = new Vector2(normalizedPos.x, normalizedPos.z); // ^ but Vector 2
+        float mapSideLength = mapTransform.rect.width; // The length of a side of the map
+        playerIconTransform.localPosition = (normalPosV2 * mapSideLength) - (new Vector2(mapSideLength, mapSideLength) / 2); // Move the icon position on the map.
     }
 
+    /// <summary>
+    /// Go to the next item on the page within the notepad.
+    /// </summary>
     public void NextButton()
     {
         switch (page)
@@ -332,6 +383,11 @@ public class Notepad : MonoBehaviour
                 break;
         }
     }
+
+
+    /// <summary>
+    /// Go to the previous item on the page within the notepad.
+    /// </summary>
     public void PreviousButton()
     {
         switch (page)
