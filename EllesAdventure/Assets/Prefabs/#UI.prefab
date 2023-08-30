@@ -5223,6 +5223,20 @@ MonoBehaviour:
   - {fileID: 8651270942933780582}
   inventoryDescription: {fileID: 5150659069661229935}
   profilePanel: {fileID: 1835048871916714500}
+  profileImage: {fileID: 2765320679831843214}
+  profileInfoText: {fileID: 6951689197801184489}
+  profileDescriptionText: {fileID: 8000469605879113667}
+  profileList:
+  - npcImage: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+    name: Jane
+    occupation: Foreperson
+    info: Boss
+    bio: Likes cats.
+  - npcImage: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    name: Alice
+    occupation: Carpenter
+    info: Make things
+    bio: Always forgets the nails.
   mapPanel: {fileID: 8944255212871713035}
 --- !u!1 &4545126767153501181
 GameObject:
@@ -5481,7 +5495,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7420409273922366783}
         m_TargetAssemblyTypeName: Notepad, Assembly-CSharp
-        m_MethodName: ShowInventory
+        m_MethodName: ShowMap
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10149,7 +10163,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7420409273922366783}
         m_TargetAssemblyTypeName: Notepad, Assembly-CSharp
-        m_MethodName: ShowInventory
+        m_MethodName: ShowProfiles
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

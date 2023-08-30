@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -53,7 +54,12 @@ public class Notepad : MonoBehaviour
 
     [Header("Profile")]
     [SerializeField] private GameObject profilePanel;
+    [SerializeField] private Image profileImage;
+    [SerializeField] private TextMeshProUGUI profileInfoText;
+    [SerializeField] private TextMeshProUGUI profileDescriptionText;
+    [SerializeField] private List<NPCProfile> profileList;
 
+    private int currentProfile = 0;
 
     [Header("Map")]
     [SerializeField] private GameObject mapPanel;
@@ -238,12 +244,61 @@ public class Notepad : MonoBehaviour
 
     public void ShowProfiles()
     {
+        if (currentProfile >= profileList.Count)
+        {
+            currentProfile = profileList.Count - 1;
+        }
+        else if (currentProfile < 0)
+        {
+            currentProfile = 0;
+        }
+
+
+
+        ShowProfiles(currentProfile);
+    }
+
+    public void ShowProfiles(int profileNumber)
+    {
+
         page = Pages.Profile;
 
         tasksPanel.SetActive(false);
         inventoryPanel.SetActive(false);
         profilePanel.SetActive(true);
         mapPanel.SetActive(false);
+
+        if (profileNumber >= profileList.Count)
+        {
+            profileNumber = profileList.Count - 1;
+        }
+        else if (profileNumber < 0)
+        {
+            profileNumber = 0;
+        }
+
+        // Set page buttons
+        if (profileNumber >= profileList.Count - 1)
+        {
+            nextButton.SetActive(false);
+        }
+        else
+        {
+            nextButton.SetActive(true);
+        }
+        if (profileNumber <= 0)
+        {
+            previousButton.SetActive(false);
+        }
+        else
+        {
+            previousButton.SetActive(true);
+        }
+
+        // Set active task
+        profileImage.sprite = profileList[profileNumber].npcImage;
+        profileInfoText.text = profileList[profileNumber].name + "\n" + profileList[profileNumber].occupation + "\n" + profileList[profileNumber].info;
+        profileDescriptionText.text = profileList[profileNumber].bio;
     }
 
     public void ShowMap()
@@ -268,6 +323,8 @@ public class Notepad : MonoBehaviour
             case Pages.Inventroy:
                 break;
             case Pages.Profile:
+                currentProfile += 1;
+                ShowProfiles(currentProfile);
                 break;
             case Pages.Map:
                 break;
@@ -286,6 +343,8 @@ public class Notepad : MonoBehaviour
             case Pages.Inventroy:
                 break;
             case Pages.Profile:
+                currentProfile -= 1;
+                ShowProfiles(currentProfile);
                 break;
             case Pages.Map:
                 break;
