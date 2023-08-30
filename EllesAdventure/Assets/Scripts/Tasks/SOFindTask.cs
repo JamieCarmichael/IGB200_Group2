@@ -44,7 +44,7 @@ public class SOFindTask : SOTask
             return IsComplete;
         }
 
-        isComplete = PlayerManager.Instance.playerInventory.UseItem(item, true);
+        isComplete = PlayerManager.Instance.PlayerInventory.UseItem(item, true);
 
         return IsComplete;
     }

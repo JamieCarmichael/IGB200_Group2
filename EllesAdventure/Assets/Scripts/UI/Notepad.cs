@@ -247,7 +247,7 @@ public class Notepad : MonoBehaviour
         nextButton.SetActive(false);
         previousButton.SetActive(false);
         // Get inventory
-        List<InventoryObject> inventory = PlayerManager.Instance.playerInventory.InventoryList;
+        List<InventoryObject> inventory = PlayerManager.Instance.PlayerInventory.InventoryList;
 
         inventoryDescription.text = "";
 

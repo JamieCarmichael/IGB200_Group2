@@ -204,11 +204,12 @@ public class PlayerMovementLadder : MonoBehaviour
     private IEnumerator GetOnTopOfLadder()
     {
         inputAccepted = false;
+
+        Vector3 movePostion = Vector3.zero;
+
         Vector3 toVector = (ladderTop - (ladder.transform.forward * (halfwidth * 2))) - transform.position;
         float timeToMove = toVector.magnitude / climbSpeed;
-
         float moveTimer = 0.0f;
-        Vector3 movePostion = Vector3.zero;
 
         animator.SetBool(animClimb, true);
         // Climb up ledge.

@@ -132,6 +132,10 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnEnable()
     {
+        verticalVelocity = 0.0f;
+        speed = 0.0f;
+        movementVector = Vector3.zero;      
+
         InputManager.Instance.PlayerInput.InGame.Jump.performed += Jump;
     }
     private void OnDisable()

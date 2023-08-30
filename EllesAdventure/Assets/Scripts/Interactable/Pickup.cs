@@ -53,7 +53,7 @@ public class Pickup : MonoBehaviour, IIntertactable
 
     public void Interact()
     {
-        PlayerManager.Instance.playerInventory.AddToInventory(item);
+        PlayerManager.Instance.PlayerInventory.AddToInventory(item);
 
         gameObject.SetActive(false);
     }
