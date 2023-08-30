@@ -41,7 +41,7 @@ public class Lever : MonoBehaviour, IIntertactable
     [Tooltip("How long the lever takes to opperate.")]
     [SerializeField] private float openTime = 1.0f;
     [Tooltip("The name of the item requeired to use the lever. If empty no item is required.")]
-    [SerializeField] private string requiredItem;
+    [SerializeField] private InventoryObject requiredItem;
     [Tooltip("The number of the item needed to use the level.")]
     [SerializeField] private int numberOfItmesNeeded;
     [Tooltip("If true the required item will be ussd and no longer be in the inventroy.")]
@@ -61,9 +61,9 @@ public class Lever : MonoBehaviour, IIntertactable
     #region IIntertactable
     public void Interact()
     {
-        if (requiredItem != string.Empty)
+        if (requiredItem != null)
         {
-            if (!PlayerManager.Instance.UseItem(requiredItem, numberOfItmesNeeded, useRequiredItem))
+            if (!PlayerManager.Instance.playerInventory.UseItem(requiredItem, useRequiredItem))
             {
                 return;
             }

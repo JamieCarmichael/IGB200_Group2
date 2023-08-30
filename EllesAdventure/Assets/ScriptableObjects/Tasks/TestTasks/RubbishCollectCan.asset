@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: RubbishCollectCan
   m_EditorClassIdentifier: 
   item:
-    itemName: Can
-    numberOfItems: 1
+    item: {fileID: 11400000, guid: 244a61e003b3ccd48bc123e05395d53c, type: 2}
+    count: 1
   taskName: Collect 1 can

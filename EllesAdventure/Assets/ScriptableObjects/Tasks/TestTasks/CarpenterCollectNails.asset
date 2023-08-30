@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: CarpenterCollectNails
   m_EditorClassIdentifier: 
   item:
-    itemName: Nail
-    numberOfItems: 6
+    item: {fileID: 11400000, guid: 404369e4c65ca2e428ab66d113640ae2, type: 2}
+    count: 6
   taskName: Collect 6 nails

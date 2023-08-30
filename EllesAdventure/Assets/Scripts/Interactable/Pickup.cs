@@ -29,7 +29,7 @@ public class Pickup : MonoBehaviour, IIntertactable
     [Tooltip("The object that indicates when this object is being looked at.")]
     [SerializeField] private GameObject lookAtObject;
     [Tooltip("The items name when added to the players inventroy.")]
-    [SerializeField] private string itemName;
+    [SerializeField] private InventoryObject item;
 
     private Collider thisCollider;
     #endregion
@@ -53,7 +53,7 @@ public class Pickup : MonoBehaviour, IIntertactable
 
     public void Interact()
     {
-        PlayerManager.Instance.AddToInventory(itemName);
+        PlayerManager.Instance.playerInventory.AddToInventory(item);
 
         gameObject.SetActive(false);
     }

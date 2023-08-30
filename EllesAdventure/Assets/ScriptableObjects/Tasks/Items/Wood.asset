@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae6393220bc208d43889001291bc0681, type: 3}
-  m_Name: ToolPersonCollectTools
+  m_Script: {fileID: 11500000, guid: 1a050fcd9a0993f46a9b2ffc84fd6722, type: 3}
+  m_Name: Wood
   m_EditorClassIdentifier: 
-  item:
-    item: {fileID: 11400000, guid: fb54a319ecee7854eac13b8eecd29f28, type: 2}
-    count: 3
-  taskName: Collect 3 tools
+  itemName: Wood
+  itemDescription: Comes from trees.
+  itemSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}

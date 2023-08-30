@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: RubbishCollectBottle
   m_EditorClassIdentifier: 
   item:
-    itemName: Bottle
-    numberOfItems: 2
+    item: {fileID: 11400000, guid: 0d560936191ea704b9351f7e73073671, type: 2}
+    count: 2
   taskName: Collect 2 bottles

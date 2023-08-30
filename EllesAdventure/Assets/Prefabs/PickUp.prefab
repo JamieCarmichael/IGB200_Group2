@@ -49,7 +49,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactAminationString: ellePickUp
   lookAtObject: {fileID: 9089120544228345911}
-  itemName: Item
+  item:
+    item: {fileID: 0}
+    count: 1
 --- !u!135 &87321658003064147
 SphereCollider:
   m_ObjectHideFlags: 0

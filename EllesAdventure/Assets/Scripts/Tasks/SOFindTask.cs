@@ -9,19 +9,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewSOFindTask", menuName = "ScriptableObjects/SOFindTask")]
 public class SOFindTask : SOTask
 {
-    /// <summary>
-    /// An item name and how many of the item there are.
-    /// </summary>
-    [Serializable]
-    public struct Item
-    {
-        public string itemName;
-        public int numberOfItems;
-    }
-
     #region Fields
     [Tooltip("The item that is needed. The string and number of the item.")]
-    [SerializeField] private Item item;
+    [SerializeField] private InventoryObject item;
     [Tooltip("The name of the task being done. This is displayed in the notepad and should be descriptive.")]
     [SerializeField] private string taskName;
 
@@ -54,7 +44,7 @@ public class SOFindTask : SOTask
             return IsComplete;
         }
 
-        isComplete = PlayerManager.Instance.UseItem(item.itemName, item.numberOfItems, true);
+        isComplete = PlayerManager.Instance.playerInventory.UseItem(item, true);
 
         return IsComplete;
     }

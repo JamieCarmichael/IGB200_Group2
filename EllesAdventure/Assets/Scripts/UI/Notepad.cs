@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -12,6 +11,8 @@ using UnityEngine.UI;
 public class Notepad : MonoBehaviour 
 {
     #region Fields
+    public static Notepad Instance {  get; private set; }
+
     /// <summary>
     /// A list of all currenly active tasks.
     /// </summary>
@@ -19,9 +20,6 @@ public class Notepad : MonoBehaviour
 
     [Tooltip("The UI object that enables the notepad to be seen.")]
     [SerializeField] private GameObject notebookObject;
-
-    //[Tooltip("How many characters can make up an item name. Spaces will be added to make all item names this long.")]
-    //[SerializeField] private int itemStringLength = 20;
 
     /// <summary>
     /// If true the player has the notepad and it will be shown in the pause menu.
@@ -35,7 +33,7 @@ public class Notepad : MonoBehaviour
     {
         Tasks, Inventroy, Profile, Map
     }
-
+    [Header("Buttons")]
     [SerializeField] private GameObject nextButton;
     [SerializeField] private GameObject previousButton;
 
@@ -43,12 +41,14 @@ public class Notepad : MonoBehaviour
     [SerializeField] private GameObject tasksPanel;
     [SerializeField] private TextMeshProUGUI taskName;
     [SerializeField] private TextMeshProUGUI taskDescription;
-
+    [SerializeField] private string noTaskText = "No Task";
     private int currentTask = 0;
 
 
     [Header("Inventory")]
     [SerializeField] private GameObject inventoryPanel;
+    [SerializeField] private InventorySpace[] inventroySpaces;
+    [SerializeField] private TextMeshProUGUI inventoryDescription;
 
 
     [Header("Profile")]
@@ -66,6 +66,17 @@ public class Notepad : MonoBehaviour
     #endregion
 
     #region Unity Call Functions
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
+
     private void OnEnable()
     {
         notebookObject.SetActive(notepadAquired);
@@ -123,12 +134,27 @@ public class Notepad : MonoBehaviour
     /// </summary>
     public void ShowTasks()
     {
+        if (currentTask >= activeTasks.Count)
+        {
+            currentTask = activeTasks.Count - 1;
+        }
+        else if (currentTask < 0)
+        {
+            currentTask = 0;
+        }
+            
+
+
         ShowTasks(currentTask);
     }
 
     private void ShowTasks(int taskNumber)
     {
-        if (taskNumber >= activeTasks.Count || taskNumber < 0)
+        if (taskNumber >= activeTasks.Count)
+        {
+            taskNumber = activeTasks.Count - 1;
+        }
+        else if (taskNumber < 0)
         {
             taskNumber = 0;
         }
@@ -138,16 +164,6 @@ public class Notepad : MonoBehaviour
         inventoryPanel.SetActive(false);
         profilePanel.SetActive(false);
         mapPanel.SetActive(false);
-
-        if (activeTasks.Count == 0)
-        {
-            taskName.text = "No Task";
-            taskDescription.text = "";
-            return;
-        }
-
-        taskName.text = activeTasks[taskNumber].TaskName;
-        taskDescription.text = activeTasks[taskNumber].Description;
 
         // Set page buttons
         if (taskNumber >= activeTasks.Count - 1)
@@ -167,6 +183,17 @@ public class Notepad : MonoBehaviour
             previousButton.SetActive(true);
         }
 
+        // Set active task
+        if (activeTasks.Count == 0)
+        {
+            taskName.text = noTaskText;
+            taskDescription.text = "";
+        }
+        else
+        {
+            taskName.text = activeTasks[taskNumber].TaskName;
+            taskDescription.text = activeTasks[taskNumber].Description;
+        }
     }
 
 
@@ -182,16 +209,30 @@ public class Notepad : MonoBehaviour
         profilePanel.SetActive(false);
         mapPanel.SetActive(false);
 
+        nextButton.SetActive(false);
+        previousButton.SetActive(false);
 
-        Dictionary<string, int> inventoryDictionary = PlayerManager.Instance.InventoryDictionary;
+        List<InventoryObject> inventory = PlayerManager.Instance.playerInventory.InventoryList;
 
-        //textField.text = "";
+        inventoryDescription.text = "";
 
-        //foreach (KeyValuePair<string, int> item in inventoryDictionary)
-        //{
-        //    int paddingSpace = itemStringLength - item.Key.Length;
-        //    textField.text += item.Key + string.Concat(System.Linq.Enumerable.Repeat(" ", paddingSpace)) + "\t" + item.Value + "\n";
-        //}
+        for (int i = 0; i < inventroySpaces.Length; i++)
+        {
+            // If there are more spaces then items disable space.
+            if (i >= inventory.Count)
+            {
+                inventroySpaces[i].gameObject.SetActive(false);
+                continue;
+            }
+
+            // Set the inventory space
+            inventroySpaces[i].SetInventory(inventory[i]);
+        }
+    }
+
+    public void SetInventoryDiscription(SOInventoryItem item)
+    {
+        inventoryDescription.text = item.itemName + "\n" + item.itemDescription;
     }
 
 

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ToolPersonTask1
   m_EditorClassIdentifier: 
   startTaskDialogue:
-  - Can yhou help me get some tools.
+  - Can you help me get some tools.
   duringTaskDialogue:
   - Get me tools
   completeTaskDialogue:

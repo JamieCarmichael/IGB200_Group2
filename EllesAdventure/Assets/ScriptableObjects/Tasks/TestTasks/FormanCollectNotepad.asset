@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: FormanCollectNotepad
   m_EditorClassIdentifier: 
   item:
-    itemName: Notepad
-    numberOfItems: 0
+    item: {fileID: 11400000, guid: a51f141684559004d850da9ba4107d4a, type: 2}
+    count: 1
   taskName: Collect notepad

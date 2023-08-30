@@ -585,6 +585,12 @@ PrefabInstance:
       propertyPath: itemName
       value: Notepad
       objectReference: {fileID: 0}
+    - target: {fileID: 3451797997623712669, guid: 0d5747628d9615e4b9efa8b82a2137ca,
+        type: 3}
+      propertyPath: item.item
+      value: 
+      objectReference: {fileID: 11400000, guid: a51f141684559004d850da9ba4107d4a,
+        type: 2}
     - target: {fileID: 4579435912210108271, guid: 0d5747628d9615e4b9efa8b82a2137ca,
         type: 3}
       propertyPath: m_LocalPosition.x

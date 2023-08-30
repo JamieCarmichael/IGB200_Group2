@@ -46,13 +46,19 @@ PrefabInstance:
     - target: {fileID: 1377304936735920482, guid: 0d5747628d9615e4b9efa8b82a2137ca,
         type: 3}
       propertyPath: m_Name
-      value: PickUp (4)
+      value: Tool
       objectReference: {fileID: 0}
     - target: {fileID: 3451797997623712669, guid: 0d5747628d9615e4b9efa8b82a2137ca,
         type: 3}
       propertyPath: itemName
       value: Tool
       objectReference: {fileID: 0}
+    - target: {fileID: 3451797997623712669, guid: 0d5747628d9615e4b9efa8b82a2137ca,
+        type: 3}
+      propertyPath: item.item
+      value: 
+      objectReference: {fileID: 11400000, guid: fb54a319ecee7854eac13b8eecd29f28,
+        type: 2}
     - target: {fileID: 4579435912210108271, guid: 0d5747628d9615e4b9efa8b82a2137ca,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -169,13 +175,19 @@ PrefabInstance:
     - target: {fileID: 1377304936735920482, guid: 0d5747628d9615e4b9efa8b82a2137ca,
         type: 3}
       propertyPath: m_Name
-      value: PickUp (3)
+      value: Tool
       objectReference: {fileID: 0}
     - target: {fileID: 3451797997623712669, guid: 0d5747628d9615e4b9efa8b82a2137ca,
         type: 3}
       propertyPath: itemName
       value: Tool
       objectReference: {fileID: 0}
+    - target: {fileID: 3451797997623712669, guid: 0d5747628d9615e4b9efa8b82a2137ca,
+        type: 3}
+      propertyPath: item.item
+      value: 
+      objectReference: {fileID: 11400000, guid: fb54a319ecee7854eac13b8eecd29f28,
+        type: 2}
     - target: {fileID: 4579435912210108271, guid: 0d5747628d9615e4b9efa8b82a2137ca,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -525,13 +537,19 @@ PrefabInstance:
     - target: {fileID: 1377304936735920482, guid: 0d5747628d9615e4b9efa8b82a2137ca,
         type: 3}
       propertyPath: m_Name
-      value: PickUp (2)
+      value: Tool
       objectReference: {fileID: 0}
     - target: {fileID: 3451797997623712669, guid: 0d5747628d9615e4b9efa8b82a2137ca,
         type: 3}
       propertyPath: itemName
       value: Tool
       objectReference: {fileID: 0}
+    - target: {fileID: 3451797997623712669, guid: 0d5747628d9615e4b9efa8b82a2137ca,
+        type: 3}
+      propertyPath: item.item
+      value: 
+      objectReference: {fileID: 11400000, guid: fb54a319ecee7854eac13b8eecd29f28,
+        type: 2}
     - target: {fileID: 4579435912210108271, guid: 0d5747628d9615e4b9efa8b82a2137ca,
         type: 3}
       propertyPath: m_LocalPosition.x
