@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -66,20 +65,8 @@ public class Notepad : MonoBehaviour
 
 
     [Header("Profile")]
-    [Tooltip("The panel that the profile UI is on.")]
-    [SerializeField] private GameObject profilePanel;
-    [Tooltip("The Image that the profile image is shown on.")]
-    [SerializeField] private Image profileImage;
-    [Tooltip("The TMP text field that the profile informaion is dislayed in.")]
-    [SerializeField] private TextMeshProUGUI profileInfoText;
-    [Tooltip("The TMP text field that the profile bio is shown in.")]
-    [SerializeField] private TextMeshProUGUI profileDescriptionText;
-    [Tooltip("The list of NPC profiles.")]
-    [SerializeField] private List<NPCProfile> profileList;
-    /// <summary>
-    /// The current profile being viewed.
-    /// </summary>
-    private int currentProfile = 0;
+    [Tooltip("The profile manager for all of the profiles in the notepad.")]
+    [SerializeField] private ProfileManager profileManager;
 
     [Header("Map")]
     [Tooltip("The panel that the Map UI is on.")]
@@ -97,6 +84,8 @@ public class Notepad : MonoBehaviour
     /// The currrent page opened in the notepad.
     /// </summary>
     private Pages page = Pages.Tasks;
+
+    private bool notepadVisable = false;
     #endregion
 
     #region Unity Call Functions
@@ -113,7 +102,6 @@ public class Notepad : MonoBehaviour
 
     private void OnEnable()
     {
-        notebookObject.SetActive(notepadAquired);
 
         // Select current page.
         switch (page) 
@@ -133,10 +121,50 @@ public class Notepad : MonoBehaviour
             default:
                 break;
         }
+
+        InputManager.Instance.PlayerInput.PauseGame.Notepad.performed += context => ShowNotebook();
+    }
+
+    private void OnDisable()
+    {
+        InputManager.Instance.PlayerInput.PauseGame.Notepad.performed -= context => ShowNotebook();
     }
     #endregion
 
     #region Public Methods
+    private void ShowNotebook()
+    {
+
+        if (notepadAquired && !Pause.Instance.IsPaused)
+        {
+            notepadVisable = !notepadVisable;
+
+            notebookObject.SetActive(notepadVisable);
+
+            if (notepadVisable)
+            {
+                InputManager.Instance.PlayerInput.InGame.Disable();
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                InputManager.Instance.PlayerInput.InGame.Enable();
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+
+        }
+    }
+    /// <summary>
+    /// Hide the notepad
+    /// </summary>
+    public void HideNotepad()
+    {
+        notepadVisable = false;
+        notebookObject.SetActive(false);
+    }
+
     /// <summary>
     /// Set if the notepad is visable in the Pause menu.
     /// </summary>
@@ -197,7 +225,7 @@ public class Notepad : MonoBehaviour
 
         tasksPanel.SetActive(true);
         inventoryPanel.SetActive(false);
-        profilePanel.SetActive(false);
+        profileManager.HideProfile();;
         mapPanel.SetActive(false);
 
         // Set page buttons
@@ -241,7 +269,7 @@ public class Notepad : MonoBehaviour
 
         tasksPanel.SetActive(false);
         inventoryPanel.SetActive(true);
-        profilePanel.SetActive(false);
+        profileManager.HideProfile(); ;
         mapPanel.SetActive(false);
         // Set page buttons
         nextButton.SetActive(false);
@@ -279,62 +307,16 @@ public class Notepad : MonoBehaviour
     /// </summary>
     public void ShowProfiles()
     {
-        if (currentProfile >= profileList.Count)
-        {
-            currentProfile = profileList.Count - 1;
-        }
-        else if (currentProfile < 0)
-        {
-            currentProfile = 0;
-        }
-        ShowProfiles(currentProfile);
-    }
-
-    /// <summary>
-    /// Show the profile page.
-    /// </summary>
-    /// <param name="profileNumber"></param>
-    public void ShowProfiles(int profileNumber)
-    {
-
         page = Pages.Profile;
 
         tasksPanel.SetActive(false);
         inventoryPanel.SetActive(false);
-        profilePanel.SetActive(true);
         mapPanel.SetActive(false);
-
-        if (profileNumber >= profileList.Count)
-        {
-            profileNumber = profileList.Count - 1;
-        }
-        else if (profileNumber < 0)
-        {
-            profileNumber = 0;
-        }
-
         // Set page buttons
-        if (profileNumber >= profileList.Count - 1)
-        {
-            nextButton.SetActive(false);
-        }
-        else
-        {
-            nextButton.SetActive(true);
-        }
-        if (profileNumber <= 0)
-        {
-            previousButton.SetActive(false);
-        }
-        else
-        {
-            previousButton.SetActive(true);
-        }
+        nextButton.SetActive(true);
+        previousButton.SetActive(true);
 
-        // Set active task
-        profileImage.sprite = profileList[profileNumber].npcImage;
-        profileInfoText.text = profileList[profileNumber].name + "\n" + profileList[profileNumber].occupation + "\n" + profileList[profileNumber].info;
-        profileDescriptionText.text = profileList[profileNumber].bio;
+        profileManager.DisplayProfile();
     }
 
     /// <summary>
@@ -346,7 +328,7 @@ public class Notepad : MonoBehaviour
 
         tasksPanel.SetActive(false);
         inventoryPanel.SetActive(false);
-        profilePanel.SetActive(false);
+        profileManager.HideProfile();
         mapPanel.SetActive(true);
 
         nextButton.SetActive(false);
@@ -374,8 +356,7 @@ public class Notepad : MonoBehaviour
             case Pages.Inventroy:
                 break;
             case Pages.Profile:
-                currentProfile += 1;
-                ShowProfiles(currentProfile);
+                profileManager.DisplayNextProfile();
                 break;
             case Pages.Map:
                 break;
@@ -399,8 +380,7 @@ public class Notepad : MonoBehaviour
             case Pages.Inventroy:
                 break;
             case Pages.Profile:
-                currentProfile -= 1;
-                ShowProfiles(currentProfile);
+                profileManager.DisplayPreviousProfile();
                 break;
             case Pages.Map:
                 break;

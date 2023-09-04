@@ -8,6 +8,8 @@ using UnityEngine;
 public class Pause : MonoBehaviour 
 {
     #region Fields
+    public static Pause Instance { get; private set; }
+
     [Tooltip("The UI panel that is the visual for the pause menu.")]
     [SerializeField] private GameObject pausePanel;
     [Tooltip("Objects to be disabled when the game is paused.")]
@@ -17,9 +19,21 @@ public class Pause : MonoBehaviour
     /// If ture the game is paused.
     /// </summary>
     private bool isPaused = false;
+
+    public bool IsPaused {  get { return isPaused; } }
     #endregion
 
     #region Unity Call Functions
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
     private void Start()
     {
         PauseGame(false);
@@ -46,6 +60,7 @@ public class Pause : MonoBehaviour
         Time.timeScale = 0.0f;
         InputManager.Instance.PlayerInput.InGame.Disable();
         InputManager.Instance.PlayerInput.PauseGame.Disable();
+
 
         for (int i = 0; i < UIObjectsToHide.Length; i++)
         {
@@ -76,6 +91,7 @@ public class Pause : MonoBehaviour
             Time.timeScale = 0.0f;
             pausePanel.SetActive(true);
             InputManager.Instance.PlayerInput.InGame.Disable();
+            Notepad.Instance.HideNotepad();
 
             for (int i = 0; i < UIObjectsToHide.Length; i++)
             {

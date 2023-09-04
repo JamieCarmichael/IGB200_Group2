@@ -242,6 +242,15 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Notepad"",
+                    ""type"": ""Button"",
+                    ""id"": ""72bf57bf-4fd2-4f92-8c74-ddbd840207d2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -264,6 +273,17 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Controller"",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3bb72245-74b0-4d0e-aa06-85c8d8591d33"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Notepad"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -293,6 +313,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         // PauseGame
         m_PauseGame = asset.FindActionMap("PauseGame", throwIfNotFound: true);
         m_PauseGame_Pause = m_PauseGame.FindAction("Pause", throwIfNotFound: true);
+        m_PauseGame_Notepad = m_PauseGame.FindAction("Notepad", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -433,11 +454,13 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PauseGame;
     private List<IPauseGameActions> m_PauseGameActionsCallbackInterfaces = new List<IPauseGameActions>();
     private readonly InputAction m_PauseGame_Pause;
+    private readonly InputAction m_PauseGame_Notepad;
     public struct PauseGameActions
     {
         private @PlayerActions m_Wrapper;
         public PauseGameActions(@PlayerActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Pause => m_Wrapper.m_PauseGame_Pause;
+        public InputAction @Notepad => m_Wrapper.m_PauseGame_Notepad;
         public InputActionMap Get() { return m_Wrapper.m_PauseGame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -450,6 +473,9 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @Notepad.started += instance.OnNotepad;
+            @Notepad.performed += instance.OnNotepad;
+            @Notepad.canceled += instance.OnNotepad;
         }
 
         private void UnregisterCallbacks(IPauseGameActions instance)
@@ -457,6 +483,9 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @Notepad.started -= instance.OnNotepad;
+            @Notepad.performed -= instance.OnNotepad;
+            @Notepad.canceled -= instance.OnNotepad;
         }
 
         public void RemoveCallbacks(IPauseGameActions instance)
@@ -503,5 +532,6 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
     public interface IPauseGameActions
     {
         void OnPause(InputAction.CallbackContext context);
+        void OnNotepad(InputAction.CallbackContext context);
     }
 }
