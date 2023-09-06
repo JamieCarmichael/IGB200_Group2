@@ -35,6 +35,10 @@ public class Ladder : MonoBehaviour, IIntertactable
     }
     [Tooltip("If true this object can be interacted with.")]
     [SerializeField] private bool intertactable = false;
+
+
+    private string requiredItem = "";
+    public string RequiredItem { get { return requiredItem; } }
     #endregion
 
     #region Unity Call Functions

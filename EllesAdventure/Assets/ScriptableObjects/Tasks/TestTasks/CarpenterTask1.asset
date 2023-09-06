@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CarpenterTask1
   m_EditorClassIdentifier: 
   startTaskDialogue:
-  - Can you get me 2 wood
+  - Can you get me wood
   duringTaskDialogue:
   - Find the wood now.
   completeTaskDialogue:

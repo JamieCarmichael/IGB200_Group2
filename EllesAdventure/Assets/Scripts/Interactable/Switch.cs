@@ -5,7 +5,7 @@ using UnityEngine.Events;
 /// Made By: Jamie Carmichael
 /// Details: A switch that interacts with another object.
 /// </summary>
-public class Lever : MonoBehaviour, IIntertactable
+public class Switch : MonoBehaviour, IIntertactable
 {
     #region Fields
     private Collider thisCollider;
@@ -40,15 +40,13 @@ public class Lever : MonoBehaviour, IIntertactable
 
     [Tooltip("How long the lever takes to opperate.")]
     [SerializeField] private float openTime = 1.0f;
-    [Tooltip("The name of the item requeired to use the lever. If empty no item is required.")]
-    [SerializeField] private InventoryObject requiredItem;
-    [Tooltip("The number of the item needed to use the level.")]
-    [SerializeField] private int numberOfItmesNeeded;
-    [Tooltip("If true the required item will be ussd and no longer be in the inventroy.")]
-    [SerializeField] private bool useRequiredItem = false;
     [Tooltip("The event called after the lever had been used.")]
     [SerializeField] private UnityEvent afterLeverEvent;
 
+
+    [Tooltip("The name of the item requeired to use the lever. If empty no item is required.")]
+    [SerializeField] private string requiredItem;
+    public string RequiredItem { get { return requiredItem; } }
     #endregion
 
     #region Unity Call Functions
@@ -61,14 +59,6 @@ public class Lever : MonoBehaviour, IIntertactable
     #region IIntertactable
     public void Interact()
     {
-        if (numberOfItmesNeeded != 0)
-        {
-            if (!PlayerManager.Instance.PlayerInventory.UseItem(requiredItem, useRequiredItem))
-            {
-                return;
-            }
-        }
-
         gameObject.GetComponent<Animator>().SetTrigger("Open");
         Invoke("AfterLever", openTime);
     }

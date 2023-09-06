@@ -397,6 +397,7 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 toVector = closestPoint - transform.position;
         Vector3 direction = toVector.normalized;
+        direction.y = -1.0f;
         float distance = toVector.magnitude - stoppingDistance;
 
         float timeToMove = distance / maxWalkSpeed;
@@ -419,6 +420,7 @@ public class PlayerMovement : MonoBehaviour
             RotatePlayer(toVector, true, timeToMove);
 
             movePostion = direction * maxWalkSpeed * Time.deltaTime;
+
             characterController.Move(movePostion);
             yield return null;
         }

@@ -25,7 +25,20 @@ public class PlayerInteract : MonoBehaviour
 
     private Pickup heldObject;
 
-
+    public string HeldItemName 
+    {
+        get 
+        { 
+            if (heldObject == null)
+            {
+                return "";
+            }
+            else
+            {
+                return heldObject.ItemName;
+            }
+        } 
+    }
 
     [SerializeField] private LayerMask putDownLayer;
 
@@ -41,12 +54,15 @@ public class PlayerInteract : MonoBehaviour
     /// If true the interact animation is running.
     /// </summary>
     private bool interactAnimationRunning = false;
+
+    private float playerHeight;
     #endregion
 
     #region Unity Call Functions
     private void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
+        playerHeight = GetComponent<CharacterController>().height;
     }
     private void OnEnable()
     {
@@ -79,6 +95,12 @@ public class PlayerInteract : MonoBehaviour
             heldObject = (Pickup)interactable;
             interactable = null;
         }
+    }
+
+    public void RemoveHeldObject()
+    {
+        heldObject.gameObject.SetActive(false);
+        heldObject = null;
     }
     #endregion
 
@@ -149,23 +171,38 @@ public class PlayerInteract : MonoBehaviour
         if (heldObject != null && interactable == null)
         {
             Vector3 dropPos = transform.position + transform.forward;
-            if (Physics.Raycast(dropPos + (Vector3.up * 2), Vector3.down, out RaycastHit hitInfo, 3.0f, putDownLayer, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(dropPos + (Vector3.up * playerHeight), Vector3.down, out RaycastHit hitInfo, playerHeight * 1.5f, putDownLayer, QueryTriggerInteraction.Ignore))
             {
                 dropPos = hitInfo.point;
             }
 
-            heldObject.PutDown(dropPos);
-            heldObject = null;
+            // Only drop if area is clear
+            if (!Physics.CheckSphere(dropPos + Vector3.up * 0.6f, 0.5f))
+            {
+                heldObject.PutDown(dropPos);
+                heldObject = null;
+            }
         }
         // Nothing held something to interact with
         else if(heldObject == null && interactable != null)
         {
-            StartCoroutine(InteractWithObject());
+            if (interactable.RequiredItem == "" || interactable.RequiredItem == "NPC")
+            {
+                StartCoroutine(InteractWithObject(false));
+            }
         }
         // Holding object and something to interact with
         else if(heldObject != null && interactable != null)
-        { 
-             // Need logic for completing task.
+        {
+            if (interactable.RequiredItem == heldObject.ItemName)
+            {
+                StartCoroutine(InteractWithObject(true));
+            }
+            else if (interactable.RequiredItem == "NPC")
+            {
+                StartCoroutine(InteractWithObject(false));
+            }
+            // Need logic for completing task.
         }
     }
 
@@ -182,7 +219,7 @@ public class PlayerInteract : MonoBehaviour
     /// They move to the object, run an interact animation, run interact logic.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator InteractWithObject()
+    private IEnumerator InteractWithObject(bool removeHeldItem)
     {
         InputManager.Instance.PlayerInput.InGame.Disable();
 
@@ -205,7 +242,10 @@ public class PlayerInteract : MonoBehaviour
             interactable.Interact();
         }
 
-
+        if (removeHeldItem)
+        {
+            RemoveHeldObject();
+        }
         InputManager.Instance.PlayerInput.InGame.Enable();
     }
     #endregion

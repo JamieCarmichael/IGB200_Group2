@@ -10,8 +10,8 @@ using UnityEngine;
 public class SOFindTask : SOTask
 {
     #region Fields
-    [Tooltip("The item that is needed. The string and number of the item.")]
-    [SerializeField] private InventoryObject item;
+    [Tooltip("The item that is needed. The name of the item needed.")]
+    [SerializeField] private string itemName;
     [Tooltip("The name of the task being done. This is displayed in the notepad and should be descriptive.")]
     [SerializeField] private string taskName;
 
@@ -39,14 +39,18 @@ public class SOFindTask : SOTask
     #region Public Methods
     public override bool TryComplete()
     {
-        if (IsComplete)
+        if (isComplete)
         {
-            return IsComplete;
+            return isComplete;
         }
 
-        isComplete = PlayerManager.Instance.PlayerInventory.UseItem(item, true);
+        isComplete = PlayerManager.Instance.PlayerInteract.HeldItemName == itemName;
+        if (isComplete)
+        {
+            PlayerManager.Instance.PlayerInteract.RemoveHeldObject();
+        }
 
-        return IsComplete;
+        return isComplete;
     }
 
     public override void StartTask()

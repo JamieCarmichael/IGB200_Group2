@@ -32,13 +32,9 @@ public class PlayerManager : MonoBehaviour
     private PlayerInteract playerInteract;
     private PlayerMovementLadder playerMovementLadder;
     private PlayerMovementEdge playerMovementEdge;
-    private Inventory inventory;
 
-    /// <summary>
-    /// The players inventory.
-    /// </summary>
-    public Inventory PlayerInventory { get { return inventory; } }
     public PlayerMovement PlayerMovement { get { return playerMovement; } }
+    public PlayerInteract PlayerInteract { get { return playerInteract; } }
     #endregion
 
     #region Unity Call Functions
@@ -55,7 +51,6 @@ public class PlayerManager : MonoBehaviour
         playerInteract = GetComponentInChildren<PlayerInteract>();
         playerMovementLadder = GetComponentInChildren<PlayerMovementLadder>();
         playerMovementEdge = GetComponentInChildren<PlayerMovementEdge>();
-        inventory = GetComponent<Inventory>();
     }
     #endregion
 

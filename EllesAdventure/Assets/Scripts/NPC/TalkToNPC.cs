@@ -68,6 +68,9 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     /// What task is currently being done.
     /// </summary>
     private int currentTaskNumber = 0;
+
+    private string requiredItem = "NPC";
+    public string RequiredItem { get { return requiredItem; } }
     #endregion
 
     #region Unity Call Functions

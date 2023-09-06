@@ -54,16 +54,6 @@ public class Notepad : MonoBehaviour
     /// </summary>
     private int currentTask = 0;
 
-
-    [Header("Inventory")]
-    [Tooltip("The panel that the inventory UI is on.")]
-    [SerializeField] private GameObject inventoryPanel;
-    [Tooltip("The array of inventory spaces that the inventory can be displayed on.")]
-    [SerializeField] private InventorySpace[] inventroySpaces;
-    [Tooltip("The TMP text field that shows the item description.")]
-    [SerializeField] private TextMeshProUGUI inventoryDescription;
-
-
     [Header("Profile")]
     [Tooltip("The profile manager for all of the profiles in the notepad.")]
     [SerializeField] private ProfileManager profileManager;
@@ -102,25 +92,7 @@ public class Notepad : MonoBehaviour
 
     private void OnEnable()
     {
-
-        // Select current page.
-        switch (page) 
-        {
-            case Pages.Tasks:
-                ShowTasks();
-                break; 
-            case Pages.Inventroy:
-                ShowInventory();
-                break; 
-            case Pages.Profile:
-                ShowProfiles();
-                break;
-            case Pages.Map:
-                ShowMap();
-                break;
-            default:
-                break;
-        }
+        ShowPage();
 
         InputManager.Instance.PlayerInput.PauseGame.Notepad.performed += context => ShowNotebook();
     }
@@ -132,6 +104,25 @@ public class Notepad : MonoBehaviour
     #endregion
 
     #region Public Methods
+
+    private void ShowPage()
+    {
+        // Select current page.
+        switch (page)
+        {
+            case Pages.Tasks:
+                ShowTasks();
+                break;
+            case Pages.Profile:
+                ShowProfiles();
+                break;
+            case Pages.Map:
+                ShowMap();
+                break;
+            default:
+                break;
+        }
+    }
     private void ShowNotebook()
     {
 
@@ -143,6 +134,7 @@ public class Notepad : MonoBehaviour
 
             if (notepadVisable)
             {
+                ShowPage();
                 InputManager.Instance.PlayerInput.InGame.Disable();
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
@@ -224,7 +216,6 @@ public class Notepad : MonoBehaviour
         page = Pages.Tasks;
 
         tasksPanel.SetActive(true);
-        inventoryPanel.SetActive(false);
         profileManager.HideProfile();;
         mapPanel.SetActive(false);
 
@@ -259,49 +250,6 @@ public class Notepad : MonoBehaviour
         }
     }
 
-
-    /// <summary>
-    /// Show the players inventory.
-    /// </summary>
-    public void ShowInventory()
-    {
-        page = Pages.Inventroy;
-
-        tasksPanel.SetActive(false);
-        inventoryPanel.SetActive(true);
-        profileManager.HideProfile(); ;
-        mapPanel.SetActive(false);
-        // Set page buttons
-        nextButton.SetActive(false);
-        previousButton.SetActive(false);
-        // Get inventory
-        List<InventoryObject> inventory = PlayerManager.Instance.PlayerInventory.InventoryList;
-
-        inventoryDescription.text = "";
-
-        for (int i = 0; i < inventroySpaces.Length; i++)
-        {
-            // If there are more spaces then items disable space.
-            if (i >= inventory.Count)
-            {
-                inventroySpaces[i].gameObject.SetActive(false);
-                continue;
-            }
-
-            // Set the inventory space
-            inventroySpaces[i].SetInventory(inventory[i]);
-        }
-    }
-
-    /// <summary>
-    /// Set the description in the inventory panel of the notepad.
-    /// </summary>
-    /// <param name="item"></param>
-    public void SetInventoryDiscription(SOInventoryItem item)
-    {
-        inventoryDescription.text = item.itemName + "\n" + item.itemDescription;
-    }
-
     /// <summary>
     /// Show the profile page.
     /// </summary>
@@ -310,7 +258,6 @@ public class Notepad : MonoBehaviour
         page = Pages.Profile;
 
         tasksPanel.SetActive(false);
-        inventoryPanel.SetActive(false);
         mapPanel.SetActive(false);
         // Set page buttons
         nextButton.SetActive(true);
@@ -327,7 +274,6 @@ public class Notepad : MonoBehaviour
         page = Pages.Map;
 
         tasksPanel.SetActive(false);
-        inventoryPanel.SetActive(false);
         profileManager.HideProfile();
         mapPanel.SetActive(true);
 
@@ -353,8 +299,6 @@ public class Notepad : MonoBehaviour
                 currentTask += 1;
                 ShowTasks(currentTask);
                 break;
-            case Pages.Inventroy:
-                break;
             case Pages.Profile:
                 profileManager.DisplayNextProfile();
                 break;
@@ -376,8 +320,6 @@ public class Notepad : MonoBehaviour
             case Pages.Tasks:
                 currentTask -= 1;
                 ShowTasks(currentTask);
-                break;
-            case Pages.Inventroy:
                 break;
             case Pages.Profile:
                 profileManager.DisplayPreviousProfile();

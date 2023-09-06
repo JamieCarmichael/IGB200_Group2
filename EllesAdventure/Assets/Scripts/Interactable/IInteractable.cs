@@ -11,6 +11,11 @@ public interface IIntertactable
     public string InteractAminationString { get; }
 
     /// <summary>
+    /// The identification string for the item required to interact with this.
+    /// </summary>
+    public string RequiredItem {  get; }
+
+    /// <summary>
     /// If true this object can be interacted with.
     /// </summary>
     public bool Intertactable { get; }

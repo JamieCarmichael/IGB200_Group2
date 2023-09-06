@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: ToolPersonTask1
   m_EditorClassIdentifier: 
   startTaskDialogue:
-  - Can you help me get some tools.
+  - Can you help me get a tool.
   duringTaskDialogue:
-  - Get me tools
+  - Get me tool
   completeTaskDialogue:
-  - Thanks for the tools.
+  - Thanks for the tool.
   tasks:
   - {fileID: 11400000, guid: 22a9b55d84eeb974eb63481a5e48995c, type: 2}
   taskName: Help Tools

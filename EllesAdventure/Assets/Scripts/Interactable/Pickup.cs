@@ -28,8 +28,6 @@ public class Pickup : MonoBehaviour, IIntertactable
 
     [Tooltip("The object that indicates when this object is being looked at.")]
     [SerializeField] private GameObject lookAtObject;
-    [Tooltip("The items name when added to the players inventroy.")]
-    [SerializeField] private InventoryObject item;
 
     private Collider thisCollider;
 
@@ -40,6 +38,10 @@ public class Pickup : MonoBehaviour, IIntertactable
     [SerializeField] private string itemName;
 
     public string ItemName { get { return itemName; } }
+
+
+    private string requiredItem = "";
+    public string RequiredItem { get { return requiredItem; } }
     #endregion
 
     #region Unity Call Functions

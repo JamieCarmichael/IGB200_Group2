@@ -38,6 +38,8 @@ public class Gate : MonoBehaviour, IIntertactable
     [SerializeField] private UnityEvent afterOpenEvent;
 
 
+    [SerializeField] private string requiredItem;
+    public string RequiredItem { get { return requiredItem; } }
     #endregion
 
     #region Unity Call Functions
@@ -55,6 +57,7 @@ public class Gate : MonoBehaviour, IIntertactable
     {
         gameObject.GetComponent<Animator>().SetTrigger("Open");
         Invoke("AfterOpenGate", openTime);
+        this.enabled = false;
     }
 
     /// <summary>
