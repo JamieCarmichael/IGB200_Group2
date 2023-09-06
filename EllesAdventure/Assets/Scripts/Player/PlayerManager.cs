@@ -21,6 +21,13 @@ public class PlayerManager : MonoBehaviour
         get { return playerTransform; }
     }
 
+    [Tooltip("The transform that held items are attactched to. ")]
+    [SerializeField] private Transform itemCarryTransform;
+    public Transform ItemCarryTransform
+    {
+        get { return itemCarryTransform; }
+    }
+
     private PlayerMovement playerMovement;
     private PlayerInteract playerInteract;
     private PlayerMovementLadder playerMovementLadder;

@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 6583016714712921538}
+  itemCarryTransform: {fileID: 927420413136690223}
 --- !u!114 &1042987707504072772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,6 +232,7 @@ Transform:
   m_Children:
   - {fileID: 4228425319461690356}
   - {fileID: 8432181734809682891}
+  - {fileID: 927420413136690223}
   m_Father: {fileID: 383029648402967398}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &8686189581662546988
@@ -277,8 +279,6 @@ MonoBehaviour:
   runAcceleration: 0.25
   maxRunSpeed: 5
   lookAtTransform: {fileID: 8432181734809682891}
-  horizontalTurnSpeed: 33
-  verticalTurnSpeed: 25
   verticalClamp: {x: -30, y: 30}
   jumpHeight: 1.2
   gravity: 9.8
@@ -350,6 +350,37 @@ MonoBehaviour:
   climbSpeed: 2
   animHang: isWalking
   animClimb: isWalking
+--- !u!1 &8638824602577140536
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 927420413136690223}
+  m_Layer: 6
+  m_Name: ItemCarryPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &927420413136690223
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8638824602577140536}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6583016714712921538}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8806746005780933916
 GameObject:
   m_ObjectHideFlags: 0
@@ -542,12 +573,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e10873d959a89dd4db22e831673f1d04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RunEvent:
-    m_PersistentCalls:
+  RunEvents:
+  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8984690542345762672}
         m_TargetAssemblyTypeName: PlayerInteract, Assembly-CSharp
         m_MethodName: StopInteractAnimation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8984690542345762672}
+        m_TargetAssemblyTypeName: PlayerInteract, Assembly-CSharp
+        m_MethodName: RunInteractAction
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

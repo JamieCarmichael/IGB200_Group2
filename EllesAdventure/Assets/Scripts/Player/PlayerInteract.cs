@@ -20,6 +20,15 @@ public class PlayerInteract : MonoBehaviour
     /// The current interactable object.
     /// </summary>
     private IIntertactable interactable;
+
+
+
+    private Pickup heldObject;
+
+
+
+    [SerializeField] private LayerMask putDownLayer;
+
     /// <summary>
     /// The players movement script
     /// </summary>
@@ -61,6 +70,16 @@ public class PlayerInteract : MonoBehaviour
     {
         interactAnimationRunning = false;
     }
+
+    public void RunInteractAction()
+    {
+        interactable.Interact();
+        if (interactable.GetType() == typeof(Pickup))
+        {
+            heldObject = (Pickup)interactable;
+            interactable = null;
+        }
+    }
     #endregion
 
     #region Private Methods
@@ -80,11 +99,19 @@ public class PlayerInteract : MonoBehaviour
             }
             return null;
         }
+        if (interactableArray.Length == 1 && heldObject != null)
+        {
+            return null;
+        }
         int select = 0;
         float closestDistance = float.MaxValue;
         float distance = 0.0f;
         for (int i = 0; i < interactableArray.Length; i++)
         {
+            if (heldObject != null && heldObject.gameObject == interactableArray[i].gameObject)
+            {
+                continue;
+            }
             distance = Vector3.Distance(transform.position, interactableArray[i].transform.position);
             if (distance < closestDistance)
             {
@@ -118,9 +145,27 @@ public class PlayerInteract : MonoBehaviour
     /// </summary>
     private void Interact()
     {
-        if (interactable != null)
+        // Holding object but nothing to interact with.
+        if (heldObject != null && interactable == null)
+        {
+            Vector3 dropPos = transform.position + transform.forward;
+            if (Physics.Raycast(dropPos + (Vector3.up * 2), Vector3.down, out RaycastHit hitInfo, 3.0f, putDownLayer, QueryTriggerInteraction.Ignore))
+            {
+                dropPos = hitInfo.point;
+            }
+
+            heldObject.PutDown(dropPos);
+            heldObject = null;
+        }
+        // Nothing held something to interact with
+        else if(heldObject == null && interactable != null)
         {
             StartCoroutine(InteractWithObject());
+        }
+        // Holding object and something to interact with
+        else if(heldObject != null && interactable != null)
+        { 
+             // Need logic for completing task.
         }
     }
 
@@ -149,14 +194,17 @@ public class PlayerInteract : MonoBehaviour
         {
             interactAnimationRunning = true;
             animator.SetTrigger(interactable.InteractAminationString);
-
+            // StopInteractAnimation method needs to be called as an animation event when the animation is finishing to stop the loop.
             while (interactAnimationRunning)
             {
                 yield return null;
             }
         }
+        else
+        {
+            interactable.Interact();
+        }
 
-        interactable.Interact();
 
         InputManager.Instance.PlayerInput.InGame.Enable();
     }

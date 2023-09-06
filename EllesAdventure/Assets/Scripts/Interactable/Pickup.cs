@@ -32,6 +32,14 @@ public class Pickup : MonoBehaviour, IIntertactable
     [SerializeField] private InventoryObject item;
 
     private Collider thisCollider;
+
+    private bool isHeld = false;
+
+    public bool IsHeld { get { return isHeld; } }
+
+    [SerializeField] private string itemName;
+
+    public string ItemName { get { return itemName; } }
     #endregion
 
     #region Unity Call Functions
@@ -42,6 +50,17 @@ public class Pickup : MonoBehaviour, IIntertactable
     #endregion
 
     #region Public Methods
+    public void PutDown(Vector3 newPos)
+    {
+        isHeld = false;
+        transform.parent = null;
+        transform.position = newPos;
+    }
+
+    public void Use()
+    {
+        gameObject.SetActive(false);
+    }
     #endregion
 
     #region Private Methods
@@ -49,18 +68,24 @@ public class Pickup : MonoBehaviour, IIntertactable
     #endregion
 
     #region IIntertactable
-
-
     public void Interact()
     {
-        PlayerManager.Instance.PlayerInventory.AddToInventory(item);
-
-        gameObject.SetActive(false);
+        isHeld = true;
+        transform.parent = PlayerManager.Instance.ItemCarryTransform;
+        transform.position = transform.parent.position;
+        lookAtObject.SetActive(false);
     }
 
     public void StartLookAt()
     {
-        lookAtObject.SetActive(true);
+        if (!isHeld)
+        {
+            lookAtObject.SetActive(true);
+        }
+        else
+        {
+            lookAtObject.SetActive(false);
+        }
     }
 
     public void StopLookAt()

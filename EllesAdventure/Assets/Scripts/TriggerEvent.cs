@@ -9,16 +9,17 @@ public class TriggerEvent : MonoBehaviour
 {
     #region Fields
     [Tooltip("Event to be triggered.")]
-    [SerializeField] UnityEvent RunEvent;
+    [SerializeField] UnityEvent[] RunEvents;
     #endregion
 
     #region Public Methods
     /// <summary>
     /// Calls the event.
     /// </summary>
-    public void CallEvent()
+    /// <param name="eventIndex">The index of the event being called within the run events array.</param>
+    public void CallEvent(int eventIndex)
     {
-        RunEvent.Invoke();
+        RunEvents[eventIndex].Invoke();
     }
     #endregion
 
