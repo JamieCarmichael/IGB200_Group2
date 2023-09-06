@@ -35,13 +35,17 @@ public class PlayerMovement : MonoBehaviour
     [Header("Looking")]
     [Tooltip("The transform that the camera is looking at.")]
     [SerializeField] Transform lookAtTransform;
-    [Tooltip("The speed that the player turns horizontally")]
-    [SerializeField] private float horizontalTurnSpeed = 10.0f;
-    [Tooltip("The speed that the player turns vertically")]
-    [SerializeField] private float verticalTurnSpeed = 10.0f;
     [Tooltip("The minimum and maximum angles that the player can look on the vertical axis.")]
     [SerializeField] Vector2 verticalClamp = new Vector2(-85.0f, 85.0f);
 
+    /// <summary>
+    /// The speed that the player turns horizontally
+    /// </summary>
+    private float horizontalTurnSpeed;
+    /// <summary>
+    /// The speed that the player turns vertically.
+    /// </summary>
+    private float verticalTurnSpeed;
     /// <summary>
     /// The cameras rotation on the X axis.
     /// </summary>
@@ -62,6 +66,10 @@ public class PlayerMovement : MonoBehaviour
     /// A timer for how much long the rotation has been going for.
     /// </summary>
     private float rotateTimer = 0.0f;
+
+    private const string MOUSE_SENSITIVITY_X = "MouseSensitivityX";
+    private const string MOUSE_SENSITIVITY_Y = "MouseSensitivityY";
+    private float defaultSensitivityValue = 10.0f;
 
 
     [Header("Jump")]
@@ -129,6 +137,8 @@ public class PlayerMovement : MonoBehaviour
         toDirection = transform.forward;
 
         verticalCameraAngle = transform.rotation.y;
+
+        RetrieveMouseSensitivity();
     }
     private void OnEnable()
     {
@@ -362,6 +372,15 @@ public class PlayerMovement : MonoBehaviour
         verticalCameraAngle = Mathf.Clamp(verticalCameraAngle, verticalClamp.x, verticalClamp.y);
         lookAtTransform.localRotation = Quaternion.Euler(verticalCameraAngle, 0.0f, 0.0f);
 
+    }
+
+    /// <summary>
+    /// Sets the mouse sensitivity values.
+    /// </summary>
+    private void RetrieveMouseSensitivity()
+    {
+        horizontalTurnSpeed = PlayerPrefs.GetFloat(MOUSE_SENSITIVITY_X, defaultSensitivityValue);
+        verticalTurnSpeed = PlayerPrefs.GetFloat(MOUSE_SENSITIVITY_Y, defaultSensitivityValue);
     }
     #endregion
 
