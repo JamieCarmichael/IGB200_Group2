@@ -27,6 +27,9 @@ public class SODoTask : SOTask
 
     [Tooltip("The name of this task. Is displayed in the notepad.")]
     [SerializeField] private string taskName;
+
+    [Tooltip("If true the building will be added to when this task is completed.")]
+    [SerializeField] private bool buildBuildingOnComplete = false;
     #endregion
 
     #region Properties
@@ -93,6 +96,12 @@ public class SODoTask : SOTask
                 tasks[i].TryComplete();
             }
         }
+        // Add to central building.
+        if (IsComplete && buildBuildingOnComplete)
+        {
+            HouseProgress.Instance.IncreaseProgressLevel();
+        }
+
         return IsComplete;
     }
 

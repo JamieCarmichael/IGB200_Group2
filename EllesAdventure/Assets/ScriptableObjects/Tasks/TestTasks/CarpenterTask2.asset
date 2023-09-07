@@ -21,3 +21,4 @@ MonoBehaviour:
   tasks:
   - {fileID: 11400000, guid: 018b4170b9a0aae4bb7b4b2e4061cb3d, type: 2}
   taskName: Help Carpenter
+  buildBuildingOnComplete: 1

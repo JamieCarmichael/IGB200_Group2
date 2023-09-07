@@ -21,3 +21,4 @@ MonoBehaviour:
   tasks:
   - {fileID: 11400000, guid: 9bfda70f5a55be0418ba61db7c9a7ce8, type: 2}
   taskName: Get Notepad
+  buildBuildingOnComplete: 0
