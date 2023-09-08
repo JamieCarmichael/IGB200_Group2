@@ -13,16 +13,12 @@ public class PlayerMovement : MonoBehaviour
 {
     #region Fields
     [Header("Player Movement")]
-    [Tooltip("How many seconds it takes the player to go from the maximum running speed to 0 if no key is pressed.")]
+    [Tooltip("How many seconds it takes the player to go from the maximum moving speed to 0 if no key is pressed.")]
     [SerializeField] private float deceleration = 10.0f;
-    [Tooltip("How many seconds it takes the player to go from 0 to the maximum walking speed.")]
-    [SerializeField] private float walkAcceleration = 5.0f;
-    [Tooltip("The maximum speed the player can move when walking.")]
-    [SerializeField] private float maxWalkSpeed = 5.0f;
-    [Tooltip("How many seconds it takes the player to go from 0 to the maximum running speed.")]
-    [SerializeField] private float runAcceleration = 10.0f;
-    [Tooltip("The maximum speed the player can move when running.")]
-    [SerializeField] private float maxRunSpeed = 10.0f;
+    [Tooltip("How many seconds it takes the player to go from 0 to the maximum move speed.")]
+    [SerializeField] private float moveAcceleration = 5.0f;
+    [Tooltip("The maximum speed the player can move when moving.")]
+    [SerializeField] private float maxMoveSpeed = 5.0f;
     /// <summary>
     /// The velocity of the players horizontal movement.
     /// </summary>
@@ -71,15 +67,6 @@ public class PlayerMovement : MonoBehaviour
     private const string MOUSE_SENSITIVITY_Y = "MouseSensitivityY";
     private float defaultSensitivityValue = 10.0f;
 
-
-    [Header("Jump")]
-    [Tooltip("How many meters the player can jump.")]
-    [SerializeField] private float jumpHeight = 2.0f;
-    [Tooltip("The force applied to the player if they are not grounded.")]
-    [SerializeField] private float gravity = 9.81f;
-    [Tooltip("Multiplier to increase the speed that the player falls.")]
-    [SerializeField] private float fallMultiplier = 2.0f;
-
     [Header("Check Grounded")]
     [Tooltip("The distance from the ground that the player will detect the ground and stop falling/be able to jump.")]
     [SerializeField] private float groundCheckDistance = 0.1f;
@@ -87,6 +74,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask groundedLayer;
     [Tooltip("If the player is below this height the are sent back to the last position they were grounded.")]
     [SerializeField] private float minYHieght = -5.0f;
+    [Tooltip("The force applied to the player if they are not grounded.")]
+    [SerializeField] private float gravity = 9.81f;
+    [Tooltip("Multiplier to increase the speed that the player falls.")]
+    [SerializeField] private float fallMultiplier = 2.0f;
     /// <summary>
     /// The players vertical velocity. Used for jumping and gravity.
     /// </summary>
@@ -113,8 +104,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Animation")]
     [Tooltip("The animator used for the player model.")]
     [SerializeField] private Animator animator;
-    [SerializeField] private string animWalk = "";
-    [SerializeField] private string animRun = "";
+    [SerializeField] private string animMove = "";
     [SerializeField] private string animFall = "";
 
     /// <summary>
@@ -145,19 +135,13 @@ public class PlayerMovement : MonoBehaviour
         verticalVelocity = 0.0f;
         speed = 0.0f;
         movementVector = Vector3.zero;      
-
-        InputManager.Instance.PlayerInput.InGame.Jump.performed += Jump;
-    }
-    private void OnDisable()
-    {
-        InputManager.Instance.PlayerInput.InGame.Jump.performed -= Jump;
     }
 
     private void LateUpdate()
     {
         if (canMove)
         {
-            CollisionCheck();
+            //CollisionCheck();
             CheckGround();
 
 
@@ -199,38 +183,22 @@ public class PlayerMovement : MonoBehaviour
 
         if (!hasInput)
         {
-            animator.SetBool(animWalk, false);
-            animator.SetBool(animRun, false);
+            animator.SetBool(animMove, false);
             // No input
-            speed = Mathf.Clamp(speed - (maxRunSpeed / deceleration * Time.deltaTime), 0, speed);
+            speed = Mathf.Clamp(speed - (maxMoveSpeed / deceleration * Time.deltaTime), 0, speed);
             moveInput = new Vector2(movementVector.x, movementVector.z).normalized;
-        }
-        else if (!InputManager.Instance.PlayerInput.InGame.Sprint.IsInProgress())
-        {
-            animator.SetBool(animWalk, true);
-            animator.SetBool(animRun, false);
-            // Walking
-            if (speed > maxWalkSpeed)
-            {
-                speed = Mathf.Clamp(speed - (maxRunSpeed / deceleration * Time.deltaTime), 0, speed);
-            }
-            else
-            {
-                speed = Mathf.Clamp(speed + (maxWalkSpeed / walkAcceleration * Time.deltaTime), 0, maxWalkSpeed);
-            }
         }
         else
         {
-            animator.SetBool(animWalk, false);
-            animator.SetBool(animRun, true);
-            // Running
-            if (speed > maxRunSpeed)
+            animator.SetBool(animMove, true);
+            // moving
+            if (speed > maxMoveSpeed)
             {
-                speed = Mathf.Clamp(speed - (maxRunSpeed / deceleration * Time.deltaTime), 0, speed);
+                speed = Mathf.Clamp(speed - (maxMoveSpeed / deceleration * Time.deltaTime), 0, speed);
             }
             else
             {
-                speed = Mathf.Clamp(speed + (maxRunSpeed / runAcceleration * Time.deltaTime), 0, maxRunSpeed);
+                speed = Mathf.Clamp(speed + (maxMoveSpeed / moveAcceleration * Time.deltaTime), 0, maxMoveSpeed);
             }
 
         }
@@ -333,32 +301,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Apply upwards velcoity to the player. Make them jump.
-    /// </summary>
-    private void Jump()
-    {
-        if (isGrounded)
-        {
-            verticalVelocity = Mathf.Sqrt(jumpHeight * 2 * gravity);
-        }
-    }
-
-    private void Jump(InputAction.CallbackContext obj)
-    {
-        Jump();
-    }
-
-    /// <summary>
-    /// Checks if the player collided with something and stops velocity on that plane.
-    /// </summary>
-    private void CollisionCheck()
-    {
-        if (characterController.collisionFlags == CollisionFlags.Above && verticalVelocity > 0)
-        {
-            verticalVelocity = 0;
-        }
-    }
 
     /// <summary>
     /// Handles inputs for looking around. Rotates the player and looksm up and down.
@@ -400,12 +342,12 @@ public class PlayerMovement : MonoBehaviour
         direction.y = -1.0f;
         float distance = toVector.magnitude - stoppingDistance;
 
-        float timeToMove = distance / maxWalkSpeed;
+        float timeToMove = distance / maxMoveSpeed;
 
         float moveTimer = 0.0f;
         Vector3 movePostion = Vector3.zero;
 
-        animator.SetBool(animWalk, true);
+        animator.SetBool(animMove, true);
 
 
         if (timeToMove < 0.0f)
@@ -419,7 +361,7 @@ public class PlayerMovement : MonoBehaviour
             moveTimer += Time.deltaTime;
             RotatePlayer(toVector, true, timeToMove);
 
-            movePostion = direction * maxWalkSpeed * Time.deltaTime;
+            movePostion = direction * maxMoveSpeed * Time.deltaTime;
 
             characterController.Move(movePostion);
             yield return null;
@@ -428,8 +370,137 @@ public class PlayerMovement : MonoBehaviour
 
 
         movementVector = Vector3.zero;
-        animator.SetBool(animWalk, false);
+        animator.SetBool(animMove, false);
         canMove = true;
     }
+    #endregion
+
+    #region WalkRun CUT
+
+    /*
+     
+    [Header("Player Movement")]
+    [Tooltip("How many seconds it takes the player to go from the maximum running speed to 0 if no key is pressed.")]
+    [SerializeField] private float deceleration = 10.0f;
+    [Tooltip("How many seconds it takes the player to go from 0 to the maximum walking speed.")]
+    [SerializeField] private float walkAcceleration = 5.0f;
+    [Tooltip("The maximum speed the player can move when walking.")]
+    [SerializeField] private float maxWalkSpeed = 5.0f;
+    [Tooltip("How many seconds it takes the player to go from 0 to the maximum running speed.")]
+    [SerializeField] private float runAcceleration = 10.0f;
+    [Tooltip("The maximum speed the player can move when running.")]
+    [SerializeField] private float maxRunSpeed = 10.0f;
+      
+     private void Move()
+    {    
+        if (!isGrounded)
+        {
+            animator.SetBool(animFall, true);
+            movementVector.y = 0.0f;
+            return;
+        }
+
+        animator.SetBool(animFall, false);
+
+        // Get Input
+        Vector2 moveInput = InputManager.Instance.PlayerInput.InGame.Move.ReadValue<Vector2>();
+        moveInput = moveInput.normalized;
+        bool hasInput = InputManager.Instance.PlayerInput.InGame.Move.IsInProgress();
+
+        float targetAngle = Mathf.Atan2(moveInput.x, moveInput.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+        Vector3 moveDirection = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
+        moveInput = new Vector2(moveDirection.x, moveDirection.z);
+
+        if (!hasInput)
+        {
+            animator.SetBool(animWalk, false);
+            animator.SetBool(animRun, false);
+            // No input
+            speed = Mathf.Clamp(speed - (maxRunSpeed / deceleration * Time.deltaTime), 0, speed);
+            moveInput = new Vector2(movementVector.x, movementVector.z).normalized;
+        }
+        else if (!InputManager.Instance.PlayerInput.InGame.Sprint.IsInProgress())
+        {
+            animator.SetBool(animWalk, true);
+            animator.SetBool(animRun, false);
+            // Walking
+            if (speed > maxMoveSpeed)
+            {
+                speed = Mathf.Clamp(speed - (maxRunSpeed / deceleration * Time.deltaTime), 0, speed);
+            }
+            else
+            {
+                speed = Mathf.Clamp(speed + (maxMoveSpeed / moveAcceleration * Time.deltaTime), 0, maxMoveSpeed);
+            }
+        }
+        else
+        {
+            animator.SetBool(animWalk, false);
+            animator.SetBool(animRun, true);
+            // Running
+            if (speed > maxRunSpeed)
+            {
+                speed = Mathf.Clamp(speed - (maxRunSpeed / deceleration * Time.deltaTime), 0, speed);
+            }
+            else
+            {
+                speed = Mathf.Clamp(speed + (maxRunSpeed / runAcceleration * Time.deltaTime), 0, maxRunSpeed);
+            }
+
+        }
+
+        Vector3 moveInputVector3 = new Vector3(moveInput.x, 0.0f, moveInput.y);
+        movementVector = moveInputVector3 * speed;
+    }
+     */
+
+    #endregion
+
+    #region Jump CUT
+    /*
+         [Header("Jump")]
+    [Tooltip("How many meters the player can jump.")]
+    [SerializeField] private float jumpHeight = 2.0f;
+    [Tooltip("The force applied to the player if they are not grounded.")]
+    [SerializeField] private float gravity = 9.81f;
+    [Tooltip("Multiplier to increase the speed that the player falls.")]
+    [SerializeField] private float fallMultiplier = 2.0f;
+
+    private void OnEnable()
+    {
+        InputManager.Instance.PlayerInput.InGame.Jump.performed += Jump;
+    }
+    private void OnDisable()
+    {
+        InputManager.Instance.PlayerInput.InGame.Jump.performed -= Jump;
+    }     
+    
+    /// <summary>
+    /// Apply upwards velcoity to the player. Make them jump.
+    /// </summary>
+    private void Jump()
+    {
+        if (isGrounded)
+        {
+            verticalVelocity = Mathf.Sqrt(jumpHeight * 2 * gravity);
+        }
+    }
+
+    private void Jump(InputAction.CallbackContext obj)
+    {
+        Jump();
+    }
+
+    /// <summary>
+    /// Checks if the player collided with something and stops velocity on that plane.
+    /// </summary>
+    private void CollisionCheck()
+    {
+        if (characterController.collisionFlags == CollisionFlags.Above && verticalVelocity > 0)
+        {
+            verticalVelocity = 0;
+        }
+    }
+     */
     #endregion
 }
