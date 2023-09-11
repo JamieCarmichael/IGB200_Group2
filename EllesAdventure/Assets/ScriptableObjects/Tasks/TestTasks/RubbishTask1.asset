@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: RubbishTask1
   m_EditorClassIdentifier: 
   startTaskDialogue:
-  - Pick up the rubish for me.
+  - Elle, Thank god you're here! The Car park is a mess! I need your help, can you
+    help clean this place up? Sort the objects into their area.
   duringTaskDialogue:
-  - Get me rubbish.
+  - Sort the objects into the area
   completeTaskDialogue:
   - Thanks for cleaning up.
   tasks:

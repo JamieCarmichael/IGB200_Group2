@@ -13,14 +13,19 @@ MonoBehaviour:
   m_Name: FormanTask2
   m_EditorClassIdentifier: 
   startTaskDialogue:
-  - Now go and help people.
+  - Anyways, now that's done, the site is a bit of a mess today. All of the Carpenter's
+    Materials need to get where it's needed, the Electrician is missing his toolbox,
+    and apparently the Apprentice made a huge mess over in the car park.
+  - Can you go and check on all of them, and help get the site back on track?
   duringTaskDialogue:
-  - Hurry
+  - Go get em Elle! Remember, you can open the Notebook with E to check who you still
+    need to help and see a map of the site.
   completeTaskDialogue:
-  - Good work helping evenyone.
-  - I'll open the gate and we can leave now.
+  - Good work Elle! Thanks to you, the site is back on track. We couldn't have done
+    it without you.
   tasks:
   - {fileID: 11400000, guid: 50cf92fb39d1da448b32cfa2bef7ce93, type: 2}
   - {fileID: 11400000, guid: 3eed7c34417e66343ad8fbbe7bb418ea, type: 2}
   - {fileID: 11400000, guid: 5ad569f294abcaa46b8802579adf31fa, type: 2}
-  taskName: Help People
+  taskName: Help Workers
+  buildBuildingOnComplete: 0
