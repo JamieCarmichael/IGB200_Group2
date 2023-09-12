@@ -196,6 +196,7 @@ GameObject:
   - component: {fileID: 6845875503587334929}
   - component: {fileID: 8984690542345762672}
   - component: {fileID: 2961242446931671715}
+  - component: {fileID: 4674117773892115036}
   m_Layer: 6
   m_Name: Elle
   m_TagString: Untagged
@@ -260,19 +261,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deceleration: 0.25
-  moveAcceleration: 0.25
-  maxMoveSpeed: 6
+  walkAcceleration: 0.25
+  maxWalkSpeed: 2.5
+  runAcceleration: 0.25
+  maxRunSpeed: 5
   lookAtTransform: {fileID: 8432181734809682891}
   verticalClamp: {x: -30, y: 30}
+  jumpHeight: 1.2
+  gravity: 9.8
+  fallMultiplier: 2
   groundCheckDistance: 0.1
   groundedLayer:
     serializedVersion: 2
     m_Bits: 129
   minYHieght: -5
-  gravity: 9.8
-  fallMultiplier: 2
   animator: {fileID: 7804261757546250638}
-  animMove: isJogging
+  animWalk: isWalking
+  animRun: isJogging
   animFall: isFalling
 --- !u!114 &8984690542345762672
 MonoBehaviour:
@@ -310,6 +315,30 @@ MonoBehaviour:
   climbSpeed: 2
   getOffLadderDiatance: 0.2
   animator: {fileID: 7804261757546250638}
+  animClimb: isWalking
+--- !u!114 &4674117773892115036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935052765830162921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 989289729636e0e4f8cc416ea6d4bbd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkDistance: 0.5
+  overTop: 0.05
+  downFromTop: 0.3
+  climbLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  hangDistance: 0.5
+  maxHangTime: 5
+  hangCooldown: 3
+  climbSpeed: 2
+  animHang: isWalking
   animClimb: isWalking
 --- !u!1 &8638824602577140536
 GameObject:
