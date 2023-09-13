@@ -35,13 +35,12 @@ public class Pickup : MonoBehaviour, IIntertactable
 
     public bool IsHeld { get { return isHeld; } }
 
-    [SerializeField] private string itemName;
+    [SerializeField] private UsableItems.Item item;
 
-    public string ItemName { get { return itemName; } }
+    public UsableItems.Item Item { get { return item; } }
 
-
-    private string requiredItem = "";
-    public string RequiredItem { get { return requiredItem; } }
+    private UsableItems.Item requiredItem = UsableItems.Item.None;
+    public UsableItems.Item RequiredItem { get { return requiredItem; } }
     #endregion
 
     #region Unity Call Functions
@@ -70,8 +69,13 @@ public class Pickup : MonoBehaviour, IIntertactable
     #endregion
 
     #region IIntertactable
-    public void Interact()
+    public void Interact(UsableItems.Item item)
     {
+        if (PlayerManager.Instance.PlayerInteract.HeldItem != UsableItems.Item.None)
+        {
+            return;
+        }
+
         isHeld = true;
         transform.parent = PlayerManager.Instance.ItemCarryTransform;
         transform.position = transform.parent.position;

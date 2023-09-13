@@ -7,6 +7,9 @@ using UnityEngine;
 public class Ladder : MonoBehaviour, IIntertactable
 {
     #region Fields
+    [Tooltip("The position that the player goes to to start climbing the laddder.")]
+    [SerializeField] private Transform climbOnPosition;
+
     /// <summary>
     /// The collider for this object.
     /// </summary>
@@ -37,8 +40,8 @@ public class Ladder : MonoBehaviour, IIntertactable
     [SerializeField] private bool intertactable = false;
 
 
-    private string requiredItem = "";
-    public string RequiredItem { get { return requiredItem; } }
+    private UsableItems.Item requiredItem = UsableItems.Item.None;
+    public UsableItems.Item RequiredItem { get { return requiredItem; } }
     #endregion
 
     #region Unity Call Functions
@@ -49,7 +52,7 @@ public class Ladder : MonoBehaviour, IIntertactable
     #endregion
 
     #region IIntertactable
-    public void Interact()
+    public void Interact(UsableItems.Item item)
     {
         PlayerManager.Instance.ClimbLadder(this);
     }
@@ -66,23 +69,31 @@ public class Ladder : MonoBehaviour, IIntertactable
 
     public Vector3 GetClosestPoint(Vector3 playerPos)
     {
-        Bounds bounds = thisCollider.bounds;
+        //Bounds bounds = thisCollider.bounds;
 
-        Vector3 center = bounds.center;
-        Vector3 extents = bounds.extents;
-        Vector3 bottom = thisCollider.ClosestPoint(center + new Vector3(0, -extents.y, -extents.z));
-        Vector3 top = thisCollider.ClosestPoint(center + new Vector3(0, extents.y, -extents.z));
-        Vector3 upDirection = (top - bottom).normalized;
-        float height = bounds.size.y;
-        
-        float percentUp = (playerPos.y -bottom.y) / height;
+        //Vector3 center = bounds.center;
+        //Vector3 extents = bounds.extents;
 
-        Vector3 vectorUp = upDirection * percentUp;
+        //extents = transform.InverseTransformPoint(extents);
+
+
+        //Vector3 bottom = thisCollider.ClosestPoint(center + new Vector3(0, -extents.y, -extents.z));
+
+        //return bottom;
+
+        //Vector3 top = thisCollider.ClosestPoint(center + new Vector3(0, extents.y, -extents.z));
+        //Vector3 upDirection = (top - bottom).normalized;
+        //float height = bounds.size.y;
+
+        //float percentUp = (playerPos.y -bottom.y) / height;
+
+        //Vector3 vectorUp = upDirection * percentUp;
 
         //Vector3 closestPoint = vectorUp + bottom;
-        Vector3 closestPoint = bottom;
 
-        return closestPoint;
+        //return closestPoint;
+
+        return climbOnPosition.position;
     }
     #endregion
 }

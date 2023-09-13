@@ -45,8 +45,8 @@ public class Switch : MonoBehaviour, IIntertactable
 
 
     [Tooltip("The name of the item requeired to use the lever. If empty no item is required.")]
-    [SerializeField] private string requiredItem;
-    public string RequiredItem { get { return requiredItem; } }
+    [SerializeField] private UsableItems.Item requiredItem;
+    public UsableItems.Item RequiredItem { get { return requiredItem; } }
     #endregion
 
     #region Unity Call Functions
@@ -57,7 +57,7 @@ public class Switch : MonoBehaviour, IIntertactable
     #endregion
 
     #region IIntertactable
-    public void Interact()
+    public void Interact(UsableItems.Item item)
     {
         gameObject.GetComponent<Animator>().SetTrigger("Open");
         Invoke("AfterLever", openTime);

@@ -69,8 +69,8 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     /// </summary>
     private int currentTaskNumber = 0;
 
-    private string requiredItem = "NPC";
-    public string RequiredItem { get { return requiredItem; } }
+    private UsableItems.Item requiredItem = UsableItems.Item.None;
+    public UsableItems.Item RequiredItem { get { return requiredItem; } }
     #endregion
 
     #region Unity Call Functions
@@ -136,7 +136,7 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     #endregion
 
     #region IIntertactable
-    public void Interact()
+    public void Interact(UsableItems.Item item)
     {
         transform.rotation = Quaternion.LookRotation(PlayerManager.Instance.PlayerTransform.position - transform.position);
 

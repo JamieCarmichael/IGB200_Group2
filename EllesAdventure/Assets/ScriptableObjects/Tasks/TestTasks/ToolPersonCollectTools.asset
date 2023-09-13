@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae6393220bc208d43889001291bc0681, type: 3}
   m_Name: ToolPersonCollectTools
   m_EditorClassIdentifier: 
-  itemName: Tool
+  item: 6
   taskName: Collect tool

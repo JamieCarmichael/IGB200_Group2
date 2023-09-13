@@ -11,7 +11,7 @@ public class SOFindTask : SOTask
 {
     #region Fields
     [Tooltip("The item that is needed. The name of the item needed.")]
-    [SerializeField] private string itemName;
+    [SerializeField] private UsableItems.Item item;
     [Tooltip("The name of the task being done. This is displayed in the notepad and should be descriptive.")]
     [SerializeField] private string taskName;
 
@@ -44,7 +44,7 @@ public class SOFindTask : SOTask
             return isComplete;
         }
 
-        isComplete = PlayerManager.Instance.PlayerInteract.HeldItemName == itemName;
+        isComplete = PlayerManager.Instance.PlayerInteract.HeldItem == item;
         if (isComplete)
         {
             PlayerManager.Instance.PlayerInteract.RemoveHeldObject();

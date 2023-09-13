@@ -38,8 +38,8 @@ public class Gate : MonoBehaviour, IIntertactable
     [SerializeField] private UnityEvent afterOpenEvent;
 
 
-    [SerializeField] private string requiredItem;
-    public string RequiredItem { get { return requiredItem; } }
+    [SerializeField] private UsableItems.Item requiredItem;
+    public UsableItems.Item RequiredItem { get { return requiredItem; } }
     #endregion
 
     #region Unity Call Functions
@@ -70,7 +70,7 @@ public class Gate : MonoBehaviour, IIntertactable
     #endregion
 
     #region IIntertactable
-    public void Interact()
+    public void Interact(UsableItems.Item item)
     {
         OpenGate();
     }

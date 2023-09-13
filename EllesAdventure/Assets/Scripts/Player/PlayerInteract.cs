@@ -25,18 +25,15 @@ public class PlayerInteract : MonoBehaviour
 
     private Pickup heldObject;
 
-    public string HeldItemName 
-    {
+    public UsableItems.Item HeldItem 
+    { 
         get 
         { 
             if (heldObject == null)
             {
-                return "";
+                return UsableItems.Item.None;
             }
-            else
-            {
-                return heldObject.ItemName;
-            }
+            return heldObject.Item; 
         } 
     }
 
@@ -89,8 +86,8 @@ public class PlayerInteract : MonoBehaviour
 
     public void RunInteractAction()
     {
-        interactable.Interact();
-        if (interactable.GetType() == typeof(Pickup))
+        interactable.Interact(HeldItem);
+        if (interactable.GetType() == typeof(Pickup) && HeldItem == UsableItems.Item.None)
         {
             heldObject = (Pickup)interactable;
             interactable = null;
@@ -186,7 +183,7 @@ public class PlayerInteract : MonoBehaviour
         // Nothing held something to interact with
         else if(heldObject == null && interactable != null)
         {
-            if (interactable.RequiredItem == "" || interactable.RequiredItem == "NPC")
+            if (interactable.RequiredItem == UsableItems.Item.None)
             {
                 StartCoroutine(InteractWithObject(false));
             }
@@ -194,11 +191,11 @@ public class PlayerInteract : MonoBehaviour
         // Holding object and something to interact with
         else if(heldObject != null && interactable != null)
         {
-            if (interactable.RequiredItem == heldObject.ItemName)
+            if (interactable.RequiredItem == heldObject.Item)
             {
                 StartCoroutine(InteractWithObject(true));
             }
-            else if (interactable.RequiredItem == "NPC")
+            else if (interactable.RequiredItem == UsableItems.Item.None)
             {
                 StartCoroutine(InteractWithObject(false));
             }
@@ -239,7 +236,7 @@ public class PlayerInteract : MonoBehaviour
         }
         else
         {
-            interactable.Interact();
+            interactable.Interact(HeldItem);
         }
 
         if (removeHeldItem)
