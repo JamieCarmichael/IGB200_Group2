@@ -13,16 +13,12 @@ public class PlayerMovement : MonoBehaviour
 {
     #region Fields
     [Header("Player Movement")]
-    [Tooltip("How many seconds it takes the player to go from the maximum running speed to 0 if no key is pressed.")]
+    [Tooltip("How many seconds it takes the player to go from the maximum moving speed to 0 if no key is pressed.")]
     [SerializeField] private float deceleration = 10.0f;
-    [Tooltip("How many seconds it takes the player to go from 0 to the maximum walking speed.")]
-    [SerializeField] private float walkAcceleration = 5.0f;
-    [Tooltip("The maximum speed the player can move when walking.")]
-    [SerializeField] private float maxWalkSpeed = 5.0f;
-    [Tooltip("How many seconds it takes the player to go from 0 to the maximum running speed.")]
-    [SerializeField] private float runAcceleration = 10.0f;
-    [Tooltip("The maximum speed the player can move when running.")]
-    [SerializeField] private float maxRunSpeed = 10.0f;
+    [Tooltip("How many seconds it takes the player to go from 0 to the maximum move speed.")]
+    [SerializeField] private float moveAcceleration = 5.0f;
+    [Tooltip("The maximum speed the player can move when moving.")]
+    [SerializeField] private float maxMoveSpeed = 5.0f;
     /// <summary>
     /// The velocity of the players horizontal movement.
     /// </summary>
@@ -113,8 +109,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Animation")]
     [Tooltip("The animator used for the player model.")]
     [SerializeField] private Animator animator;
-    [SerializeField] private string animWalk = "";
-    [SerializeField] private string animRun = "";
+    [SerializeField] private string animMove = "";
     [SerializeField] private string animFall = "";
 
     /// <summary>
@@ -199,38 +194,22 @@ public class PlayerMovement : MonoBehaviour
 
         if (!hasInput)
         {
-            animator.SetBool(animWalk, false);
-            animator.SetBool(animRun, false);
+            animator.SetBool(animMove, false);
             // No input
-            speed = Mathf.Clamp(speed - (maxRunSpeed / deceleration * Time.deltaTime), 0, speed);
+            speed = Mathf.Clamp(speed - (maxMoveSpeed / deceleration * Time.deltaTime), 0, speed);
             moveInput = new Vector2(movementVector.x, movementVector.z).normalized;
-        }
-        else if (!InputManager.Instance.PlayerInput.InGame.Sprint.IsInProgress())
-        {
-            animator.SetBool(animWalk, true);
-            animator.SetBool(animRun, false);
-            // Walking
-            if (speed > maxWalkSpeed)
-            {
-                speed = Mathf.Clamp(speed - (maxRunSpeed / deceleration * Time.deltaTime), 0, speed);
-            }
-            else
-            {
-                speed = Mathf.Clamp(speed + (maxWalkSpeed / walkAcceleration * Time.deltaTime), 0, maxWalkSpeed);
-            }
         }
         else
         {
-            animator.SetBool(animWalk, false);
-            animator.SetBool(animRun, true);
+            animator.SetBool(animMove, true);
             // Running
-            if (speed > maxRunSpeed)
+            if (speed > maxMoveSpeed)
             {
-                speed = Mathf.Clamp(speed - (maxRunSpeed / deceleration * Time.deltaTime), 0, speed);
+                speed = Mathf.Clamp(speed - (maxMoveSpeed / deceleration * Time.deltaTime), 0, speed);
             }
             else
             {
-                speed = Mathf.Clamp(speed + (maxRunSpeed / runAcceleration * Time.deltaTime), 0, maxRunSpeed);
+                speed = Mathf.Clamp(speed + (maxMoveSpeed / moveAcceleration * Time.deltaTime), 0, maxMoveSpeed);
             }
 
         }
@@ -400,12 +379,12 @@ public class PlayerMovement : MonoBehaviour
         direction.y = -1.0f;
         float distance = toVector.magnitude - stoppingDistance;
 
-        float timeToMove = distance / maxWalkSpeed;
+        float timeToMove = distance / maxMoveSpeed;
 
         float moveTimer = 0.0f;
         Vector3 movePostion = Vector3.zero;
 
-        animator.SetBool(animWalk, true);
+        animator.SetBool(animMove, true);
 
 
         if (timeToMove < 0.0f)
@@ -419,7 +398,7 @@ public class PlayerMovement : MonoBehaviour
             moveTimer += Time.deltaTime;
             RotatePlayer(toVector, true, timeToMove);
 
-            movePostion = direction * maxWalkSpeed * Time.deltaTime;
+            movePostion = direction * maxMoveSpeed * Time.deltaTime;
 
             characterController.Move(movePostion);
             yield return null;
@@ -428,7 +407,7 @@ public class PlayerMovement : MonoBehaviour
 
 
         movementVector = Vector3.zero;
-        animator.SetBool(animWalk, false);
+        animator.SetBool(animMove, false);
         canMove = true;
     }
     #endregion

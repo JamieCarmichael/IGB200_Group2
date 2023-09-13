@@ -261,10 +261,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deceleration: 0.25
-  walkAcceleration: 0.25
-  maxWalkSpeed: 2.5
-  runAcceleration: 0.25
-  maxRunSpeed: 5
+  moveAcceleration: 0.25
+  maxMoveSpeed: 6
   lookAtTransform: {fileID: 8432181734809682891}
   verticalClamp: {x: -30, y: 30}
   jumpHeight: 1.2
@@ -276,8 +274,7 @@ MonoBehaviour:
     m_Bits: 129
   minYHieght: -5
   animator: {fileID: 7804261757546250638}
-  animWalk: isWalking
-  animRun: isJogging
+  animMove: isJogging
   animFall: isFalling
 --- !u!114 &8984690542345762672
 MonoBehaviour:
