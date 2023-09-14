@@ -247,7 +247,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 796
+  m_VersionIndex: 800
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -299,7 +299,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3b6ccfecc2db6dd4da286d99fe6c8ff1, type: 2}
+  - {fileID: 2100000, guid: 25a9fb42d361f46ad89221f6d301e96e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -360,7 +360,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7281880389846618271}
-  - {fileID: 5561699511831453161}
+  - {fileID: 8150615571669576558}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &2296379553346029778
@@ -396,6 +396,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Ladder
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815644417246822249, guid: 51606329cf6912a4899001c7ba929456,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815644417246822249, guid: 51606329cf6912a4899001c7ba929456,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6815644417246822249, guid: 51606329cf6912a4899001c7ba929456,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: 7108340388805626350, guid: 51606329cf6912a4899001c7ba929456,
         type: 3}
@@ -452,9 +467,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51606329cf6912a4899001c7ba929456, type: 3}
---- !u!4 &5561699511831453161 stripped
+--- !u!4 &8150615571669576558 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 7108340388805626350, guid: 51606329cf6912a4899001c7ba929456,
+  m_CorrespondingSourceObject: {fileID: 6815644417246822249, guid: 51606329cf6912a4899001c7ba929456,
     type: 3}
   m_PrefabInstance: {fileID: 3425767968804377607}
   m_PrefabAsset: {fileID: 0}
