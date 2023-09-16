@@ -36,10 +36,6 @@ public class Gate : MonoBehaviour, IIntertactable
     [SerializeField] private float openTime = 1.0f;
     [Tooltip("This event is called after the gate has finished opening.")]
     [SerializeField] private UnityEvent afterOpenEvent;
-
-
-    [SerializeField] private UsableItems.Item requiredItem;
-    public UsableItems.Item RequiredItem { get { return requiredItem; } }
     #endregion
 
     #region Unity Call Functions
@@ -70,7 +66,7 @@ public class Gate : MonoBehaviour, IIntertactable
     #endregion
 
     #region IIntertactable
-    public void Interact(UsableItems.Item item)
+    public void Interact(string item)
     {
         OpenGate();
     }

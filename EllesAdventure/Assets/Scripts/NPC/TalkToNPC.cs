@@ -68,9 +68,6 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     /// What task is currently being done.
     /// </summary>
     private int currentTaskNumber = 0;
-
-    private UsableItems.Item requiredItem = UsableItems.Item.None;
-    public UsableItems.Item RequiredItem { get { return requiredItem; } }
     #endregion
 
     #region Unity Call Functions
@@ -136,7 +133,7 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     #endregion
 
     #region IIntertactable
-    public void Interact(UsableItems.Item item)
+    public void Interact(string item)
     {
         transform.rotation = Quaternion.LookRotation(PlayerManager.Instance.PlayerTransform.position - transform.position);
 

@@ -10,10 +10,6 @@ public interface IIntertactable
     /// </summary>
     public string InteractAminationString { get; }
 
-    /// <summary>
-    /// The identification string for the item required to interact with this.
-    /// </summary>
-    public UsableItems.Item RequiredItem {  get; }
 
     /// <summary>
     /// If true this object can be interacted with.
@@ -23,7 +19,7 @@ public interface IIntertactable
     /// <summary>
     /// To be called when interacting with an object.
     /// </summary>
-    public void Interact(UsableItems.Item item);
+    public void Interact(string item);
     /// <summary>
     /// Called when the player starts looking at this object.
     /// </summary>

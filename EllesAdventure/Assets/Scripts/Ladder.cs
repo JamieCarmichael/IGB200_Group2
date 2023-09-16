@@ -38,10 +38,6 @@ public class Ladder : MonoBehaviour, IIntertactable
     }
     [Tooltip("If true this object can be interacted with.")]
     [SerializeField] private bool intertactable = false;
-
-
-    private UsableItems.Item requiredItem = UsableItems.Item.None;
-    public UsableItems.Item RequiredItem { get { return requiredItem; } }
     #endregion
 
     #region Unity Call Functions
@@ -52,7 +48,7 @@ public class Ladder : MonoBehaviour, IIntertactable
     #endregion
 
     #region IIntertactable
-    public void Interact(UsableItems.Item item)
+    public void Interact(string item)
     {
         PlayerManager.Instance.ClimbLadder(this);
     }

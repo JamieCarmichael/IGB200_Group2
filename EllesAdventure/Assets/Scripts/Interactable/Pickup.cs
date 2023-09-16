@@ -7,6 +7,8 @@ using UnityEngine;
 public class Pickup : MonoBehaviour, IIntertactable
 {
     #region Fields
+    private Vector3 startPos;
+
     public string InteractAminationString
     {
         get
@@ -35,18 +37,16 @@ public class Pickup : MonoBehaviour, IIntertactable
 
     public bool IsHeld { get { return isHeld; } }
 
-    [SerializeField] private UsableItems.Item item;
+    [SerializeField] private string itemName;
 
-    public UsableItems.Item Item { get { return item; } }
-
-    private UsableItems.Item requiredItem = UsableItems.Item.None;
-    public UsableItems.Item RequiredItem { get { return requiredItem; } }
+    public string Item { get { return itemName; } }
     #endregion
 
     #region Unity Call Functions
     private void Start()
     {
         thisCollider = GetComponent<Collider>();
+        startPos = transform.position;
     }
     #endregion
 
@@ -62,6 +62,12 @@ public class Pickup : MonoBehaviour, IIntertactable
     {
         gameObject.SetActive(false);
     }
+
+    public void ReturnToStart()
+    {
+        transform.position = startPos;
+        gameObject.SetActive(true);
+    }
     #endregion
 
     #region Private Methods
@@ -69,9 +75,9 @@ public class Pickup : MonoBehaviour, IIntertactable
     #endregion
 
     #region IIntertactable
-    public void Interact(UsableItems.Item item)
+    public void Interact(string item)
     {
-        if (PlayerManager.Instance.PlayerInteract.HeldItem != UsableItems.Item.None)
+        if (PlayerManager.Instance.PlayerInteract.HeldItem != "")
         {
             return;
         }

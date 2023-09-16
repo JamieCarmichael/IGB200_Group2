@@ -300,7 +300,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3b6ccfecc2db6dd4da286d99fe6c8ff1, type: 2}
+  - {fileID: 2100000, guid: 25a9fb42d361f46ad89221f6d301e96e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -431,9 +431,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactAminationString: ellePickUp
-  gate: {fileID: 0}
   openTime: 1
-  nPCMove: {fileID: 0}
+  afterLeverEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  requiredItem: 0
 --- !u!65 &4234568814102913237
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -754,7 +756,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3b6ccfecc2db6dd4da286d99fe6c8ff1, type: 2}
+  - {fileID: 2100000, guid: 25a9fb42d361f46ad89221f6d301e96e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

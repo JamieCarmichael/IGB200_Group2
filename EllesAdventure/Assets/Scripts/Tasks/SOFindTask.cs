@@ -11,7 +11,7 @@ public class SOFindTask : SOTask
 {
     #region Fields
     [Tooltip("The item that is needed. The name of the item needed.")]
-    [SerializeField] private UsableItems.Item item;
+    [SerializeField] private string item;
     [Tooltip("The name of the task being done. This is displayed in the notepad and should be descriptive.")]
     [SerializeField] private string taskName;
 

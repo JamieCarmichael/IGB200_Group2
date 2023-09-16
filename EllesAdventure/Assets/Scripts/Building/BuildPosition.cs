@@ -1,38 +1,49 @@
 using UnityEngine;
-using TMPro;
+using System.Collections.Generic;
 
 /// <summary>
 /// Made By: Jamie Carmichael
-/// Details: 
+/// Details: A building postion where things can be made.
 /// </summary>
 public class BuildPosition : MonoBehaviour, IIntertactable
 {
     #region Fields
-    [Tooltip("The position that the building will be build at. Generally this object but may very if the building is being built off centre from this object.")]
-    [SerializeField] Transform buildingPosition;
-    [Tooltip("The game object representing the mesh of the area to be built on. This will be disabled when the building is built.")]
-    [SerializeField] GameObject buildingMesh;
-    [Tooltip("The Recipe for the building in this area.")]
-    [SerializeField] SOBuildingRecipe buildingRecipe;
+    [SerializeField] private string buildingName;
+
+    [SerializeField] private string buildingType;
+
+    [Tooltip("What materials are required to make the building.")]
+    [SerializeField] private UsableItems.Items[] buildingMaterial;
+
+    private UsableItems.Items[] materialsRequired;
+
+    [Tooltip("Object being built.")]
+    [SerializeField] private GameObject objectBuilt;
+
+
+    [Tooltip("The game object for the area when the building needs to be built.")]
+    [SerializeField] GameObject buildAreaObject;
+
     [Tooltip("The string for the animation to interact with this object.")]
     [SerializeField] private string interactAminationString;
-    [Tooltip("Any text fields that are displaying the required items.")]
-    [SerializeField] private TextMeshPro[] textFields;
 
-    private UsableItems.Item requiredItem = UsableItems.Item.None;
-
-    private UsableItems.Items[] buildingMaterial;
+    [SerializeField] private BuildingSign sign;
 
     private bool interactable = true;
 
+    private bool isBuilt = false;
+
     private Collider thisCollider;
+
+    private List<Pickup> itemsUsed = new List<Pickup>();
     #endregion
 
     #region Unity Call Functions
     private void Start()
     {
         thisCollider = GetComponent<Collider>();
-        buildingMaterial = (UsableItems.Items[])buildingRecipe.BuildingMaterial.Clone();
+
+        materialsRequired = (UsableItems.Items[])buildingMaterial.Clone();
         DisplayMaterialRequired();
     }
     #endregion
@@ -47,19 +58,20 @@ public class BuildPosition : MonoBehaviour, IIntertactable
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
-    private bool UseItem(UsableItems.Item item)
+    private bool UseItem(string item)
     {
         int index = GetItemIndex(item);
         if (index == -1) 
         {
             return false;
         }
-        if (buildingMaterial[index].numberOfItems <= 0 )
+        if (materialsRequired[index].numberOfItems <= 0 )
         {
             return false;
         }
 
-        buildingMaterial[index].numberOfItems--;
+        materialsRequired[index].numberOfItems--;
+        itemsUsed.Add(PlayerManager.Instance.PlayerInteract.HeldObject);
         PlayerManager.Instance.PlayerInteract.RemoveHeldObject();
         return true;
     }
@@ -70,11 +82,11 @@ public class BuildPosition : MonoBehaviour, IIntertactable
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
-    private int GetItemIndex(UsableItems.Item item)
+    private int GetItemIndex(string item)
     {
-        for (int i = 0; i < buildingMaterial.Length; i++)
+        for (int i = 0; i < materialsRequired.Length; i++)
         {
-            if (buildingMaterial[i].thisItem == item)
+            if (materialsRequired[i].itemName == item)
             {
                 return i;
             }
@@ -89,9 +101,9 @@ public class BuildPosition : MonoBehaviour, IIntertactable
     /// <returns></returns>
     private bool CheckIfBuildingHasAllMaterials()
     {
-        for (int i = 0; i < buildingMaterial.Length; i++)
+        for (int i = 0; i < materialsRequired.Length; i++)
         {
-            if (buildingMaterial[i].numberOfItems > 0)
+            if (materialsRequired[i].numberOfItems > 0)
             {
                 return false;
             }
@@ -102,11 +114,25 @@ public class BuildPosition : MonoBehaviour, IIntertactable
     // Makes the building. Disables this script and any no longer necisary objects.
     private void MakeBuilding()
     {
-        Instantiate(buildingRecipe.BuildingPrefab, buildingPosition.position, buildingPosition.rotation, this.transform);
-        buildingMesh.SetActive(false);
-        thisCollider.enabled = false;
-        interactable = false;
-        this.enabled = false;
+        objectBuilt.SetActive(true);
+        buildAreaObject.SetActive(false);
+        isBuilt = true;
+    }
+
+    // Destroy the building and return the materials.
+    private void UnMakeBuilding()
+    {
+        objectBuilt.SetActive(false);
+        buildAreaObject.SetActive(true);
+        isBuilt = false;
+        materialsRequired = (UsableItems.Items[])buildingMaterial.Clone();
+
+        foreach (Pickup item in itemsUsed)
+        {
+            item.ReturnToStart();
+        }
+        itemsUsed = new List<Pickup>();
+        DisplayMaterialRequired();
     }
 
     /// <summary>
@@ -115,32 +141,38 @@ public class BuildPosition : MonoBehaviour, IIntertactable
     private void DisplayMaterialRequired()
     {
         string text = "";
-        for (int i = 0; i < buildingMaterial.Length; i++)
+        for (int i = 0; i < materialsRequired.Length; i++)
         {
-            text += buildingMaterial[i].thisItem.ToString() + ": " + buildingMaterial[i].numberOfItems + "\n";
+            text += materialsRequired[i].itemName.ToString() + ": " + materialsRequired[i].numberOfItems + "\n";
         }
 
-        for (int i = 0;i < textFields.Length;i++)
-        {
-            textFields[i].text = text;
-        }
+        sign.DisplayMaterialRequired(materialsRequired, buildingName);
     }
     #endregion
 
     #region IInteractable
     public string InteractAminationString { get { return interactAminationString; } }
 
-    public UsableItems.Item RequiredItem { get { return requiredItem; } }
-
     public bool Intertactable { get { return interactable; } }
 
 
-    public void Interact(UsableItems.Item item)
+    public void Interact(string item)
     {
         if (!interactable)
         {
             return;
         }
+        // Cant make this building.
+        if (!PlayerManager.Instance.PlayerInteract.CanMakeBuidlingType(buildingType))
+        {
+            return;
+        }
+        if (isBuilt)
+        {
+            UnMakeBuilding();
+            return;
+        }
+
         if (CheckIfBuildingHasAllMaterials())
         {
             MakeBuilding();
@@ -148,8 +180,15 @@ public class BuildPosition : MonoBehaviour, IIntertactable
         }
         if (UseItem(item))
         {
+
             // Update visual
             DisplayMaterialRequired();
+            return;
+        }
+        // No item in hand. Return materials.
+        if (item == "")
+        {
+            UnMakeBuilding();
             return;
         }
 
@@ -173,6 +212,4 @@ public class BuildPosition : MonoBehaviour, IIntertactable
         return closestPoint;
     }
     #endregion
-
-
 }

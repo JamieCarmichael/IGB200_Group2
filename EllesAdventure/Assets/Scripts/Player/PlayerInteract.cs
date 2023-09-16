@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -12,8 +13,8 @@ public class PlayerInteract : MonoBehaviour
     [Header("Interact")]
     [Tooltip("The maximum interacting distance from an object.")]
     [SerializeField] private float interactRange = 1.0f;
-    [Tooltip("The distance from an intarctable object that the player will move to.")]
-    [SerializeField] private float stoppingDistance = 0.5f;
+    //[Tooltip("The distance from an intarctable object that the player will move to.")]
+    //[SerializeField] private float stoppingDistance = 0.5f;
     [Tooltip("The layer for interactable objects.")]
     [SerializeField] private LayerMask interactLayer;
     /// <summary>
@@ -25,15 +26,22 @@ public class PlayerInteract : MonoBehaviour
 
     private Pickup heldObject;
 
-    public UsableItems.Item HeldItem 
+    public string HeldItem 
     { 
         get 
         { 
             if (heldObject == null)
             {
-                return UsableItems.Item.None;
+                return "";
             }
             return heldObject.Item; 
+        } 
+    }
+    public Pickup HeldObject 
+    { 
+        get 
+        { 
+            return heldObject; 
         } 
     }
 
@@ -53,6 +61,8 @@ public class PlayerInteract : MonoBehaviour
     private bool interactAnimationRunning = false;
 
     private float playerHeight;
+
+    private List<string> bulidableObjects = new List<string>();
     #endregion
 
     #region Unity Call Functions
@@ -87,7 +97,7 @@ public class PlayerInteract : MonoBehaviour
     public void RunInteractAction()
     {
         interactable.Interact(HeldItem);
-        if (interactable.GetType() == typeof(Pickup) && HeldItem == UsableItems.Item.None)
+        if (interactable.GetType() == typeof(Pickup) && HeldItem == "")
         {
             heldObject = (Pickup)interactable;
             interactable = null;
@@ -97,7 +107,32 @@ public class PlayerInteract : MonoBehaviour
     public void RemoveHeldObject()
     {
         heldObject.gameObject.SetActive(false);
+        heldObject.transform.parent = null;
         heldObject = null;
+    }
+
+    public bool CanMakeBuidlingType(string buildingType)
+    {
+        foreach (string item in bulidableObjects)
+        {
+            if (buildingType == item)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void EnableBuilding(string buildingType)
+    {
+        foreach (string item in bulidableObjects)
+        {
+            if (buildingType == item)
+            {
+                return;
+            }
+        }
+        bulidableObjects.Add(buildingType);
     }
     #endregion
 
@@ -183,23 +218,12 @@ public class PlayerInteract : MonoBehaviour
         // Nothing held something to interact with
         else if(heldObject == null && interactable != null)
         {
-            if (interactable.RequiredItem == UsableItems.Item.None)
-            {
-                StartCoroutine(InteractWithObject(false));
-            }
+            StartCoroutine(InteractWithObject());
         }
         // Holding object and something to interact with
         else if(heldObject != null && interactable != null)
         {
-            if (interactable.RequiredItem == heldObject.Item)
-            {
-                StartCoroutine(InteractWithObject(true));
-            }
-            else if (interactable.RequiredItem == UsableItems.Item.None)
-            {
-                StartCoroutine(InteractWithObject(false));
-            }
-            // Need logic for completing task.
+            StartCoroutine(InteractWithObject());
         }
     }
 
@@ -216,13 +240,13 @@ public class PlayerInteract : MonoBehaviour
     /// They move to the object, run an interact animation, run interact logic.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator InteractWithObject(bool removeHeldItem)
+    private IEnumerator InteractWithObject()
     {
         InputManager.Instance.PlayerInput.InGame.Disable();
 
         Vector3 closestPoint = interactable.GetClosestPoint(transform.position);
 
-        yield return playerMovement.MoveTo(closestPoint, stoppingDistance);
+        //yield return playerMovement.MoveTo(closestPoint, stoppingDistance);
 
         if (interactable.InteractAminationString != string.Empty)
         {
@@ -237,11 +261,6 @@ public class PlayerInteract : MonoBehaviour
         else
         {
             interactable.Interact(HeldItem);
-        }
-
-        if (removeHeldItem)
-        {
-            RemoveHeldObject();
         }
         InputManager.Instance.PlayerInput.InGame.Enable();
     }

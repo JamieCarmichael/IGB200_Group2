@@ -67,6 +67,10 @@ public class DialogueManager : MonoBehaviour
         {
             return;
         }
+        if (newDialogue.Length == 0)
+        {
+            return;
+        }
 
         currentDialogue = newDialogue;
         dialogueObject.SetActive(true);
