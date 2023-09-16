@@ -36,6 +36,11 @@ public class BuildPosition : MonoBehaviour, IIntertactable
     private Collider thisCollider;
 
     private List<Pickup> itemsUsed = new List<Pickup>();
+
+
+    [TextArea]
+    [Tooltip("The dialoge when the trigger is activated")]
+    [SerializeField] private string[] cantBuildDialoge = new string[1] { "You can build this yet!" };
     #endregion
 
     #region Unity Call Functions
@@ -165,6 +170,7 @@ public class BuildPosition : MonoBehaviour, IIntertactable
         // Cant make this building.
         if (!PlayerManager.Instance.PlayerInteract.CanMakeBuidlingType(buildingType))
         {
+            DialogueManager.Instance.DisplayDialogue(cantBuildDialoge);
             return;
         }
         if (isBuilt)

@@ -5,7 +5,7 @@ using UnityEngine.Events;
 /// Made By: Jamie Carmichael
 /// Details: Calls an event.
 /// </summary>
-public class TriggerEvent : MonoBehaviour 
+public class AnimationEvent : MonoBehaviour 
 {
     #region Fields
     [Tooltip("Event to be triggered.")]
