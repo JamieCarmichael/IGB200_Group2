@@ -24,7 +24,7 @@ public class SignRow : MonoBehaviour
     /// Fills the row with the item details.
     /// </summary>
     /// <param name="item"></param>
-    public void FillRow(UsableItems.Items item)
+    public void FillRow(Pickup.ItemDetails item)
     {
         itemName.text = item.itemName.ToString();
         itemImage.sprite = item.itemImage;

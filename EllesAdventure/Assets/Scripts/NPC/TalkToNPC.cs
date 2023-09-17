@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,6 +23,8 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
 
 
     #region Fields
+    [SerializeField] private GameObject icon;
+    
     public string InteractAminationString
     {
         get
@@ -74,6 +78,8 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     private void Start()
     {
         thisCollider = gameObject.GetComponent<Collider>();
+
+        icon.SetActive(taskEnabled);
     }
     #endregion
 
@@ -88,6 +94,7 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
         taskStarted = false;
         taskComplete = false;
         taskEnabled = true;
+        icon.SetActive(taskEnabled);
     }
 
     #endregion
@@ -118,6 +125,8 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
                 taskEnabled = false;
                 UIManager.Instance.Notepad.RemoveTask(tasks[currentTaskNumber].task);
                 tasks[currentTaskNumber].finishTaskEvent.Invoke();
+
+                icon.SetActive(taskEnabled);
             }
         }
 
@@ -130,12 +139,38 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
             DialogueManager.Instance.DisplayDialogue(afterTaskDialogue);
         }
     }
-    #endregion
 
-    #region IIntertactable
-    public void Interact(string item)
+    private IEnumerator StartTaling()
     {
-        transform.rotation = Quaternion.LookRotation(PlayerManager.Instance.PlayerTransform.position - transform.position);
+        float timer = 0.0f;
+        float timeToRotate = 1.0f;
+
+        Vector3 lookDir = PlayerManager.Instance.PlayerTransform.position - transform.position;
+        lookDir.y = 0;
+
+
+        PlayerManager.Instance.PlayerInteract.enabled = false;
+        PlayerManager.Instance.PlayerMovement.enabled = false;
+
+        while (timer < timeToRotate)
+        {
+            timer += Time.deltaTime;
+
+            Vector3 faceDir = Vector3.Slerp(transform.forward, lookDir, timer / timeToRotate);
+
+            transform.rotation = Quaternion.LookRotation(faceDir);
+
+            if (Vector3.Angle(faceDir, lookDir) < 0.1f)
+            {
+                break;
+            }
+
+            yield return null;
+        }
+        transform.rotation = Quaternion.LookRotation(lookDir);
+
+        PlayerManager.Instance.PlayerInteract.enabled = true;
+        PlayerManager.Instance.PlayerMovement.enabled = true;
 
         if (taskEnabled && taskStarted)
         {
@@ -143,6 +178,13 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
         }
 
         MakeDialogue();
+    }
+    #endregion
+
+    #region IIntertactable
+    public void Interact(string item)
+    {
+        StartCoroutine(StartTaling());
     }
 
     public void StartLookAt()

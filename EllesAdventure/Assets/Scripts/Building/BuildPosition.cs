@@ -13,9 +13,9 @@ public class BuildPosition : MonoBehaviour, IIntertactable
     [SerializeField] private string buildingType;
 
     [Tooltip("What materials are required to make the building.")]
-    [SerializeField] private UsableItems.Items[] buildingMaterial;
+    [SerializeField] private Pickup.ItemDetails[] buildingMaterial;
 
-    private UsableItems.Items[] materialsRequired;
+    private Pickup.ItemDetails[] materialsRequired;
 
     [Tooltip("Object being built.")]
     [SerializeField] private GameObject objectBuilt;
@@ -48,7 +48,7 @@ public class BuildPosition : MonoBehaviour, IIntertactable
     {
         thisCollider = GetComponent<Collider>();
 
-        materialsRequired = (UsableItems.Items[])buildingMaterial.Clone();
+        materialsRequired = (Pickup.ItemDetails[])buildingMaterial.Clone();
         DisplayMaterialRequired();
     }
     #endregion
@@ -130,7 +130,7 @@ public class BuildPosition : MonoBehaviour, IIntertactable
         objectBuilt.SetActive(false);
         buildAreaObject.SetActive(true);
         isBuilt = false;
-        materialsRequired = (UsableItems.Items[])buildingMaterial.Clone();
+        materialsRequired = (Pickup.ItemDetails[])buildingMaterial.Clone();
 
         foreach (Pickup item in itemsUsed)
         {

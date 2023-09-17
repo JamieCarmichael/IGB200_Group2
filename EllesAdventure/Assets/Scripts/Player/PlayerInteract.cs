@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -63,6 +64,8 @@ public class PlayerInteract : MonoBehaviour
     private float playerHeight;
 
     private List<string> bulidableObjects = new List<string>();
+
+    private List<string> usableItems = new List<string>() { "default" };
     #endregion
 
     #region Unity Call Functions
@@ -81,7 +84,7 @@ public class PlayerInteract : MonoBehaviour
     }
     private void Update()
     {
-        interactable = FindInteractable();
+        FindInteractable();
     }
     #endregion
 
@@ -96,11 +99,27 @@ public class PlayerInteract : MonoBehaviour
 
     public void RunInteractAction()
     {
-        interactable.Interact(HeldItem);
         if (interactable.GetType() == typeof(Pickup) && HeldItem == "")
         {
-            heldObject = (Pickup)interactable;
+            Pickup pickup = (Pickup)interactable;
+
+            if (heldObject != null)
+            {
+                return;
+            }
+
+            if (!CanUseItemType(pickup.ItemIdentifier))
+            {
+                return;
+            }
+            interactable.Interact(HeldItem);
+
+            heldObject = pickup;
             interactable = null;
+        }
+        else
+        {
+            interactable.Interact(HeldItem);
         }
     }
 
@@ -134,6 +153,29 @@ public class PlayerInteract : MonoBehaviour
         }
         bulidableObjects.Add(buildingType);
     }
+    public bool CanUseItemType(string itemType)
+    {
+        foreach (string item in usableItems)
+        {
+            if (itemType == item)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void EnableUseableItmes(string itemType)
+    {
+        foreach (string item in usableItems)
+        {
+            if (itemType == item)
+            {
+                return;
+            }
+        }
+        usableItems.Add(itemType);
+    }
     #endregion
 
     #region Private Methods
@@ -141,7 +183,7 @@ public class PlayerInteract : MonoBehaviour
     /// Finds the closest interactable object within the intaract range.
     /// </summary>
     /// <returns></returns>
-    private IIntertactable FindInteractable()
+    private void FindInteractable()
     {
         // Find the closest interactable object.
         Collider[] interactableArray = Physics.OverlapSphere(transform.position, interactRange, interactLayer);
@@ -150,12 +192,18 @@ public class PlayerInteract : MonoBehaviour
             if (interactable != null)
             {
                 interactable.StopLookAt();
+                interactable = null;
             }
-            return null;
+            return;
         }
         if (interactableArray.Length == 1 && heldObject != null)
         {
-            return null;
+            if (interactable != null)
+            {
+                interactable.StopLookAt();
+                interactable = null;
+            }
+            return;
         }
         int select = 0;
         float closestDistance = float.MaxValue;
@@ -191,7 +239,8 @@ public class PlayerInteract : MonoBehaviour
                 newInteractable.StartLookAt();
             }
         }
-        return newInteractable;
+
+        interactable = newInteractable;
     }
 
     /// <summary>
@@ -223,7 +272,10 @@ public class PlayerInteract : MonoBehaviour
         // Holding object and something to interact with
         else if(heldObject != null && interactable != null)
         {
-            StartCoroutine(InteractWithObject());
+            if (interactable.GetType() != typeof(Pickup))
+            {
+                StartCoroutine(InteractWithObject());
+            }
         }
     }
 
@@ -244,9 +296,11 @@ public class PlayerInteract : MonoBehaviour
     {
         InputManager.Instance.PlayerInput.InGame.Disable();
 
+        // Move to closest point
+        /*
         Vector3 closestPoint = interactable.GetClosestPoint(transform.position);
-
-        //yield return playerMovement.MoveTo(closestPoint, stoppingDistance);
+        yield return playerMovement.MoveTo(closestPoint, stoppingDistance);
+        */
 
         if (interactable.InteractAminationString != string.Empty)
         {

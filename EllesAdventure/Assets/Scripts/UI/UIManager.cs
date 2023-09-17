@@ -9,14 +9,19 @@ public class UIManager : MonoBehaviour
     #region Fields
     public static UIManager Instance { get; private set; }
 
-    [Tooltip("The notepad object in the UI.")]
-    [SerializeField] private Notepad notepad;
+    private Notepad notepad;
+
+    private UIPrompt prompt;
 
     /// <summary>
     /// The notepad object from the UI. Has Inventory and tasks.
     /// </summary>
-    public Notepad Notepad
-    { get { return notepad; } }
+    public Notepad Notepad { get { return notepad; } }
+
+    /// <summary>
+    /// The UI prompt used in this UI.
+    /// </summary>
+    public UIPrompt Prompt { get { return prompt; } }
     #endregion
 
     #region Unity Call Functions
@@ -29,6 +34,10 @@ public class UIManager : MonoBehaviour
         }
 
         Instance = this;
+
+
+        notepad = GetComponentInChildren<Notepad>();
+        prompt = GetComponentInChildren<UIPrompt>();
     }
     #endregion
 }

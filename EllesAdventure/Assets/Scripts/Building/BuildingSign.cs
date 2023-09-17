@@ -19,7 +19,7 @@ public class BuildingSign : MonoBehaviour
     /// </summary>
     /// <param name="materials"></param>
     /// <param name="buildingName"></param>
-    public void DisplayMaterialRequired(UsableItems.Items[] materials, string buildingName)
+    public void DisplayMaterialRequired(Pickup.ItemDetails[] materials, string buildingName)
     {
         for (int i = 0; i < buildingNameTextFields.Length; i++)
         {

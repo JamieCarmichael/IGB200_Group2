@@ -37,5 +37,10 @@ public class PlayerTriggerEvent : MonoBehaviour
     {
         PlayerManager.Instance.PlayerInteract.EnableBuilding(buildingType);
     }
+
+    public void EnableItemEvent(string itemType)
+    {
+        PlayerManager.Instance.PlayerInteract.EnableUseableItmes(itemType);
+    }
     #endregion
 }

@@ -76,6 +76,14 @@ public class Notepad : MonoBehaviour
     private Pages page = Pages.Tasks;
 
     private bool notepadVisable = false;
+
+    [Header("UI prompt")]
+    [Tooltip("The sprite shown when the notepad has been updated.")]
+    [SerializeField] private Sprite notepadUpdateSprite;
+    [Tooltip("How many seconds the prompt will be at full visability.")]
+    [SerializeField] private float promptFullVisabilityTime = 1.0f;
+    [Tooltip("How many second it will take for the prompt to got from full visability to not visable.")]
+    [SerializeField] private float promtFadeTime = 1.0f;
     #endregion
 
     #region Unity Call Functions
@@ -172,6 +180,7 @@ public class Notepad : MonoBehaviour
     /// <param name="newTask"></param>
     public void AddTask(SODoTask newTask)
     {
+        UpdateNotepadPrompt();
         activeTasks.Add(newTask);
     }
     /// <summary>
@@ -329,6 +338,11 @@ public class Notepad : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void UpdateNotepadPrompt()
+    {
+        UIManager.Instance.Prompt.StartPrompt(notepadUpdateSprite, promptFullVisabilityTime, promtFadeTime);
     }
     #endregion
 }

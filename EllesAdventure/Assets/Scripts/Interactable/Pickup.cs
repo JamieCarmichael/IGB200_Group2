@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -7,6 +8,14 @@ using UnityEngine;
 public class Pickup : MonoBehaviour, IIntertactable
 {
     #region Fields
+    [Serializable]
+    public struct ItemDetails
+    {
+        public string itemName;
+        public int numberOfItems;
+        public Sprite itemImage;
+    }
+
     private Vector3 startPos;
 
     public string InteractAminationString
@@ -23,7 +32,15 @@ public class Pickup : MonoBehaviour, IIntertactable
     {
         get
         {
-            return intertactable;
+            if (PlayerManager.Instance.PlayerInteract.CanUseItemType(itemIdentifier))
+            {
+                return intertactable;
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }
     private bool intertactable = true;
@@ -40,6 +57,10 @@ public class Pickup : MonoBehaviour, IIntertactable
     [SerializeField] private string itemName;
 
     public string Item { get { return itemName; } }
+
+    [SerializeField] private string itemIdentifier = "default";
+
+    public string ItemIdentifier { get { return itemIdentifier; } }
     #endregion
 
     #region Unity Call Functions
@@ -77,7 +98,7 @@ public class Pickup : MonoBehaviour, IIntertactable
     #region IIntertactable
     public void Interact(string item)
     {
-        if (PlayerManager.Instance.PlayerInteract.HeldItem != "")
+        if (PlayerManager.Instance.PlayerInteract.HeldObject != null)
         {
             return;
         }

@@ -102,7 +102,9 @@ public class PlayerMovementLadder : MonoBehaviour
         }
         else
         {
-            RotatePlayer(ladder.transform.forward, 0.0f);
+            StartCoroutine(GetOnBottomOfLadder());
+
+            //RotatePlayer(ladder.transform.forward, 0.0f);
         }
     }
 
@@ -232,6 +234,35 @@ public class PlayerMovementLadder : MonoBehaviour
             moveTimer += Time.deltaTime;
             movePostion = toVector.normalized * climbSpeed * Time.deltaTime;
             characterController.Move(movePostion);
+            yield return null;
+        }
+        animator.SetBool(animClimb, false);
+        inputAccepted = true;
+    }
+
+    /// <summary>
+    /// Move the player onto the bottom of the ladder. Used to get on the ladder from the bottom.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator GetOnBottomOfLadder()
+    {
+        inputAccepted = false;
+
+        Vector3 movePostion = Vector3.zero;
+
+        Vector3 toVector = (ladderBottom - (ladder.transform.forward * (halfwidth * 2))) - transform.position;
+        float timeToMove = toVector.magnitude / climbSpeed;
+        float moveTimer = 0.0f;
+
+        animator.SetBool(animClimb, true);
+        // Climb up ledge.
+        while (moveTimer < timeToMove)
+        {
+            moveTimer += Time.deltaTime;
+            movePostion = toVector.normalized * climbSpeed * Time.deltaTime;
+            characterController.Move(movePostion);
+
+            RotatePlayer(ladder.transform.forward, timeToMove - moveTimer);
             yield return null;
         }
         animator.SetBool(animClimb, false);

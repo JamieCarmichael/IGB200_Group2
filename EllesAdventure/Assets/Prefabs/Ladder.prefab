@@ -44,8 +44,8 @@ GameObject:
   - component: {fileID: 14732071484434960}
   - component: {fileID: 5761231420841594648}
   - component: {fileID: 879761765541458740}
-  - component: {fileID: 370398632614062389}
   - component: {fileID: 7176069656405960214}
+  - component: {fileID: 7314388589398364310}
   m_Layer: 7
   m_Name: Ladder
   m_TagString: Untagged
@@ -387,8 +387,23 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9096981762950349572}
   m_Mesh: {fileID: 0}
---- !u!64 &370398632614062389
-MeshCollider:
+--- !u!114 &7176069656405960214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9096981762950349572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6096415cfcfb15a49903e62801e52d6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  climbOnPosition: {fileID: 1222580095241776480}
+  interactAminationString: 
+  intertactable: 1
+--- !u!65 &7314388589398364310
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -405,22 +420,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
---- !u!114 &7176069656405960214
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9096981762950349572}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6096415cfcfb15a49903e62801e52d6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  climbOnPosition: {fileID: 1222580095241776480}
-  interactAminationString: 
-  intertactable: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 0.25}
+  m_Center: {x: 0.5, y: 1, z: 0.125}

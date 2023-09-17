@@ -53,6 +53,8 @@ public class Profile : MonoBehaviour
         {
             profileObject.SetActive(true);
         }
+
+        UIManager.Instance.Notepad.UpdateNotepadPrompt();
     }
     /// <summary>
     /// Make the final state for profile visable in the notepad.
@@ -68,6 +70,8 @@ public class Profile : MonoBehaviour
         {
             profileObject.SetActive(true);
         }
+
+        UIManager.Instance.Notepad.UpdateNotepadPrompt();
     }
     /// <summary>
     /// Make this profile visable
