@@ -13,7 +13,13 @@ MonoBehaviour:
   m_Name: CarpA
   m_EditorClassIdentifier: 
   startTaskDialogue:
-  - Hey Elle, can you fetch the thingy? It's on the big cube to my right
+  - 'Hey Elle, can you fetch the thingy? It''s on the big cube to my right. You''ll
+    need scaffolding to get up there!
+
+'
+  - You can build scaffolding by retrieving all the needed materials and then pressing
+    E. It's much safer! The scaffolding next to the big cube should already have
+    all the materials you need.
   duringTaskDialogue: []
   completeTaskDialogue:
   - 'Great, thanks. '
