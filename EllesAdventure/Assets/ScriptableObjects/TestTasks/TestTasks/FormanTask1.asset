@@ -13,20 +13,18 @@ MonoBehaviour:
   m_Name: FormanTask1
   m_EditorClassIdentifier: 
   startTaskDialogue:
-  - Hey Elle, Great to see you on site! Before you get started, can you grab that
-    notepad for me? It's over there on that pile of [thing]. You might need to make
-    some scaffolding to get up there.
-  - 'Remember that you need two wood bundles and one nail pile to make scaffolding.
-    Just take it over to the area where the scaffolding will go and press E to build
-    it. There should be enough materials in this depot here. '
+  - "Hey Elle, glad to see you\u2019re on-site today. As for what you can do first
+    today, why don\u2019t you start by grabbing my notebook over there for me real
+    quick, it\u2019s got some important things written on it. It should just be over
+    in the office to the right."
   duringTaskDialogue:
-  - Have you got the Notebook? It's over on the pile of [Thing]. Remember to build
-    some scaffolding by taking two wood bundles and one nail pile over to the scaffolding
-    area.
+  - Remember to grab the notepad! It's over in the office to the right.
   completeTaskDialogue:
-  - Great! Now use E to open the notebook. You can use it to track the various odd
-    jobs you're doing for people, view the site map, and check profiles for all the
-    various workers around the site.
+  - 'Thanks, Elle, but this is actually yours today. See seems the site is a mess
+    right now and everyone is all over the place stuck with things. '
+  - "So I\u2019m going to need you to go and help them all out so we can get back
+    on track with finishing this place! Everything is in the notebook, I\u2019d do
+    it myself but I have other things to handle here. Good luck!"
   tasks:
   - {fileID: 11400000, guid: 9bfda70f5a55be0418ba61db7c9a7ce8, type: 2}
   taskName: Get Notepad

@@ -415,6 +415,8 @@ MonoBehaviour:
   buildAreaObject: {fileID: 687859232870412509}
   interactAminationString: 
   sign: {fileID: 7436719470358946733}
+  cantBuildDialoge:
+  - Not sure I can use this yet...
 --- !u!65 &6449882111510902038
 BoxCollider:
   m_ObjectHideFlags: 0
