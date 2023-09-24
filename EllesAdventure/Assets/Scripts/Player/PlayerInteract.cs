@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -11,6 +10,8 @@ using UnityEditor.Animations;
 public class PlayerInteract : MonoBehaviour 
 {
     #region Fields
+    [SerializeField] private bool alwaysDrop = false;
+
     [Header("Interact")]
     [Tooltip("The maximum interacting distance from an object.")]
     [SerializeField] private float interactRange = 1.0f;
@@ -66,6 +67,8 @@ public class PlayerInteract : MonoBehaviour
     private List<string> bulidableObjects = new List<string>();
 
     private List<string> usableItems = new List<string>() { "default" };
+
+    private float playerRadius = 1.0f;
     #endregion
 
     #region Unity Call Functions
@@ -73,6 +76,9 @@ public class PlayerInteract : MonoBehaviour
     {
         playerMovement = GetComponent<PlayerMovement>();
         playerHeight = GetComponent<CharacterController>().height;
+
+
+        playerRadius = GetComponent<CharacterController>().radius;
     }
     private void OnEnable()
     {
@@ -251,14 +257,33 @@ public class PlayerInteract : MonoBehaviour
         // Holding object but nothing to interact with.
         if (heldObject != null && interactable == null)
         {
-            Vector3 dropPos = transform.position + transform.forward;
+
+            Collider heldObjectCollider = heldObject.GetComponent<Collider>();
+            float objectLength = heldObjectCollider.bounds.extents.z;
+            if (heldObjectCollider.bounds.extents.x > heldObjectCollider.bounds.extents.z)
+            {
+                objectLength = heldObjectCollider.bounds.extents.x;
+            }
+
+            Vector3 dropPos = transform.position + (transform.forward * objectLength) + (transform.forward * playerRadius * 2);
+
             if (Physics.Raycast(dropPos + (Vector3.up * playerHeight), Vector3.down, out RaycastHit hitInfo, playerHeight * 1.5f, putDownLayer, QueryTriggerInteraction.Ignore))
             {
                 dropPos = hitInfo.point;
             }
+            else // Not ground to drop on
+            {
+                Debug.DrawRay(dropPos, Vector3.up, Color.green, 1.0f);
+                return;
+            }
 
             // Only drop if area is clear
-            if (!Physics.CheckSphere(dropPos + Vector3.up * 0.6f, 0.5f))
+            if (!Physics.CheckBox(dropPos + (Vector3.up * heldObjectCollider.bounds.extents.y) + (Vector3.up * 0.01f), heldObjectCollider.bounds.extents, heldObject.transform.rotation))
+            {
+                heldObject.PutDown(dropPos);
+                heldObject = null;
+            }
+            else if (alwaysDrop) // not clear
             {
                 heldObject.PutDown(dropPos);
                 heldObject = null;
