@@ -146,7 +146,7 @@ public class PlayerMovementEdge : MonoBehaviour
 
             StartCoroutine(MoveToEdge());
 
-            PlayerManager.Instance.OnEdge();
+            //PlayerManager.Instance.OnEdge();
 
             animator.SetBool(animHang, true);
         }

@@ -28,6 +28,12 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private float speed = 0.0f;
 
+
+    [Tooltip("The force applied to the player if they are not grounded.")]
+    [SerializeField] private float gravity = 9.81f;
+    [Tooltip("Multiplier to increase the speed that the player falls.")]
+    [SerializeField] private float fallMultiplier = 2.0f;
+
     [Header("Looking")]
     [Tooltip("The transform that the camera is looking at.")]
     [SerializeField] Transform lookAtTransform;
@@ -67,14 +73,6 @@ public class PlayerMovement : MonoBehaviour
     private const string MOUSE_SENSITIVITY_Y = "MouseSensitivityY";
     private float defaultSensitivityValue = 10.0f;
 
-
-    [Header("Jump")]
-    [Tooltip("How many meters the player can jump.")]
-    [SerializeField] private float jumpHeight = 2.0f;
-    [Tooltip("The force applied to the player if they are not grounded.")]
-    [SerializeField] private float gravity = 9.81f;
-    [Tooltip("Multiplier to increase the speed that the player falls.")]
-    [SerializeField] private float fallMultiplier = 2.0f;
 
     [Header("Check Grounded")]
     [Tooltip("The distance from the ground that the player will detect the ground and stop falling/be able to jump.")]
@@ -140,12 +138,6 @@ public class PlayerMovement : MonoBehaviour
         verticalVelocity = 0.0f;
         speed = 0.0f;
         movementVector = Vector3.zero;      
-
-        InputManager.Instance.PlayerInput.InGame.Jump.performed += Jump;
-    }
-    private void OnDisable()
-    {
-        InputManager.Instance.PlayerInput.InGame.Jump.performed -= Jump;
     }
 
     private void LateUpdate()
@@ -312,21 +304,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Apply upwards velcoity to the player. Make them jump.
-    /// </summary>
-    private void Jump()
-    {
-        if (isGrounded)
-        {
-            verticalVelocity = Mathf.Sqrt(jumpHeight * 2 * gravity);
-        }
-    }
 
-    private void Jump(InputAction.CallbackContext obj)
-    {
-        Jump();
-    }
 
     /// <summary>
     /// Checks if the player collided with something and stops velocity on that plane.
@@ -410,5 +388,44 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool(animMove, false);
         canMove = true;
     }
+    #endregion
+
+    #region Jump
+    /*
+        
+
+    [Header("Jump")]
+    [Tooltip("How many meters the player can jump.")]
+    [SerializeField] private float jumpHeight = 2.0f;
+    
+    private void OnEnable()
+    {
+        verticalVelocity = 0.0f;
+        speed = 0.0f;
+        movementVector = Vector3.zero;      
+
+        InputManager.Instance.PlayerInput.InGame.Jump.performed += Jump;
+    }
+    private void OnDisable()
+    {
+        InputManager.Instance.PlayerInput.InGame.Jump.performed -= Jump;
+    }
+
+    /// <summary>
+    /// Apply upwards velcoity to the player. Make them jump.
+    /// </summary>
+    private void Jump()
+    {
+        if (isGrounded)
+        {
+            verticalVelocity = Mathf.Sqrt(jumpHeight * 2 * gravity);
+        }
+    }
+
+    private void Jump(InputAction.CallbackContext obj)
+    {
+        Jump();
+    }
+    */
     #endregion
 }

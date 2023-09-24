@@ -31,7 +31,6 @@ public class PlayerManager : MonoBehaviour
     private PlayerMovement playerMovement;
     private PlayerInteract playerInteract;
     private PlayerMovementLadder playerMovementLadder;
-    private PlayerMovementEdge playerMovementEdge;
 
     public PlayerMovement PlayerMovement { get { return playerMovement; } }
     public PlayerInteract PlayerInteract { get { return playerInteract; } }
@@ -50,7 +49,6 @@ public class PlayerManager : MonoBehaviour
         playerMovement = GetComponentInChildren<PlayerMovement>();
         playerInteract = GetComponentInChildren<PlayerInteract>();
         playerMovementLadder = GetComponentInChildren<PlayerMovementLadder>();
-        playerMovementEdge = GetComponentInChildren<PlayerMovementEdge>();
     }
     #endregion
 
@@ -64,7 +62,6 @@ public class PlayerManager : MonoBehaviour
         playerMovementLadder.enabled = true;
         playerMovement.enabled = false;
         playerInteract.enabled = false;
-        playerMovementEdge.enabled = false;
         playerMovementLadder.AttachToLadder(ladder);
     }
 
@@ -76,15 +73,6 @@ public class PlayerManager : MonoBehaviour
         playerMovementLadder.enabled = false;
         playerMovement.enabled = true;
         playerInteract.enabled = true;
-        playerMovementEdge.enabled = true;
-    }
-
-    public void OnEdge()
-    {
-        playerMovementLadder.enabled = false;
-        playerMovement.enabled = false;
-        playerInteract.enabled = false;
-        playerMovementEdge.enabled = true;
     }
     #endregion
 }
