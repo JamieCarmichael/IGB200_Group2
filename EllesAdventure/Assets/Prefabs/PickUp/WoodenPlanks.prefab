@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7103220661182770159}
   - component: {fileID: 8892998046276725573}
-  - component: {fileID: 6461822014767594259}
+  - component: {fileID: 2851413592412601795}
   m_Layer: 7
   m_Name: WoodenPlanks
   m_TagString: Untagged
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 896061466048524917}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 38, y: 1.0000062, z: 37}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -47,12 +47,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f339ebfcb20eed4d86896c71dab80c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactAminationString: ellePickUp
+  interactAminationString: 
   lookAtObject: {fileID: 5428693824897693393}
   itemName: Wood
   itemIdentifier: default
---- !u!135 &6461822014767594259
-SphereCollider:
+--- !u!65 &2851413592412601795
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -70,8 +70,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Size: {x: 1, y: 0.2, z: 0.6}
+  m_Center: {x: 0, y: 0.09, z: 0}
 --- !u!1 &5428693824897693393
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +178,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c2ee98bedd595dd499860ccab3225173,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c2ee98bedd595dd499860ccab3225173,
         type: 3}

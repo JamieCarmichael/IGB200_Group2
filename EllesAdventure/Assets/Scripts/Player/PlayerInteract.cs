@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using UnityEditor.Animations;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -314,9 +314,26 @@ public class PlayerInteract : MonoBehaviour
         }
         else
         {
-            interactable.Interact(HeldItem);
+            ClearAnimations();
+            RunInteractAction();
         }
         InputManager.Instance.PlayerInput.InGame.Enable();
+    }
+
+    private void ClearAnimations()
+    {
+        AnimatorControllerParameter[] a = animator.parameters;
+        foreach (var item in a)
+        {
+            if(item.type == AnimatorControllerParameterType.Bool)
+            {
+                animator.SetBool(item.name, false);
+            }
+            else if (item.type == AnimatorControllerParameterType.Trigger)
+            {
+                animator.ResetTrigger(item.name);
+            }
+        }
     }
     #endregion
 }

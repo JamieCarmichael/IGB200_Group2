@@ -18,12 +18,15 @@ public class MouseSensitivityOption : MonoBehaviour
     [SerializeField] private Slider mouseSensitivityYSlider;
 
     private float defaultSensitivityValue = 10.0f;
+
+    private bool inGame = false;
     #endregion
 
     #region Unity Call Functions
     private void Start()
     {
         SetUpMouseSensitivity();
+        inGame = PlayerManager.Instance != null;
     }
     #endregion
 
@@ -60,6 +63,11 @@ public class MouseSensitivityOption : MonoBehaviour
     {
         PlayerPrefs.SetFloat(MOUSE_SENSITIVITY_X, value);
         PlayerPrefs.Save();
+
+        if (inGame)
+        {
+            PlayerManager.Instance.PlayerMovement.SetMouseSentitivity(mouseSensitivityXSlider.value, mouseSensitivityYSlider.value);
+        }
     }
 
     /// <summary>
@@ -70,6 +78,11 @@ public class MouseSensitivityOption : MonoBehaviour
     {
         PlayerPrefs.SetFloat(MOUSE_SENSITIVITY_Y, value);
         PlayerPrefs.Save();
+
+        if (inGame)
+        {
+            PlayerManager.Instance.PlayerMovement.SetMouseSentitivity(mouseSensitivityXSlider.value, mouseSensitivityYSlider.value);
+        }
     }
 
     /// <summary>
@@ -82,6 +95,11 @@ public class MouseSensitivityOption : MonoBehaviour
         PlayerPrefs.SetFloat(MOUSE_SENSITIVITY_X, sensitivity.x);
         PlayerPrefs.SetFloat(MOUSE_SENSITIVITY_Y, sensitivity.y);
         PlayerPrefs.Save();
+
+        if (inGame)
+        {
+            PlayerManager.Instance.PlayerMovement.SetMouseSentitivity(mouseSensitivityXSlider.value, mouseSensitivityYSlider.value);
+        }
     }
     #endregion
 

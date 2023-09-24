@@ -91,6 +91,10 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private bool isGrounded = true;
     /// <summary>
+    /// Checks if the player is clise to the ground. Checks twice the groundCheckDistance.
+    /// </summary>
+    private bool closeToGround = true;
+    /// <summary>
     /// True if the player is touching the ground. 
     /// </summary>
     public bool IsGrounded {  get { return isGrounded; } }
@@ -167,8 +171,9 @@ public class PlayerMovement : MonoBehaviour
     private void Move()
     {    
         if (!isGrounded)
-        {
-            animator.SetBool(animFall, true);
+        { 
+            //animator.SetBool(animFall, true);
+            animator.SetBool(animFall, !closeToGround);
             movementVector.y = 0.0f;
             return;
         }
@@ -251,6 +256,8 @@ public class PlayerMovement : MonoBehaviour
         checkOrigin.y += characterController.radius - groundCheckDistance;
 
         isGrounded = Physics.CheckSphere(checkOrigin, characterController.radius, groundedLayer, QueryTriggerInteraction.Ignore);
+
+        closeToGround = Physics.Raycast(checkOrigin, Vector3.down, characterController.radius + groundCheckDistance, groundedLayer, QueryTriggerInteraction.Ignore);
 
         if (isGrounded && verticalVelocity <= 0.0f)
         {
@@ -342,6 +349,17 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Public Methods
+    /// <summary>
+    /// Sets the mouse sensitivity.
+    /// </summary>
+    /// <param name="xValue"></param>
+    /// <param name="yValue"></param>
+    public void SetMouseSentitivity(float xValue, float yValue)
+    {
+        horizontalTurnSpeed = xValue;
+        verticalTurnSpeed = yValue;
+    }
+
     /// <summary>
     /// Stops regular movement and moves the player to a position.
     /// </summary>

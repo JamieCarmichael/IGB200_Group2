@@ -51,7 +51,8 @@ public class PlayerMovementLadder : MonoBehaviour
     [Header("Animation")]
     [Tooltip("The animator used for the player model.")]
     [SerializeField] private Animator animator;
-    [SerializeField] private string animClimb = "";
+    [SerializeField] private string animGoToLadder = "";
+    [SerializeField] private string animClimbLadder = "";
     #endregion
 
     #region Unity Call Functions
@@ -103,8 +104,6 @@ public class PlayerMovementLadder : MonoBehaviour
         else
         {
             StartCoroutine(GetOnBottomOfLadder());
-
-            //RotatePlayer(ladder.transform.forward, 0.0f);
         }
     }
 
@@ -118,7 +117,7 @@ public class PlayerMovementLadder : MonoBehaviour
     private void ClimbLadder()
     {
         Vector2 moveInput = InputManager.Instance.PlayerInput.InGame.Move.ReadValue<Vector2>();
-        
+
         if(moveInput.y > 0)
         {
             characterController.Move(upDirection * climbSpeed * Time.deltaTime);
@@ -156,6 +155,10 @@ public class PlayerMovementLadder : MonoBehaviour
     /// </summary>
     private void DetachFromLadder()
     {
+        if (animClimbLadder != "")
+        {
+            animator.SetBool(animClimbLadder, false);
+        }
         PlayerManager.Instance.StandardMovement();
     }
     /// <summary>
@@ -172,7 +175,7 @@ public class PlayerMovementLadder : MonoBehaviour
         float moveTimer = 0.0f;
         Vector3 movePostion = Vector3.zero;
 
-        animator.SetBool(animClimb, true);
+        animator.SetBool(animGoToLadder, true);
         // Climb up ledge.
         while (moveTimer < timeToMove)
         {
@@ -193,10 +196,10 @@ public class PlayerMovementLadder : MonoBehaviour
             characterController.Move(movePostion);
             yield return null;
         }
-        animator.SetBool(animClimb, false);
+        animator.SetBool(animGoToLadder, false);
         inputAccepted = true;
 
-        PlayerManager.Instance.StandardMovement();
+        DetachFromLadder();
     }
 
     /// <summary>
@@ -213,7 +216,7 @@ public class PlayerMovementLadder : MonoBehaviour
         float timeToMove = toVector.magnitude / climbSpeed;
         float moveTimer = 0.0f;
 
-        animator.SetBool(animClimb, true);
+        animator.SetBool(animGoToLadder, true);
         // Climb up ledge.
         while (moveTimer < timeToMove)
         {
@@ -236,7 +239,11 @@ public class PlayerMovementLadder : MonoBehaviour
             characterController.Move(movePostion);
             yield return null;
         }
-        animator.SetBool(animClimb, false);
+        animator.SetBool(animGoToLadder, false);
+        if (animClimbLadder != "")
+        {
+            animator.SetBool(animClimbLadder, true);
+        }
         inputAccepted = true;
     }
 
@@ -254,7 +261,7 @@ public class PlayerMovementLadder : MonoBehaviour
         float timeToMove = toVector.magnitude / climbSpeed;
         float moveTimer = 0.0f;
 
-        animator.SetBool(animClimb, true);
+        animator.SetBool(animGoToLadder, true);
         // Climb up ledge.
         while (moveTimer < timeToMove)
         {
@@ -265,7 +272,11 @@ public class PlayerMovementLadder : MonoBehaviour
             RotatePlayer(ladder.transform.forward, timeToMove - moveTimer);
             yield return null;
         }
-        animator.SetBool(animClimb, false);
+        animator.SetBool(animGoToLadder, false);
+        if (animClimbLadder != "")
+        {
+            animator.SetBool(animClimbLadder, true);
+        }
         inputAccepted = true;
     }
 
