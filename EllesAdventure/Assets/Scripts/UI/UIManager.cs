@@ -11,7 +11,9 @@ public class UIManager : MonoBehaviour
 
     private Notepad notepad;
 
-    private UIPrompt prompt;
+    private UIImagePrompt prompt;
+
+    private InteractableTextPrompt textPrompt;
 
     /// <summary>
     /// The notepad object from the UI. Has Inventory and tasks.
@@ -21,7 +23,11 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// The UI prompt used in this UI.
     /// </summary>
-    public UIPrompt Prompt { get { return prompt; } }
+    public UIImagePrompt Prompt { get { return prompt; } }
+    /// <summary>
+    /// The UI text prompt used in this UI.
+    /// </summary>
+    public InteractableTextPrompt TextPrompt { get { return textPrompt; } }
     #endregion
 
     #region Unity Call Functions
@@ -37,7 +43,8 @@ public class UIManager : MonoBehaviour
 
 
         notepad = GetComponentInChildren<Notepad>();
-        prompt = GetComponentInChildren<UIPrompt>();
+        prompt = GetComponentInChildren<UIImagePrompt>();
+        textPrompt = GetComponentInChildren<InteractableTextPrompt>();
     }
     #endregion
 }

@@ -211,6 +211,7 @@ public class PlayerInteract : MonoBehaviour
             }
             return;
         }
+        // Identify the intercatable with the clostest distance.
         int select = 0;
         float closestDistance = float.MaxValue;
         float distance = 0.0f;
@@ -242,8 +243,12 @@ public class PlayerInteract : MonoBehaviour
             }
             if (newInteractable != null)
             {
-                newInteractable.StartLookAt();
+                newInteractable.LookAt();
             }
+        }
+        else // Look at the object if it has not chnaged.
+        {
+            interactable.LookAt();
         }
 
         interactable = newInteractable;
@@ -273,7 +278,6 @@ public class PlayerInteract : MonoBehaviour
             }
             else // Not ground to drop on
             {
-                Debug.DrawRay(dropPos, Vector3.up, Color.green, 1.0f);
                 return;
             }
 

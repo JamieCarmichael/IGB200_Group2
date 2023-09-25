@@ -23,7 +23,7 @@ public interface IIntertactable
     /// <summary>
     /// Called when the player starts looking at this object.
     /// </summary>
-    public void StartLookAt();
+    public void LookAt();
     /// <summary>
     /// Called when the player stops looking at this object.
     /// </summary>

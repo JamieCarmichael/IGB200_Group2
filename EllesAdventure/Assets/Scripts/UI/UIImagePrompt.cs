@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// Made By: Jamie Carmichael
 /// Details: Displays a UI promps.
 /// </summary>
-public class UIPrompt : MonoBehaviour 
+public class UIImagePrompt : MonoBehaviour 
 {
     private Image thisImage;
 

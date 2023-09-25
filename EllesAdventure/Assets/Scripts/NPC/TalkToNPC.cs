@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using System.Threading;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -72,6 +72,12 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     /// What task is currently being done.
     /// </summary>
     private int currentTaskNumber = 0;
+
+    [Header("Text Prompt")]
+    [Tooltip("The transform of the object that the text prompt will apear over.")]
+    [SerializeField] private Transform proptLocation;
+    [Tooltip("The text displayed in the text prompt.")]
+    [SerializeField] private string proptText;
     #endregion
 
     #region Unity Call Functions
@@ -140,7 +146,7 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
         }
     }
 
-    private IEnumerator StartTaling()
+    private IEnumerator StartTalking()
     {
         float timer = 0.0f;
         float timeToRotate = 1.0f;
@@ -184,15 +190,19 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     #region IIntertactable
     public void Interact(string item)
     {
-        StartCoroutine(StartTaling());
+        StopLookAt();
+
+        StartCoroutine(StartTalking());
     }
 
-    public void StartLookAt()
+    public void LookAt()
     {
+        UIManager.Instance.TextPrompt.DisplayPrompt(proptLocation.position, proptText);
     }
 
     public void StopLookAt()
     {
+        UIManager.Instance.TextPrompt.HidePrompt();
     }
 
     public Vector3 GetClosestPoint(Vector3 playerPos)

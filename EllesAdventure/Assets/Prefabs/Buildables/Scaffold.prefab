@@ -385,6 +385,12 @@ MonoBehaviour:
   buildAreaObject: {fileID: 2364191295516089219}
   interactAminationString: 
   sign: {fileID: 6654095403576499701}
+  cantBuildDialoge:
+  - You can build this yet!
+  proptLocation: {fileID: 4082787371162452573}
+  buildProptText: E to make building
+  destroyProptText: E to return materials
+  addProptText: E to add materials
 --- !u!65 &8126211978352451144
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -842,9 +848,41 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4082787371162452573}
   - {fileID: 1660947216199564879}
   - {fileID: 8203161962891595600}
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3887438743207792784
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4082787371162452573}
+  m_Layer: 0
+  m_Name: PromptPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4082787371162452573
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3887438743207792784}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 447645409388954676}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2600268321670589130
 PrefabInstance:

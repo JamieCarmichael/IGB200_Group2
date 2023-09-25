@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using static UnityEditor.Progress;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -41,6 +42,19 @@ public class BuildPosition : MonoBehaviour, IIntertactable
     [TextArea]
     [Tooltip("The dialoge when the trigger is activated")]
     [SerializeField] private string[] cantBuildDialoge = new string[1] { "You can build this yet!" };
+
+
+    [Header("Text Prompt")]
+    [Tooltip("If true prompts are shown.")]
+    [SerializeField] private bool showPrompt = false;
+    [Tooltip("The transform of the object that the text prompt will apear over.")]
+    [SerializeField] private Transform proptLocation;
+    [Tooltip("The text displayed in the text prompt when the building is ready to be built.")]
+    [SerializeField] private string buildProptText;
+    [Tooltip("The text displayed in the text prompt when the building can be destroyed.")]
+    [SerializeField] private string destroyProptText;
+    [Tooltip("The text displayed in the text prompt when materials can be added.")]
+    [SerializeField] private string addProptText;
     #endregion
 
     #region Unity Call Functions
@@ -153,16 +167,54 @@ public class BuildPosition : MonoBehaviour, IIntertactable
 
         sign.DisplayMaterialRequired(materialsRequired, buildingName);
     }
+
+    /// <summary>
+    /// Returns true if player is on this object.
+    /// </summary>
+    /// <returns></returns>
+    private bool CheckIfPlayerOnTop()
+    {
+        Vector3 playerPos = PlayerManager.Instance.PlayerMovement.transform.position;
+
+        Bounds b = thisCollider.bounds;
+
+        Vector3 BL = b.min;
+        Vector3 TR = b.max;
+
+        if (playerPos.x < BL.x || playerPos.x > TR.x || playerPos.z < BL.z || playerPos.z > TR.z)
+        {
+            return false;
+        }
+        return true;
+    }
     #endregion
 
     #region IInteractable
     public string InteractAminationString { get { return interactAminationString; } }
 
-    public bool Intertactable { get { return interactable; } }
+    public bool Intertactable 
+    { 
+        get 
+        {
+            if(CheckIfPlayerOnTop())
+            {
+                return false;
+            }
+
+            return interactable; 
+        } 
+    }
 
 
     public void Interact(string item)
     {
+        if (CheckIfPlayerOnTop())
+        {
+            return;
+        }
+
+        StopLookAt();
+
         if (!interactable)
         {
             return;
@@ -200,15 +252,43 @@ public class BuildPosition : MonoBehaviour, IIntertactable
 
         // Nothing happened.
     }
-
-    public void StartLookAt()
+    public void LookAt()
     {
-        //lookAtObject.SetActive(true);
+        if (showPrompt)
+        {
+            if (CheckIfPlayerOnTop())
+            {
+                StopLookAt();
+                return;
+            }
+
+            if (isBuilt)
+            {
+                UIManager.Instance.TextPrompt.DisplayPrompt(proptLocation.position, destroyProptText);
+                return;
+            }
+
+            if (CheckIfBuildingHasAllMaterials())
+            {
+                UIManager.Instance.TextPrompt.DisplayPrompt(proptLocation.position, buildProptText);
+                return;
+            }
+            if (PlayerManager.Instance.PlayerInteract.HeldItem != "")
+            {
+                UIManager.Instance.TextPrompt.DisplayPrompt(proptLocation.position, addProptText);
+                return;
+            }
+
+            UIManager.Instance.TextPrompt.DisplayPrompt(proptLocation.position, destroyProptText);
+        }
     }
 
     public void StopLookAt()
     {
-        //lookAtObject.SetActive(false);
+        if (showPrompt)
+        {
+            UIManager.Instance.TextPrompt.HidePrompt();
+        }
     }
 
     public Vector3 GetClosestPoint(Vector3 playerPos)

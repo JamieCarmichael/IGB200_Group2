@@ -257,7 +257,7 @@ public class PlayerMovement : MonoBehaviour
 
         isGrounded = Physics.CheckSphere(checkOrigin, characterController.radius, groundedLayer, QueryTriggerInteraction.Ignore);
 
-        closeToGround = Physics.Raycast(checkOrigin, Vector3.down, characterController.radius + groundCheckDistance, groundedLayer, QueryTriggerInteraction.Ignore);
+        closeToGround = Physics.Raycast(checkOrigin, Vector3.down, characterController.radius + (groundCheckDistance * 2), groundedLayer, QueryTriggerInteraction.Ignore);
 
         if (isGrounded && verticalVelocity <= 0.0f)
         {

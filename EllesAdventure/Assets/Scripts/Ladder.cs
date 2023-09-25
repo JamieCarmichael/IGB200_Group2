@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -38,12 +39,35 @@ public class Ladder : MonoBehaviour, IIntertactable
     }
     [Tooltip("If true this object can be interacted with.")]
     [SerializeField] private bool intertactable = false;
+
+
+    [Header("Text Prompt")]
+    [Tooltip("The transform of the object that the text prompt will apear over.")]
+    [SerializeField] private Transform proptLocation;
+    [Tooltip("The text displayed in the text prompt.")]
+    [SerializeField] private string proptText;
+    [Tooltip("If true this object will have a highlight that activates when the objects is selected.")]
+    [SerializeField] private bool highlight = false;
+
+    // Object renderers to have highlight applied.
+    private Renderer[] renderers;
+    private Material[] highlightMaterials;
     #endregion
 
     #region Unity Call Functions
     private void Start()
     {
         thisCollider = GetComponent<Collider>();
+
+        if (highlight)
+        {
+            renderers = GetComponentsInChildren<Renderer>();
+            highlightMaterials = new Material[renderers.Length];
+            for (int i = 0; i < highlightMaterials.Length; i++)
+            {
+                highlightMaterials[i] = renderers[i].materials[1];
+            }
+        }
     }
     #endregion
 
@@ -51,44 +75,35 @@ public class Ladder : MonoBehaviour, IIntertactable
     public void Interact(string item)
     {
         PlayerManager.Instance.ClimbLadder(this);
+        StopLookAt();
     }
-
-    public void StartLookAt()
+    public void LookAt()
     {
-        //lookAtObject.SetActive(true);
+        UIManager.Instance.TextPrompt.DisplayPrompt(proptLocation.position, proptText);
+
+        if (highlight)
+        {
+            for (int i = 0; i < highlightMaterials.Length; i++)
+            {
+                highlightMaterials[i].SetFloat("_alpha", 1);
+            }
+        }
     }
 
     public void StopLookAt()
     {
-        //lookAtObject.SetActive(false);
+        UIManager.Instance.TextPrompt.HidePrompt();
+        if (highlight)
+        {
+            for (int i = 0; i < highlightMaterials.Length; i++)
+            {
+                highlightMaterials[i].SetFloat("_alpha", 0);
+            }
+        }
     }
 
     public Vector3 GetClosestPoint(Vector3 playerPos)
     {
-        //Bounds bounds = thisCollider.bounds;
-
-        //Vector3 center = bounds.center;
-        //Vector3 extents = bounds.extents;
-
-        //extents = transform.InverseTransformPoint(extents);
-
-
-        //Vector3 bottom = thisCollider.ClosestPoint(center + new Vector3(0, -extents.y, -extents.z));
-
-        //return bottom;
-
-        //Vector3 top = thisCollider.ClosestPoint(center + new Vector3(0, extents.y, -extents.z));
-        //Vector3 upDirection = (top - bottom).normalized;
-        //float height = bounds.size.y;
-
-        //float percentUp = (playerPos.y -bottom.y) / height;
-
-        //Vector3 vectorUp = upDirection * percentUp;
-
-        //Vector3 closestPoint = vectorUp + bottom;
-
-        //return closestPoint;
-
         return climbOnPosition.position;
     }
     #endregion

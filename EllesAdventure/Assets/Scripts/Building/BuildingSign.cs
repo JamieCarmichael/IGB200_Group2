@@ -8,6 +8,8 @@ using UnityEngine;
 public class BuildingSign : MonoBehaviour 
 {
     #region Fields
+    [SerializeField] private string buildText = "E to build";
+
     [SerializeField] private TextMeshPro[] buildingNameTextFields;
     [SerializeField] private SignRow[] frontSignRows;
     [SerializeField] private SignRow[] backSignRows;
@@ -26,6 +28,35 @@ public class BuildingSign : MonoBehaviour
             buildingNameTextFields[i].text = buildingName;
         }
 
+        // If all materials are dilivered
+        if (AllMaterialsDelivered(materials))
+        {
+            for (int i = 0; i < frontSignRows.Length; i++)
+            {
+                if (i == 0)
+                {
+                    frontSignRows[i].DisplayText(buildText);
+                }
+                else
+                {
+                    frontSignRows[i].gameObject.SetActive(false);
+                }
+            }
+            for (int i = 0; i < backSignRows.Length; i++)
+            {
+                if (i == 0)
+                {
+                    backSignRows[i].DisplayText(buildText);
+                }
+                else
+                {
+                    backSignRows[i].gameObject.SetActive(false);
+                }
+            }
+            return;
+        }
+
+        // Still needs materials
         for (int i = 0; i < frontSignRows.Length; i++)
         {
             if (i < materials.Length)
@@ -48,6 +79,20 @@ public class BuildingSign : MonoBehaviour
                 backSignRows[i].gameObject.SetActive(false);
             }
         }
+    }
+    #endregion
+
+    #region Private Methods
+    private bool AllMaterialsDelivered(Pickup.ItemDetails[] materials)
+    {
+        for (int i = 0; i < materials.Length; i++)
+        {
+            if (materials[i].numberOfItems > 0)
+            {
+                return false;
+            }
+        }
+        return true;
     }
     #endregion
 }
