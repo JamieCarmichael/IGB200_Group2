@@ -6,8 +6,8 @@ using UnityEngine;
 ///             All NPC's have these assigned to them.
 /// </summary>
 
-[CreateAssetMenu(fileName = "NewSODoTask", menuName = "ScriptableObjects/SODoTask")]
-public class SODoTask : SOTask
+[CreateAssetMenu(fileName = "NewSODoTask", menuName = "ScriptableObjects/OldSODoTask")]
+public class OldSODoTask : OldSOTask
 {
     #region Fields
     [TextArea]
@@ -23,7 +23,7 @@ public class SODoTask : SOTask
     [SerializeField] private string[] completeTaskDialogue;
 
     [Tooltip("An array of tasks to be completed for this task to be done.")]
-    [SerializeField] private SOTask[] tasks;
+    [SerializeField] private OldSOTask[] tasks;
 
     [Tooltip("The name of this task. Is displayed in the notepad.")]
     [SerializeField] private string taskName;
@@ -91,7 +91,7 @@ public class SODoTask : SOTask
     {
         for (int i = 0; i < tasks.Length; i++)
         {
-            if (tasks[i].GetType() == typeof(SOFindTask))
+            if (tasks[i].GetType() == typeof(OldSOFindTask))
             {
                 tasks[i].TryComplete();
             }

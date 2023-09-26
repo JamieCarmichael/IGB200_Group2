@@ -15,7 +15,7 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     [Serializable]
     public struct TaskWithEvents
     {
-        public SODoTask task;
+        public OldSODoTask task;
         public UnityEvent startTaskEvent;
         public UnityEvent finishTaskEvent;
     }

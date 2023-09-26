@@ -6315,7 +6315,7 @@ PrefabInstance:
     - target: {fileID: 3081211349995147200, guid: fa7584a14247614409c4ca71de702883,
         type: 3}
       propertyPath: beforeTaskDialogue.Array.data[0]
-      value: Hi
+      value: <s>Hi</s>
       objectReference: {fileID: 0}
     - target: {fileID: 3081211349995147200, guid: fa7584a14247614409c4ca71de702883,
         type: 3}

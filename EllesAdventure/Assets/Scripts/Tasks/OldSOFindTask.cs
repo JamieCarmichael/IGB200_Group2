@@ -6,8 +6,8 @@ using UnityEngine;
 /// Details: A task that is a collection task. The player will need to return a number of an item to the NPC.
 /// </summary>
 
-[CreateAssetMenu(fileName = "NewSOFindTask", menuName = "ScriptableObjects/SOFindTask")]
-public class SOFindTask : SOTask
+[CreateAssetMenu(fileName = "NewSOFindTask", menuName = "ScriptableObjects/OldSOFindTask")]
+public class OldSOFindTask : OldSOTask
 {
     #region Fields
     [Tooltip("The item that is needed. The name of the item needed.")]

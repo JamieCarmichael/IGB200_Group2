@@ -16,7 +16,7 @@ public class Notepad : MonoBehaviour
     /// <summary>
     /// A list of all currenly active tasks.
     /// </summary>
-    private List<SODoTask> activeTasks = new List<SODoTask>();
+    private List<OldSODoTask> activeTasks = new List<OldSODoTask>();
 
     [Tooltip("The UI object that enables the notepad to be seen.")]
     [SerializeField] private GameObject notebookObject;
@@ -178,7 +178,7 @@ public class Notepad : MonoBehaviour
     /// Add a task to the player tasks.
     /// </summary>
     /// <param name="newTask"></param>
-    public void AddTask(SODoTask newTask)
+    public void AddTask(OldSODoTask newTask)
     {
         UpdateNotepadPrompt();
         activeTasks.Add(newTask);
@@ -187,7 +187,7 @@ public class Notepad : MonoBehaviour
     /// Remove a task from the players tasks.
     /// </summary>
     /// <param name="task"></param>
-    public void RemoveTask(SODoTask task)
+    public void RemoveTask(OldSODoTask task)
     {
         activeTasks.Remove(task);
     }

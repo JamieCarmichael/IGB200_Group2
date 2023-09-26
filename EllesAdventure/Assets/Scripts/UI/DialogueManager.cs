@@ -149,7 +149,7 @@ public class DialogueManager : MonoBehaviour
     /// </summary>
     private void FinishDialogue()
     {
-        onFinishDialogueEvent.Invoke();
+        onFinishDialogueEvent?.Invoke();
 
         dialogueObject.SetActive(false);
         dialogueDisplayed = false;

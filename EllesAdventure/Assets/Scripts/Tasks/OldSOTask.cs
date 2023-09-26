@@ -4,7 +4,7 @@ using UnityEngine;
 /// Details: An abstract class to allow all tasks to be assigned the same type.
 /// </summary>
 
-public abstract class SOTask : ScriptableObject
+public abstract class OldSOTask : ScriptableObject
 {
     /// <summary>
     /// Has this task been completed.
