@@ -4601,6 +4601,18 @@ Transform:
   - {fileID: 989364429}
   m_Father: {fileID: 517867202}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1365823164 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1544041882666612878, guid: fa7584a14247614409c4ca71de702883,
+    type: 3}
+  m_PrefabInstance: {fileID: 2146065366}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89d024abe0a38e74f8f2c53d674d86e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1381838445 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7420409273922366783, guid: f9823fa4ee8c53d4e9cd791dadb4c93f,
@@ -6242,6 +6254,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 812464646}
     m_Modifications:
+    - target: {fileID: 3081211349995147200, guid: fa7584a14247614409c4ca71de702883,
+        type: 3}
+      propertyPath: icon
+      value: 
+      objectReference: {fileID: 1365823164}
     - target: {fileID: 3081211349995147200, guid: fa7584a14247614409c4ca71de702883,
         type: 3}
       propertyPath: task

@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -23,8 +22,11 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
 
 
     #region Fields
-    [SerializeField] private GameObject icon;
-    
+    [Header("Task Icon")]
+    [SerializeField] private NPCTaskIndicator icon;
+    [SerializeField] private Color startTaskColor = Color.red;
+    [SerializeField] private Color diliverTaskColor = Color.green;
+
     public string InteractAminationString
     {
         get
@@ -85,7 +87,14 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     {
         thisCollider = gameObject.GetComponent<Collider>();
 
-        icon.SetActive(taskEnabled);
+        if (taskEnabled)
+        {
+            icon.ShowIcon(startTaskColor);
+        }
+        else
+        {
+            icon.HideIcon();
+        }
     }
     #endregion
 
@@ -100,7 +109,15 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
         taskStarted = false;
         taskComplete = false;
         taskEnabled = true;
-        icon.SetActive(taskEnabled);
+
+        if (taskEnabled)
+        {
+            icon.ShowIcon(startTaskColor);
+        }
+        else
+        {
+            icon.HideIcon();
+        }
     }
 
     #endregion
@@ -115,10 +132,10 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
         {
             if (!taskStarted)
             {
-                DialogueManager.Instance.DisplayDialogue(tasks[currentTaskNumber].task.StartTaskDialogue);
+                DialogueManager.Instance.DisplayDialogue(tasks[currentTaskNumber].task.StartTaskDialogue, tasks[currentTaskNumber].startTaskEvent);
                 taskStarted = true;
                 tasks[currentTaskNumber].task.StartTask();
-                tasks[currentTaskNumber].startTaskEvent.Invoke();
+                //tasks[currentTaskNumber].startTaskEvent.Invoke();
                 UIManager.Instance.Notepad.AddTask(tasks[currentTaskNumber].task);
             }
             else if (!taskComplete)
@@ -127,12 +144,19 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
             }
             else
             {
-                DialogueManager.Instance.DisplayDialogue(tasks[currentTaskNumber].task.CompleteTaskDialogue);
+                DialogueManager.Instance.DisplayDialogue(tasks[currentTaskNumber].task.CompleteTaskDialogue, tasks[currentTaskNumber].finishTaskEvent);
                 taskEnabled = false;
                 UIManager.Instance.Notepad.RemoveTask(tasks[currentTaskNumber].task);
-                tasks[currentTaskNumber].finishTaskEvent.Invoke();
+                //tasks[currentTaskNumber].finishTaskEvent.Invoke();
 
-                icon.SetActive(taskEnabled);
+                if (taskEnabled)
+                {
+                    icon.ShowIcon(startTaskColor);
+                }
+                else
+                {
+                    icon.HideIcon();
+                }
             }
         }
 

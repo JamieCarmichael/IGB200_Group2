@@ -2341,7 +2341,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b386b339a7221224c99ce9e9c62cafc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: {fileID: 8539902923215233623}
+  icon: {fileID: 1544041882666612878}
+  startTaskColor: {r: 1, g: 0, b: 0, a: 1}
+  diliverTaskColor: {r: 0, g: 1, b: 0, a: 1}
   interactAminationString: 
   beforeTaskDialogue: []
   afterTaskDialogue: []
@@ -2728,7 +2730,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7832781639848952465
 Transform:
   m_ObjectHideFlags: 0

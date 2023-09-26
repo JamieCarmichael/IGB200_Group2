@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -38,6 +39,7 @@ public class DialogueManager : MonoBehaviour
     /// </summary>
     private PlayerInteract playerInteract;
 
+    private UnityEvent onFinishDialogueEvent;
     #endregion
 
     #region Unity Call Functions
@@ -84,6 +86,36 @@ public class DialogueManager : MonoBehaviour
         InputManager.Instance.PlayerInput.InGame.Interact.performed += NextDialogue;
     }
 
+
+    /// <summary>
+    /// Show the dialogue object.
+    /// </summary>
+    /// <param name="newDialogue"></param>
+    /// <param name="onFinishEvent"></param>
+    public void DisplayDialogue(string[] newDialogue, UnityEvent onFinishEvent)
+    {
+        if (dialogueDisplayed)
+        {
+            return;
+        }
+        if (newDialogue.Length == 0)
+        {
+            return;
+        }
+
+        onFinishDialogueEvent = onFinishEvent;
+
+        currentDialogue = newDialogue;
+        dialogueObject.SetActive(true);
+        dialogueDisplayed = true;
+        dialogueIndex = 0;
+        NextDialogue();
+
+        playerInteract.enabled = false;
+        playerMovement.enabled = false;
+
+        InputManager.Instance.PlayerInput.InGame.Interact.performed += NextDialogue;
+    }
     #endregion
 
     #region Private Methods
@@ -117,6 +149,8 @@ public class DialogueManager : MonoBehaviour
     /// </summary>
     private void FinishDialogue()
     {
+        onFinishDialogueEvent.Invoke();
+
         dialogueObject.SetActive(false);
         dialogueDisplayed = false;
 
