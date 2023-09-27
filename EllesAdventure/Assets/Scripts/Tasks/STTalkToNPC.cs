@@ -33,7 +33,7 @@ public class STTalkToNPC : SubTask
         {
             task = GetComponent<Task>();
         }
-        NPC.CurrentTask = this;
+        NPC.SetCurrentTask(this, task.currentSubTask == 0);
         onEndEvent.AddListener(StopTask);
     }
 

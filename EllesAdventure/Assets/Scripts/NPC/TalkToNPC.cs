@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.Rendering.DebugUI;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -9,23 +10,16 @@ using UnityEngine.Events;
 /// </summary>
 public class TalkToNPC : MonoBehaviour, IIntertactable
 {
-    /// <summary>
-    /// Has a task along with an event that plays when it is accepted and another event when it is completed.
-    /// </summary>
     [Serializable]
-    public struct TaskWithEvents
+    struct DialogueOption
     {
-        public OldSODoTask task;
-        public UnityEvent startTaskEvent;
-        public UnityEvent finishTaskEvent;
+        [TextArea]
+        public string[] dialogueOptions;
     }
-
 
     #region Fields
     [Header("Task Icon")]
     [SerializeField] private NPCTaskIndicator icon;
-    [SerializeField] private Color startTaskColor = Color.red;
-    [SerializeField] private Color diliverTaskColor = Color.green;
 
     public string InteractAminationString
     {
@@ -46,34 +40,12 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     }
 
     private bool intertactable = true;
+    [Tooltip("A list of all dialogue options. The first one is the start dialogue others can be used as the situation changes.")]
+    [SerializeField] private DialogueOption[] dialogueOptions;
 
-    [TextArea]
-    [Tooltip("The dialogue said before the NPC has a task.")]
-    [SerializeField] private string[] beforeTaskDialogue;
-    [TextArea]
-    [Tooltip("The dialogue said after a task has been completed for this NPC.")]
-    [SerializeField] private string[] afterTaskDialogue;
-
-    [Tooltip("If true the first task will be able to be done when the game starts.")]
-    [SerializeField] private bool taskEnabled = false;
-    /// <summary>
-    /// Has the player started doing a task for this NPC.
-    /// </summary>
-    private bool taskStarted = false;
-    /// <summary>
-    /// Has the player completed the task for this NPC.
-    /// </summary>
-    private bool taskComplete = false;
+    private int currentDialogueOption = 0;
 
     private Collider thisCollider;
-
-    [Tooltip("The tasks that this NPC can have.")]
-    [SerializeField] private TaskWithEvents[] tasks;
-
-    /// <summary>
-    /// What task is currently being done.
-    /// </summary>
-    private int currentTaskNumber = 0;
 
     [Header("Text Prompt")]
     [Tooltip("The transform of the object that the text prompt will apear over.")]
@@ -89,10 +61,6 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
         { 
             return currentTask; 
         } 
-        set
-        {
-            currentTask = value;
-        }
     }
     #endregion
 
@@ -101,11 +69,7 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     {
         thisCollider = gameObject.GetComponent<Collider>();
 
-        if (taskEnabled)
-        {
-            icon.ShowIcon(startTaskColor);
-        }
-        else
+        if (currentTask == null)
         {
             icon.HideIcon();
         }
@@ -113,85 +77,42 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     #endregion
 
     #region Public Methods
-    /// <summary>
-    /// Start doing a task.
-    /// </summary>
-    /// <param name="taskNumber">The index of the task that is being started.</param>
-    public void EnableTask(int taskNumber)
+    public void SetCurrentTask(SubTask newTask, bool isStartOfTask)
     {
-        currentTaskNumber = taskNumber; 
-        taskStarted = false;
-        taskComplete = false;
-        taskEnabled = true;
-
-        if (taskEnabled)
+        if (isStartOfTask)
         {
-            icon.ShowIcon(startTaskColor);
+            icon.ShowNewIcon();
         }
         else
         {
-            icon.HideIcon();
+            icon.ShowRunningIcon();
         }
+
+        currentTask = newTask;
     }
 
-    #endregion
-
-    #region Private Methods
-    /// <summary>
-    /// Makes the current lot of dialoge and shows it with the dialogue manager.
-    /// </summary>
-    private void MakeDialogue()
+    public void SetDialogueOption(int dialogueOptionIndex)
     {
-        /*
-        if (taskEnabled)
-        {
-            if (!taskStarted)
-            {
-                DialogueManager.Instance.DisplayDialogue(tasks[currentTaskNumber].task.StartTaskDialogue, tasks[currentTaskNumber].startTaskEvent);
-                taskStarted = true;
-                tasks[currentTaskNumber].task.StartTask();
-                //tasks[currentTaskNumber].startTaskEvent.Invoke();
-                UIManager.Instance.Notepad.AddTask(tasks[currentTaskNumber].task);
-            }
-            else if (!taskComplete)
-            {
-                DialogueManager.Instance.DisplayDialogue(tasks[currentTaskNumber].task.DuringTaskDialogue);
-            }
-            else
-            {
-                DialogueManager.Instance.DisplayDialogue(tasks[currentTaskNumber].task.CompleteTaskDialogue, tasks[currentTaskNumber].finishTaskEvent);
-                taskEnabled = false;
-                UIManager.Instance.Notepad.RemoveTask(tasks[currentTaskNumber].task);
-                //tasks[currentTaskNumber].finishTaskEvent.Invoke();
+        currentDialogueOption = dialogueOptionIndex;
+    }
 
-                if (taskEnabled)
-                {
-                    icon.ShowIcon(startTaskColor);
-                }
-                else
-                {
-                    icon.HideIcon();
-                }
-            }
-        }
-        else if (!taskComplete)
-        {
-            DialogueManager.Instance.DisplayDialogue(beforeTaskDialogue);
-        }
-        else
-        {
-            DialogueManager.Instance.DisplayDialogue(afterTaskDialogue);
-        }
-        */
+        #endregion
 
+        #region Private Methods
+        /// <summary>
+        /// Makes the current lot of dialoge and shows it with the dialogue manager.
+        /// </summary>
+        private void MakeDialogue()
+    {
         if (currentTask != null)
         {
+            icon.HideIcon();
             currentTask.DoSubtask();
             currentTask = null;
         }
         else
         {
-            DialogueManager.Instance.DisplayDialogue(beforeTaskDialogue);
+            DialogueManager.Instance.DisplayDialogue(dialogueOptions[currentDialogueOption].dialogueOptions);
         }
     }
 
@@ -226,11 +147,6 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
 
         PlayerManager.Instance.PlayerInteract.enabled = true;
         PlayerManager.Instance.PlayerMovement.enabled = true;
-
-        //if (taskEnabled && taskStarted)
-        //{
-        //    taskComplete = tasks[currentTaskNumber].task.TryComplete();
-        //}
 
         MakeDialogue();
     }

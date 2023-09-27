@@ -9,6 +9,9 @@ public class NPCTaskIndicator : MonoBehaviour
     #region Fields
     private Camera thisCamera;
     private SpriteRenderer spriteRenderer;
+
+    [SerializeField] private Color newTaskColor = Color.red;
+    [SerializeField] private Color runningTaskColor = Color.green;
     #endregion
 
     #region Unity Call Functions
@@ -29,6 +32,16 @@ public class NPCTaskIndicator : MonoBehaviour
     {
         spriteRenderer.enabled = true;
         spriteRenderer.color = color;
+    }
+    public void ShowNewIcon()
+    {
+        spriteRenderer.enabled = true;
+        spriteRenderer.color = newTaskColor;
+    }
+    public void ShowRunningIcon()
+    {
+        spriteRenderer.enabled = true;
+        spriteRenderer.color = runningTaskColor;
     }
 
     public void HideIcon()
