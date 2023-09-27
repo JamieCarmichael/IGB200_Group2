@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -11,29 +10,36 @@ using UnityEngine.Events;
 public class STTalkToNPC : SubTask
 {
     #region Fields
+    [SerializeField] private TalkToNPC NPC;
 
+    [TextArea]
+    [Tooltip("The dialoge when the task is given to the player.")]
+    [SerializeField] private string[] dialogue;
     #endregion
 
-    public STTalkToNPC()
-    {
-        taskName = "1";
-    }
 
     #region Public Methods
 
-    public override bool TryComplete()
+    public override bool DoSubtask()
     {
-        throw new NotImplementedException();
+        DialogueManager.Instance.DisplayDialogue(dialogue, onEndEvent);
+
+        return true;
     }
 
     public override void StartTask()
     {
-        throw new NotImplementedException();
+        if (task == null)
+        {
+            task = GetComponent<Task>();
+        }
+        NPC.CurrentTask = this;
+        onEndEvent.AddListener(StopTask);
     }
 
     public override void StopTask()
     {
-        throw new NotImplementedException();
+        task.FinishCurrentSubtask();
     }
     #endregion
 }

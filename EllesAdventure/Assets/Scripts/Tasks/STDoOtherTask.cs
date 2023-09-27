@@ -14,14 +14,15 @@ public class STDoOtherTask : SubTask
 
     #endregion
 
-    public STDoOtherTask()
+    public STDoOtherTask(Task theTask)
     {
         taskName = "5";
+        task = theTask;
     }
 
     #region Public Methods
 
-    public override bool TryComplete()
+    public override bool DoSubtask()
     {
         throw new NotImplementedException();
     }

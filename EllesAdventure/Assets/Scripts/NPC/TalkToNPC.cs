@@ -80,6 +80,20 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     [SerializeField] private Transform proptLocation;
     [Tooltip("The text displayed in the text prompt.")]
     [SerializeField] private string proptText;
+
+    // New task
+    private SubTask currentTask = null;
+    public SubTask CurrentTask 
+    { 
+        get 
+        { 
+            return currentTask; 
+        } 
+        set
+        {
+            currentTask = value;
+        }
+    }
     #endregion
 
     #region Unity Call Functions
@@ -128,6 +142,7 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     /// </summary>
     private void MakeDialogue()
     {
+        /*
         if (taskEnabled)
         {
             if (!taskStarted)
@@ -159,7 +174,6 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
                 }
             }
         }
-
         else if (!taskComplete)
         {
             DialogueManager.Instance.DisplayDialogue(beforeTaskDialogue);
@@ -167,6 +181,17 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
         else
         {
             DialogueManager.Instance.DisplayDialogue(afterTaskDialogue);
+        }
+        */
+
+        if (currentTask != null)
+        {
+            currentTask.DoSubtask();
+            currentTask = null;
+        }
+        else
+        {
+            DialogueManager.Instance.DisplayDialogue(beforeTaskDialogue);
         }
     }
 
@@ -202,10 +227,10 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
         PlayerManager.Instance.PlayerInteract.enabled = true;
         PlayerManager.Instance.PlayerMovement.enabled = true;
 
-        if (taskEnabled && taskStarted)
-        {
-            taskComplete = tasks[currentTaskNumber].task.TryComplete();
-        }
+        //if (taskEnabled && taskStarted)
+        //{
+        //    taskComplete = tasks[currentTaskNumber].task.TryComplete();
+        //}
 
         MakeDialogue();
     }

@@ -11,17 +11,18 @@ using UnityEngine.Events;
 public class STGoToLocation : SubTask
 {
     #region Fields
-
+    public bool canSee;
     #endregion
 
-    public STGoToLocation()
+    public STGoToLocation(Task theTask)
     {
         taskName = "2";
+        task = theTask;
     }
 
     #region Public Methods
 
-    public override bool TryComplete()
+    public override bool DoSubtask()
     {
         throw new NotImplementedException();
     }

@@ -25,11 +25,11 @@ public class Task : MonoBehaviour
 
     [SerializeField] private bool buildBuildingOnComplete = false;
 
-    [SerializeField] private List<SubTask> subTasks;
+    public SubTask[] subTasks;
 
-    private TaskState taskState = TaskState.Incactive;
+    public TaskState taskState = TaskState.Incactive;
 
-    private int currentSubTask = 0;
+    public int currentSubTask = 0;
 
 
     #endregion
@@ -65,22 +65,43 @@ public class Task : MonoBehaviour
     public void DoTask()
     {
         // 
-        if(subTasks[currentSubTask].TryComplete())
+        if(subTasks[currentSubTask].DoSubtask())
         {
             currentSubTask++;
             // If not more sub stasks left then task is complete
-            if (currentSubTask >= subTasks.Count)
+            if (currentSubTask >= subTasks.Length)
             {
                 FinishTask();
             }
         }
     }
 
+    public void FinishCurrentSubtask()
+    {
+        currentSubTask++;
+        // If not more sub stasks left then task is complete
+        if (currentSubTask >= subTasks.Length)
+        {
+            FinishTask();
+            return;
+        }
+        subTasks[currentSubTask].StartTask();
+    }
+
     public void StartTask()
     {
+        subTasks = GetComponents<SubTask>();
+        if (subTasks.Length < 0) 
+        {
+            Debug.Log("No subtasks found!");
+            FinishTask();
+        }
+
         taskState = TaskState.Available;
         currentSubTask = 0;
+
         // Set up first subtasks (Show icon for NPC)
+        subTasks[0].StartTask();
     }
 
     private void FinishTask()
@@ -90,34 +111,6 @@ public class Task : MonoBehaviour
         if (buildBuildingOnComplete)
         {
             HouseProgress.Instance.IncreaseProgressLevel();
-        }
-    }
-    #endregion
-
-
-    #region For Editor
-    public void AddSubtask(SubTask.SubtaskType newSubTask)
-    {
-        switch (newSubTask)
-        {
-            case SubTask.SubtaskType.TalkToNPC:
-                subTasks.Add(new STTalkToNPC());
-                break;
-            case SubTask.SubtaskType.GoToLocation:
-                subTasks.Add(new STGoToLocation());
-                break;
-            case SubTask.SubtaskType.PickUpItem:
-                subTasks.Add(new STPickUpItem());
-                break;
-            case SubTask.SubtaskType.DeliverItem:
-                subTasks.Add(new STDeliverItem());
-                break;
-            case SubTask.SubtaskType.DoOtherTask:
-                subTasks.Add(new STDoOtherTask());
-                break;
-            default:
-                break;
-
         }
     }
     #endregion

@@ -14,14 +14,15 @@ public class STPickUpItem : SubTask
 
     #endregion
 
-    public STPickUpItem()
+    public STPickUpItem(Task theTask)
     {
         taskName = "3";
+        task = theTask;
     }
 
     #region Public Methods
 
-    public override bool TryComplete()
+    public override bool DoSubtask()
     {
         throw new NotImplementedException();
     }

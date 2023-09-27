@@ -7,19 +7,21 @@ using UnityEngine.Events;
 /// Details: 
 /// </summary>
 
-[Serializable]
-public class SubTask
+//[Serializable]
+public abstract class SubTask : MonoBehaviour
 {
     public enum SubtaskType
     {
         TalkToNPC,
         GoToLocation,
         PickUpItem,
-        DeliverItem,
+        DeliverItemToNPC,
         DoOtherTask
     }
 
     #region Fields
+    protected Task task;
+
     [SerializeField] protected string taskName;
 
     [SerializeField] protected UnityEvent onEndEvent;
@@ -33,19 +35,10 @@ public class SubTask
         return taskName;
     }
 
-    public virtual bool TryComplete()
-    {
-        return false;
-    }
+    public abstract bool DoSubtask();
 
-    public virtual void StartTask()
-    {
+    public abstract void StartTask();
 
-    }
-
-    public virtual void StopTask()
-    {
-
-    }
+    public abstract void StopTask();
     #endregion
 }

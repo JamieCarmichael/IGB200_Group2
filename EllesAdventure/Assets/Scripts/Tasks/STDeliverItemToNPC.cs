@@ -8,20 +8,21 @@ using UnityEngine.Events;
 /// </summary>
 
 [Serializable]
-public class STDeliverItem : SubTask
+public class STDeliverItemToNPC : SubTask
 {
     #region Fields
 
     #endregion
 
-    public STDeliverItem()
+    public STDeliverItemToNPC(Task theTask)
     {
         taskName = "4";
+        task = theTask;
     }
 
     #region Public Methods
 
-    public override bool TryComplete()
+    public override bool DoSubtask()
     {
         throw new NotImplementedException();
     }

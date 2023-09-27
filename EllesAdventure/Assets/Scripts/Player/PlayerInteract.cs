@@ -64,7 +64,7 @@ public class PlayerInteract : MonoBehaviour
 
     private float playerHeight;
 
-    private List<string> bulidableObjects = new List<string>();
+    private List<string> bulidableObjects = new List<string>() { "default" };
 
     private List<string> usableItems = new List<string>() { "default" };
 
