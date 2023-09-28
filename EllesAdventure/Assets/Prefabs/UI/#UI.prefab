@@ -4060,6 +4060,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notebookObject: {fileID: 8945718359634313333}
+  notepadAquired: 1
   nextButton: {fileID: 2641502090623058707}
   previousButton: {fileID: 1497526383410616468}
   tasksPanel: {fileID: 4964846113722665326}

@@ -94,12 +94,15 @@ public class DialogueManager : MonoBehaviour
     /// <param name="onFinishEvent"></param>
     public void DisplayDialogue(string[] newDialogue, UnityEvent onFinishEvent)
     {
+        PlayerManager.Instance.PlayerInteract.ClearAnimations();
+
         if (dialogueDisplayed)
         {
             return;
         }
         if (newDialogue.Length == 0)
         {
+            onFinishEvent?.Invoke();
             return;
         }
 

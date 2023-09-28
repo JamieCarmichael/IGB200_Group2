@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -10,31 +9,102 @@ using UnityEngine.Events;
 [Serializable]
 public class STDeliverItemToNPC : SubTask
 {
-    #region Fields
+    [Serializable]
+    public struct NumberOfItems
+    {
+        public string itemName;
+        public int numberOfItems;
+    }
 
+    #region Fields
+    [SerializeField] private NumberOfItems[] itemsNeeded;
+
+    [SerializeField] private TalkToNPC NPC;
+
+    [TextArea]
+    [Tooltip("")]
+    [SerializeField] private string[] deliverItemDialogue;
+
+    [TextArea]
+    [Tooltip("")]
+    [SerializeField] private string[] noItemDialogue;
+
+    [TextArea]
+    [Tooltip("")]
+    [SerializeField] private string[] lastItemDialogue;
     #endregion
 
-    public STDeliverItemToNPC(Task theTask)
-    {
-        taskName = "4";
-        task = theTask;
-    }
 
     #region Public Methods
 
     public override bool DoSubtask()
     {
-        throw new NotImplementedException();
+        if (!DeliverItem(PlayerManager.Instance.PlayerInteract.HeldItem))
+        {
+            // No item delivered.
+            DialogueManager.Instance.DisplayDialogue(noItemDialogue, null);
+            return false;
+        }
+        if (!CheckIfItemsAreDelivered())
+        {
+            // Item delivered.
+            DialogueManager.Instance.DisplayDialogue(deliverItemDialogue, null);
+            return false;
+        }
+        // Last item delivered.
+        DialogueManager.Instance.DisplayDialogue(lastItemDialogue, onEndEvent);
+
+        return true;
     }
 
     public override void StartTask()
     {
-        throw new NotImplementedException();
+        if (task == null)
+        {
+            task = GetComponent<Task>();
+        }
+
+        NPC.SetCurrentTask(this, task.currentSubTask == 0);
+
+        onEndEvent.AddListener(StopTask);
     }
 
     public override void StopTask()
     {
-        throw new NotImplementedException();
+        task.FinishCurrentSubtask();
     }
     #endregion
+
+    private bool CheckIfItemsAreDelivered()
+    {
+        foreach (NumberOfItems item in itemsNeeded)
+        {
+            if (item.numberOfItems > 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private bool DeliverItem(string itemType)
+    {
+        for (int i = 0; i < itemsNeeded.Length; i++)
+        {
+            if (itemsNeeded[i].itemName == itemType)
+            {
+                if (itemsNeeded[i].numberOfItems > 0)
+                {
+                    itemsNeeded[i].numberOfItems--;
+                    PlayerManager.Instance.PlayerInteract.RemoveHeldObject();
+                    return true;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        return false;
+    }
 }

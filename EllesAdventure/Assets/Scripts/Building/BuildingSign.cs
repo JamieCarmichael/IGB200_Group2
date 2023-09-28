@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -7,6 +8,14 @@ using UnityEngine;
 /// </summary>
 public class BuildingSign : MonoBehaviour 
 {
+    [Serializable]
+    public struct ItemDetails
+    {
+        public string itemName;
+        public int numberOfItems;
+        public Sprite itemImage;
+    }
+
     #region Fields
     [SerializeField] private string buildText = "E to build";
 
@@ -21,7 +30,7 @@ public class BuildingSign : MonoBehaviour
     /// </summary>
     /// <param name="materials"></param>
     /// <param name="buildingName"></param>
-    public void DisplayMaterialRequired(Pickup.ItemDetails[] materials, string buildingName)
+    public void DisplayMaterialRequired(ItemDetails[] materials, string buildingName)
     {
         for (int i = 0; i < buildingNameTextFields.Length; i++)
         {
@@ -83,7 +92,7 @@ public class BuildingSign : MonoBehaviour
     #endregion
 
     #region Private Methods
-    private bool AllMaterialsDelivered(Pickup.ItemDetails[] materials)
+    private bool AllMaterialsDelivered(ItemDetails[] materials)
     {
         for (int i = 0; i < materials.Length; i++)
         {

@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using static UnityEditor.Progress;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -14,9 +13,9 @@ public class BuildPosition : MonoBehaviour, IIntertactable
     [SerializeField] private string buildingType;
 
     [Tooltip("What materials are required to make the building.")]
-    [SerializeField] private Pickup.ItemDetails[] buildingMaterial;
+    [SerializeField] private BuildingSign.ItemDetails[] buildingMaterial;
 
-    private Pickup.ItemDetails[] materialsRequired;
+    private BuildingSign.ItemDetails[] materialsRequired;
 
     [Tooltip("Object being built.")]
     [SerializeField] private GameObject objectBuilt;
@@ -62,7 +61,7 @@ public class BuildPosition : MonoBehaviour, IIntertactable
     {
         thisCollider = GetComponent<Collider>();
 
-        materialsRequired = (Pickup.ItemDetails[])buildingMaterial.Clone();
+        materialsRequired = (BuildingSign.ItemDetails[])buildingMaterial.Clone();
         DisplayMaterialRequired();
     }
     #endregion
@@ -144,7 +143,7 @@ public class BuildPosition : MonoBehaviour, IIntertactable
         objectBuilt.SetActive(false);
         buildAreaObject.SetActive(true);
         isBuilt = false;
-        materialsRequired = (Pickup.ItemDetails[])buildingMaterial.Clone();
+        materialsRequired = (BuildingSign.ItemDetails[])buildingMaterial.Clone();
 
         foreach (Pickup item in itemsUsed)
         {

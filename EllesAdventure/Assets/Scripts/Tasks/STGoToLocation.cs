@@ -1,6 +1,6 @@
 using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.Events;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -11,30 +11,37 @@ using UnityEngine.Events;
 public class STGoToLocation : SubTask
 {
     #region Fields
-    public bool canSee;
+    [SerializeField] private PlayerTriggerLocation triggerLocation;
+
+    [TextArea]
+    [Tooltip("The dialoge when the trigger is activated")]
+    [SerializeField] private string[] dialogue;
+
     #endregion
 
-    public STGoToLocation(Task theTask)
-    {
-        taskName = "2";
-        task = theTask;
-    }
 
     #region Public Methods
 
     public override bool DoSubtask()
     {
-        throw new NotImplementedException();
+        DialogueManager.Instance.DisplayDialogue(dialogue, onEndEvent);
+
+        return true;
     }
 
     public override void StartTask()
     {
-        throw new NotImplementedException();
+        if (task == null)
+        {
+            task = GetComponent<Task>();
+        }
+        triggerLocation.SetCurrentTask(this);
+        onEndEvent.AddListener(StopTask);
     }
 
     public override void StopTask()
     {
-        throw new NotImplementedException();
+        task.FinishCurrentSubtask();
     }
     #endregion
 }

@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -28,7 +27,7 @@ public class SignRow : MonoBehaviour
     /// Fills the row with the item details.
     /// </summary>
     /// <param name="item"></param>
-    public void FillRow(Pickup.ItemDetails item)
+    public void FillRow(BuildingSign.ItemDetails item)
     {
         itemName.text = item.itemName.ToString();
         itemImage.enabled = true;

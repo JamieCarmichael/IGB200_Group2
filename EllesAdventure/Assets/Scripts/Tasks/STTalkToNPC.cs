@@ -23,7 +23,6 @@ public class STTalkToNPC : SubTask
     public override bool DoSubtask()
     {
         DialogueManager.Instance.DisplayDialogue(dialogue, onEndEvent);
-
         return true;
     }
 

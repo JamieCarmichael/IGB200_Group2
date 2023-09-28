@@ -349,7 +349,7 @@ public class PlayerInteract : MonoBehaviour
         InputManager.Instance.PlayerInput.InGame.Enable();
     }
 
-    private void ClearAnimations()
+    public void ClearAnimations()
     {
         AnimatorControllerParameter[] a = animator.parameters;
         foreach (var item in a)

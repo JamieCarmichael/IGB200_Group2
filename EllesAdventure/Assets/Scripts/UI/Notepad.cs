@@ -24,7 +24,7 @@ public class Notepad : MonoBehaviour
     /// <summary>
     /// If true the player has the notepad and it will be shown in the pause menu.
     /// </summary>
-    private bool notepadAquired = false;
+    [SerializeField] private bool notepadAquired = false;
 
     /// <summary>
     /// Pages on the notepad.
@@ -172,7 +172,6 @@ public class Notepad : MonoBehaviour
     public void AquireNotepad(bool isAquired)
     {
         notepadAquired = isAquired;
-        gameObject.SetActive(notepadAquired);
     }
     /// <summary>
     /// Add a task to the player tasks.

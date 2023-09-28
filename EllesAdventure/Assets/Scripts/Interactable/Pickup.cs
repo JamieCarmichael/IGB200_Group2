@@ -8,13 +8,6 @@ using UnityEngine;
 public class Pickup : MonoBehaviour, IIntertactable
 {
     #region Fields
-    [Serializable]
-    public struct ItemDetails
-    {
-        public string itemName;
-        public int numberOfItems;
-        public Sprite itemImage;
-    }
 
     private Vector3 startPos;
 

@@ -106,9 +106,11 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     {
         if (currentTask != null)
         {
-            icon.HideIcon();
-            currentTask.DoSubtask();
-            currentTask = null;
+            if (currentTask.DoSubtask())
+            {
+                currentTask = null;
+                icon.HideIcon();
+            }
         }
         else
         {
