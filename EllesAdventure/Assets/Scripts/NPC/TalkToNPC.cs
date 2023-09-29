@@ -95,6 +95,10 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
 
         currentTask = newTask;
     }
+    public void SetCurrentTask(SubTask newTask)
+    {
+        currentTask = newTask;
+    }
 
     public void SetDialogueOption(int dialogueOptionIndex)
     {

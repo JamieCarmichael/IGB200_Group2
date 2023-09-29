@@ -1,6 +1,4 @@
 using System;
-using UnityEngine;
-using UnityEngine.Events;
 
 /// <summary>
 /// Made By: Jamie Carmichael

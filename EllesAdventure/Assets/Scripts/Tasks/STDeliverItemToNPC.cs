@@ -64,7 +64,7 @@ public class STDeliverItemToNPC : SubTask
             task = GetComponent<Task>();
         }
 
-        NPC.SetCurrentTask(this, task.CurrentSubTask == 0);
+        NPC.SetCurrentTask(this);
 
         onEndEvent.AddListener(StopTask);
     }
@@ -110,12 +110,19 @@ public class STDeliverItemToNPC : SubTask
 
     public override bool CheckTask()
     {
-        if (!CheckIfItemsAreDelivered())
+        return CheckIfItemsAreDelivered();
+    }
+    public bool CheckItem(string itemName)
+    {
+
+        foreach (NumberOfItems item in itemsNeeded)
         {
-            // Need more items
-            return false;
+            if (item.itemName == itemName)
+            {
+                NPC.SetIcon(false);
+                return true;
+            }
         }
-        NPC.SetIcon(false);
-        return true;
+        return false;
     }
 }

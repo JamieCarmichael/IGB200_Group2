@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine.Events;
 
 /// <summary>
@@ -91,6 +89,7 @@ public class Task : MonoBehaviour
         // If not more sub stasks left then task is complete
         if (currentSubTask >= subTasks.Length)
         {
+            currentSubTask = subTasks.Length - 1;
             FinishTask();
             return;
         }

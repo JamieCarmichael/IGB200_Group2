@@ -44,6 +44,7 @@ public class STDoOtherTask : SubTask
             return false;
         }
 
+        //NPC.SetIcon(false);
         DialogueManager.Instance.DisplayDialogue(finishedDialogue, onEndEvent);
         return true;
     }
@@ -55,7 +56,7 @@ public class STDoOtherTask : SubTask
             task = GetComponent<Task>();
         }
 
-        NPC.SetCurrentTask(this, task.CurrentSubTask == 0);
+        NPC.SetCurrentTask(this);
 
         onEndEvent.AddListener(StopTask);
 

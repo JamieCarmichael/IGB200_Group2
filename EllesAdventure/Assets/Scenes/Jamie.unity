@@ -1199,6 +1199,7 @@ GameObject:
   m_Component:
   - component: {fileID: 562365592}
   - component: {fileID: 562365591}
+  - component: {fileID: 562365594}
   - component: {fileID: 562365593}
   m_Layer: 0
   m_Name: Task (2)
@@ -1282,6 +1283,25 @@ MonoBehaviour:
   - Get material
   lastItemDialogue:
   - Job Done
+--- !u!114 &562365594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 562365590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d169e81e4a924f4c99522981c06d55a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  taskName: Help Jane
+  onEndEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  NPC: {fileID: 866306750}
+  dialogue:
+  - Can you get me 2 wood and 1 metal
 --- !u!43 &573136439
 Mesh:
   m_ObjectHideFlags: 0
@@ -2133,6 +2153,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f9823fa4ee8c53d4e9cd791dadb4c93f, type: 3}
+--- !u!114 &962421696 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 955326189565336425, guid: f9823fa4ee8c53d4e9cd791dadb4c93f,
+    type: 3}
+  m_PrefabInstance: {fileID: 933574765}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96edf2cf0f091f84c9a784c5d8f63d7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &991351152
 GameObject:
   m_ObjectHideFlags: 0
@@ -3750,7 +3782,19 @@ MonoBehaviour:
   taskName: FinishWork
   onEndEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 962421696}
+        m_TargetAssemblyTypeName: CompleteGame, Assembly-CSharp
+        m_MethodName: FinishGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   NPC: {fileID: 866306750}
   dialogue:
   - Well done you finished.

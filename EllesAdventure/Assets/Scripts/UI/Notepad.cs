@@ -13,11 +13,6 @@ public class Notepad : MonoBehaviour
     #region Fields
     public static Notepad Instance {  get; private set; }
 
-    /// <summary>
-    /// A list of all currenly active tasks.
-    /// </summary>
-    private List<OldSODoTask> activeTasks = new List<OldSODoTask>();
-
     [Tooltip("The UI object that enables the notepad to be seen.")]
     [SerializeField] private GameObject notebookObject;
 
@@ -31,7 +26,7 @@ public class Notepad : MonoBehaviour
     /// </summary>
     public enum Pages
     {
-        Tasks, Inventroy, Profile, Map
+        Tasks, Profile, Map
     }
 
     [Header("Buttons")]
@@ -41,18 +36,8 @@ public class Notepad : MonoBehaviour
     [SerializeField] private GameObject previousButton;
 
     [Header("Tasks")]
-    [Tooltip("The panel that the tasks UI is on.")]
-    [SerializeField] private GameObject tasksPanel;
-    [Tooltip("The TMP text field for the tasks name.")]
-    [SerializeField] private TextMeshProUGUI taskName;
-    [Tooltip("The TMP text field for the tasks description.")]
-    [SerializeField] private TextMeshProUGUI taskDescription;
-    [Tooltip("The text displayed if there are no active tasks.")]
-    [SerializeField] private string noTaskText = "No Task";
-    /// <summary>
-    /// The current task being viewed.
-    /// </summary>
-    private int currentTask = 0;
+    [Tooltip("The TMP text field for the tasks.")]
+    [SerializeField] private TextMeshProUGUI taskTextField;
 
     [Header("Profile")]
     [Tooltip("The profile manager for all of the profiles in the notepad.")]
@@ -100,7 +85,7 @@ public class Notepad : MonoBehaviour
 
     private void OnEnable()
     {
-        ShowPage();
+        //ShowPage();
 
         InputManager.Instance.PlayerInput.PauseGame.Notepad.performed += context => ShowNotebook();
     }
@@ -173,89 +158,24 @@ public class Notepad : MonoBehaviour
     {
         notepadAquired = isAquired;
     }
-    /// <summary>
-    /// Add a task to the player tasks.
-    /// </summary>
-    /// <param name="newTask"></param>
-    public void AddTask(OldSODoTask newTask)
-    {
-        UpdateNotepadPrompt();
-        activeTasks.Add(newTask);
-    }
-    /// <summary>
-    /// Remove a task from the players tasks.
-    /// </summary>
-    /// <param name="task"></param>
-    public void RemoveTask(OldSODoTask task)
-    {
-        activeTasks.Remove(task);
-    }
+
 
     /// <summary>
     /// Show the players tasks.
     /// </summary>
-    public void ShowTasks()
+    private void ShowTasks()
     {
-        if (currentTask >= activeTasks.Count)
-        {
-            currentTask = activeTasks.Count - 1;
-        }
-        else if (currentTask < 0)
-        {
-            currentTask = 0;
-        }
-        ShowTasks(currentTask);
-    }
-
-    /// <summary>
-    /// Show the players tasks.
-    /// </summary>
-    /// <param name="taskNumber"></param>
-    private void ShowTasks(int taskNumber)
-    {
-        if (taskNumber >= activeTasks.Count)
-        {
-            taskNumber = activeTasks.Count - 1;
-        }
-        else if (taskNumber < 0)
-        {
-            taskNumber = 0;
-        }
         page = Pages.Tasks;
 
-        tasksPanel.SetActive(true);
+        taskTextField.gameObject.SetActive(true);
         profileManager.HideProfile();;
         mapPanel.SetActive(false);
 
         // Set page buttons
-        if (taskNumber >= activeTasks.Count - 1)
-        {
-            nextButton.SetActive(false);
-        }
-        else
-        {
-            nextButton.SetActive(true);
-        }
-        if (taskNumber <= 0)
-        {
-            previousButton.SetActive(false);
-        }
-        else
-        {
-            previousButton.SetActive(true);
-        }
+        nextButton.SetActive(false);
+        previousButton.SetActive(false);
 
-        // Set active task
-        if (activeTasks.Count == 0)
-        {
-            taskName.text = noTaskText;
-            taskDescription.text = "";
-        }
-        else
-        {
-            taskName.text = activeTasks[taskNumber].TaskName;
-            taskDescription.text = activeTasks[taskNumber].Description;
-        }
+        taskTextField.text = TaskManager.Instance.GetTaskListForNotepad();
     }
 
     /// <summary>
@@ -265,7 +185,7 @@ public class Notepad : MonoBehaviour
     {
         page = Pages.Profile;
 
-        tasksPanel.SetActive(false);
+        taskTextField.gameObject.SetActive(false);
         mapPanel.SetActive(false);
         // Set page buttons
         nextButton.SetActive(true);
@@ -281,7 +201,7 @@ public class Notepad : MonoBehaviour
     {
         page = Pages.Map;
 
-        tasksPanel.SetActive(false);
+        taskTextField.gameObject.SetActive(false);
         profileManager.HideProfile();
         mapPanel.SetActive(true);
 
@@ -304,8 +224,6 @@ public class Notepad : MonoBehaviour
         switch (page)
         {
             case Pages.Tasks:
-                currentTask += 1;
-                ShowTasks(currentTask);
                 break;
             case Pages.Profile:
                 profileManager.DisplayNextProfile();
@@ -326,8 +244,6 @@ public class Notepad : MonoBehaviour
         switch (page)
         {
             case Pages.Tasks:
-                currentTask -= 1;
-                ShowTasks(currentTask);
                 break;
             case Pages.Profile:
                 profileManager.DisplayPreviousProfile();
