@@ -9,15 +9,6 @@ using UnityEngine.Events;
 //[Serializable]
 public abstract class SubTask : MonoBehaviour
 {
-    public enum SubtaskType
-    {
-        TalkToNPC,
-        GoToLocation,
-        PickUpItem,
-        DeliverItemToNPC,
-        DoOtherTask
-    }
-
     #region Fields
     protected Task task;
 

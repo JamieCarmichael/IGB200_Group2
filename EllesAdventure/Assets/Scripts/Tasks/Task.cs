@@ -23,9 +23,9 @@ public class Task : MonoBehaviour
 
     [SerializeField] private bool buildBuildingOnComplete = false;
 
-    public SubTask[] subTasks;
+    private SubTask[] subTasks;
 
-    public TaskState taskState = TaskState.Incactive;
+    private TaskState taskState = TaskState.Incactive;
 
     private int currentSubTask = 0;
 
@@ -141,6 +141,23 @@ public class Task : MonoBehaviour
         if (owningSubtask != null)
         {
             owningSubtask.CheckTask();
+        }
+    }
+
+    public void CheckItemPickup(string itemName)
+    {
+        if (subTasks[currentSubTask].GetType() == typeof(STDeliverItemToNPC))
+        {
+            STDeliverItemToNPC thisSubtask = (STDeliverItemToNPC)subTasks[currentSubTask];
+            thisSubtask.PickUpItem(itemName);
+        }
+    }
+    public void DropItemPickup()
+    {
+        if (subTasks[currentSubTask].GetType() == typeof(STDeliverItemToNPC))
+        {
+            STDeliverItemToNPC thisSubtask = (STDeliverItemToNPC)subTasks[currentSubTask];
+            thisSubtask.PutDownItem();
         }
     }
     #endregion

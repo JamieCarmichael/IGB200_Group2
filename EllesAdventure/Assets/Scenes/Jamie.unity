@@ -1222,8 +1222,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   taskName: Task2
   buildBuildingOnComplete: 1
-  subTasks: []
-  taskState: 0
   nextTasks: []
   startTaskEvent:
     m_PersistentCalls:
@@ -1271,6 +1269,8 @@ MonoBehaviour:
   onEndEvent:
     m_PersistentCalls:
       m_Calls: []
+  hasItem: 0
+  getItemTaskName: Return material to Jane
   itemsNeeded:
   - itemName: Wood
     numberOfItems: 2
@@ -2591,8 +2591,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   taskName: Task0
   buildBuildingOnComplete: 0
-  subTasks: []
-  taskState: 0
   nextTasks:
   - {fileID: 1731680148}
   startTaskEvent:
@@ -2695,8 +2693,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   taskName: Task3
   buildBuildingOnComplete: 1
-  subTasks: []
-  taskState: 0
   nextTasks: []
   startTaskEvent:
     m_PersistentCalls:
@@ -2732,6 +2728,8 @@ MonoBehaviour:
   onEndEvent:
     m_PersistentCalls:
       m_Calls: []
+  hasItem: 0
+  getItemTaskName: Return toolbox to person 2
   itemsNeeded:
   - itemName: Toolbox 2
     numberOfItems: 1
@@ -3637,8 +3635,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   taskName: Task1
   buildBuildingOnComplete: 0
-  subTasks: []
-  taskState: 0
   nextTasks:
   - {fileID: 1794532659}
   startTaskEvent:
@@ -3746,8 +3742,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   taskName: Task4
   buildBuildingOnComplete: 0
-  subTasks: []
-  taskState: 0
   nextTasks: []
   startTaskEvent:
     m_PersistentCalls:

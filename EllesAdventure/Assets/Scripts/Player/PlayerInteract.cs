@@ -122,6 +122,8 @@ public class PlayerInteract : MonoBehaviour
 
             heldObject = pickup;
             interactable = null;
+            // Check tasks
+            TaskManager.Instance.PickUpItem(HeldItem);
         }
         else
         {
@@ -134,6 +136,7 @@ public class PlayerInteract : MonoBehaviour
         heldObject.gameObject.SetActive(false);
         heldObject.transform.parent = null;
         heldObject = null;
+        TaskManager.Instance.PutDownItem();
     }
 
     public bool CanMakeBuidlingType(string buildingType)
@@ -286,11 +289,13 @@ public class PlayerInteract : MonoBehaviour
             {
                 heldObject.PutDown(dropPos);
                 heldObject = null;
+                TaskManager.Instance.PutDownItem();
             }
             else if (alwaysDrop) // not clear
             {
                 heldObject.PutDown(dropPos);
                 heldObject = null;
+                TaskManager.Instance.PutDownItem();
             }
         }
         // Nothing held something to interact with

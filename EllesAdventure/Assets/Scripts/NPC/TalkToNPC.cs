@@ -88,6 +88,10 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
             icon.ShowRunningIcon();
         }
     }
+    public void HideIcon()
+    {
+        icon.HideIcon();
+    }
 
     public void SetCurrentTask(SubTask newTask, bool isStartOfTask)
     {

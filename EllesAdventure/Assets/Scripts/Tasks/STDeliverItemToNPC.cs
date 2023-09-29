@@ -17,6 +17,10 @@ public class STDeliverItemToNPC : SubTask
     }
 
     #region Fields
+    [SerializeField] private bool hasItem = false;
+
+    [SerializeField] private string getItemTaskName;
+
     [SerializeField] private NumberOfItems[] itemsNeeded;
 
     [SerializeField] private TalkToNPC NPC;
@@ -36,6 +40,18 @@ public class STDeliverItemToNPC : SubTask
 
 
     #region Public Methods
+
+    public override string GetName()
+    {
+        if (!hasItem)
+        {
+            return taskName;
+        }
+        else
+        {
+            return getItemTaskName;
+        }
+    }
 
     public override bool DoSubtask()
     {
@@ -112,17 +128,25 @@ public class STDeliverItemToNPC : SubTask
     {
         return CheckIfItemsAreDelivered();
     }
-    public bool CheckItem(string itemName)
-    {
 
+    public void PickUpItem(string itemName)
+    {
         foreach (NumberOfItems item in itemsNeeded)
         {
             if (item.itemName == itemName)
             {
-                NPC.SetIcon(false);
-                return true;
+                if (item.numberOfItems > 0)
+                {
+                    NPC.SetIcon(false);
+                    hasItem = true;
+                }
+                return;
             }
         }
-        return false;
+    }
+    public void PutDownItem()
+    {
+        NPC.HideIcon();
+        hasItem = false;
     }
 }

@@ -58,6 +58,27 @@ public class TaskManager : MonoBehaviour
         }
         return tasksString;
     }
+
+    public void PickUpItem(string itemName)
+    {
+        foreach (Task task in activeTasks)
+        {
+            if (task.ThisTaskState == Task.TaskState.Active)
+            {
+                task.CheckItemPickup(itemName);
+            }
+        }
+    }
+    public void PutDownItem()
+    {
+        foreach (Task task in activeTasks)
+        {
+            if (task.ThisTaskState == Task.TaskState.Active)
+            {
+                task.DropItemPickup();
+            }
+        }
+    }
     #endregion
 
 }
