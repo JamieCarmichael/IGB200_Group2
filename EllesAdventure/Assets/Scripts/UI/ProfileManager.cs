@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -12,7 +14,15 @@ public class ProfileManager : MonoBehaviour
     /// <summary>
     /// The current profile being viewed.
     /// </summary>
-    private int currentProfile = 0;
+    public int currentProfile = 0;
+
+    public int minActiveProfileIndex = -1;
+    public int maxActiveProfileIndex = -1;
+
+    [SerializeField] private TextMeshProUGUI nameTextField;
+    [SerializeField] private TextMeshProUGUI bioTextField;
+    [SerializeField] private TextMeshProUGUI detailsTextField;
+    [SerializeField] private Image image;
     #endregion
 
     #region Public Methods
@@ -29,79 +39,75 @@ public class ProfileManager : MonoBehaviour
     public void DisplayProfile()
     {
         gameObject.SetActive(true);
-        if (profiles[currentProfile].GetCurrentProfileState() != Profile.ProfileState.Unwritten)
-        {
-            profiles[currentProfile].DisplayProfile();
-        }
-        else
-        {
-            currentProfile = SelectNextProfile();
 
-            if (currentProfile == -1)
-            {
-                currentProfile = 0;
-            }
-            else
-            {
-                profiles[currentProfile].DisplayProfile();
-            }
-
-        }
-    }
-
-    /// <summary>
-    /// Display a profile for the NPC with the profileName.
-    /// </summary>
-    /// <param name="profileName"></param>
-    public void DisplayProfile(string profileName)
-    {
-        for (int i = 0; i < profiles.Length; i++)
+        if (minActiveProfileIndex < 0)
         {
-            if (profiles[i].ProfileName == profileName)  
-            {
-                if (profiles[i].GetCurrentProfileState() != Profile.ProfileState.Unwritten)
-                {
-                    profiles[currentProfile].HideProfile();
-                    currentProfile = i;
-                    profiles[i].DisplayProfile();
-                }
-                break;
-            }
+            nameTextField.enabled = false;
+            bioTextField.enabled = false;
+            detailsTextField.enabled = false;
+            image.enabled = false;
+            return;
         }
-        gameObject.SetActive(true);
+        if (maxActiveProfileIndex >= profiles.Length)
+        {
+            nameTextField.enabled = false;
+            bioTextField.enabled = false;
+            detailsTextField.enabled = false;
+            image.enabled = false;
+            return;
+        }
+
+        if (!profiles[currentProfile].GetProfileInfo(out Profile.ProfileInfo profileInfo))
+        {
+            nameTextField.enabled = false;
+            bioTextField.enabled = false;
+            detailsTextField.enabled = false;
+            image.enabled = false;
+            return;
+        }
+
+        nameTextField.text = profileInfo.name;
+        bioTextField.text = profileInfo.bio;
+        detailsTextField.text = profileInfo.details;
+        image.sprite = profileInfo.image;
+
+        nameTextField.enabled = true;
+        bioTextField.enabled = true;
+        detailsTextField.enabled = true;
+        image.enabled = true;
     }
 
     /// <summary>
     /// Display the next profile. Will continue looking and loop around until it finds a profile.
     /// </summary>
-    public void DisplayNextProfile()
+    public bool DisplayNextProfile()
     {
-        profiles[currentProfile].HideProfile();
-        currentProfile = SelectNextProfile();
-
-        if (currentProfile == -1)
+        int nextProfile = FindNextProfile();
+        if (nextProfile < 0)
         {
-            currentProfile = 0;
-            return;
+            return false;
         }
+        currentProfile = nextProfile;
+        DisplayProfile();
 
-        profiles[currentProfile].DisplayProfile();
+        //return true;
+        return FindNextProfile() >= 0;
     }
     /// <summary>
     /// Display the previous profile. Will continue looking and loop around until it finds a profile.
     /// </summary>
-    public void DisplayPreviousProfile()
+    public bool DisplayPreviousProfile()
     {
-        profiles[currentProfile].HideProfile();
-        currentProfile = SelectPreviousProfile();
-
-        if (currentProfile == -1)
+        int nextProfile = FindPreviousProfile();
+        if (nextProfile < 0)
         {
-            currentProfile = 0;
-            return;
+            return false;
         }
+        currentProfile = nextProfile;
+        DisplayProfile();
 
-        profiles[currentProfile].DisplayProfile();
+        //return true;
+        return FindPreviousProfile() >= 0;
     }
     #endregion
 
@@ -110,18 +116,18 @@ public class ProfileManager : MonoBehaviour
     /// Find the next active profile.
     /// </summary>
     /// <returns></returns>
-    private int SelectNextProfile()
+    public int FindNextProfile()
     {
         int newProfileIndex = currentProfile;
 
-        for (int i = 0; i < profiles.Length; i++)
+        for (int i = currentProfile; i < profiles.Length; i++)
         {
             newProfileIndex++;
-            if (newProfileIndex >= profiles.Length)
+            if (newProfileIndex > maxActiveProfileIndex || newProfileIndex > profiles.Length)
             {
-                newProfileIndex = 0;
+                return -1;
             }
-            if (profiles[newProfileIndex].GetCurrentProfileState() != Profile.ProfileState.Unwritten)
+            if (profiles[newProfileIndex].ProfileStageIndex >= 0)
             {
                 return newProfileIndex;
             }
@@ -133,24 +139,45 @@ public class ProfileManager : MonoBehaviour
     /// Find the previous active profile.
     /// </summary>
     /// <returns></returns>
-    private int SelectPreviousProfile()
+    public int FindPreviousProfile()
     {
         int newProfileIndex = currentProfile;
 
-        for (int i = 0; i < profiles.Length; i++)
+        for (int i = currentProfile; i < profiles.Length; i--)
         {
             newProfileIndex--;
-            if (newProfileIndex < 0)
+            if (newProfileIndex < minActiveProfileIndex || newProfileIndex < 0)
             {
-                newProfileIndex = profiles.Length - 1;
+                return -1;
             }
-            if (profiles[newProfileIndex].GetCurrentProfileState() != Profile.ProfileState.Unwritten)
+            if (profiles[newProfileIndex].ProfileStageIndex >= 0)
             {
                 return newProfileIndex;
             }
         }
 
         return -1;
+    }
+
+    public void EnableProfile(int profileIndex)
+    {
+        if (minActiveProfileIndex < 0)
+        {
+            minActiveProfileIndex = profileIndex;
+            maxActiveProfileIndex = profileIndex;
+            currentProfile = profileIndex;
+            return;
+        }
+        if (minActiveProfileIndex > profileIndex)
+        {
+            minActiveProfileIndex = profileIndex;
+        }
+        if (maxActiveProfileIndex < profileIndex)
+        {
+            maxActiveProfileIndex = profileIndex;
+        }
+
+        currentProfile = profileIndex;
     }
     #endregion
 

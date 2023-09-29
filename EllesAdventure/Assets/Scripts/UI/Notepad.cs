@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -188,8 +187,8 @@ public class Notepad : MonoBehaviour
         taskTextField.gameObject.SetActive(false);
         mapPanel.SetActive(false);
         // Set page buttons
-        nextButton.SetActive(true);
-        previousButton.SetActive(true);
+        nextButton.SetActive(profileManager.FindNextProfile() >= 0);
+        previousButton.SetActive(profileManager.FindPreviousProfile() >= 0 );
 
         profileManager.DisplayProfile();
     }
@@ -226,8 +225,18 @@ public class Notepad : MonoBehaviour
             case Pages.Tasks:
                 break;
             case Pages.Profile:
-                profileManager.DisplayNextProfile();
-                break;
+                {
+                    if (profileManager.DisplayNextProfile())
+                    {
+                        nextButton.SetActive(true);
+                    }
+                    else
+                    {
+                        nextButton.SetActive(false);
+                    }
+                    previousButton.SetActive(true);
+                    break;
+                }
             case Pages.Map:
                 break;
             default:
@@ -246,8 +255,18 @@ public class Notepad : MonoBehaviour
             case Pages.Tasks:
                 break;
             case Pages.Profile:
-                profileManager.DisplayPreviousProfile();
-                break;
+                {
+                    if (profileManager.DisplayPreviousProfile())
+                    {
+                        previousButton.SetActive(true);
+                    }
+                    else
+                    {
+                        previousButton.SetActive(false);
+                    }
+                    nextButton.SetActive(true);
+                    break;
+                }
             case Pages.Map:
                 break;
             default:

@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
-using static UnityEngine.Rendering.DebugUI;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -18,6 +16,12 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     }
 
     #region Fields
+    [SerializeField] private Profile profile;
+
+    public Profile ThisProfile { get { return profile; } }
+
+    private bool firstInteraction = true;
+
     [Header("Task Icon")]
     [SerializeField] private NPCTaskIndicator icon;
 
@@ -127,7 +131,7 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
         }
         else
         {
-            DialogueManager.Instance.DisplayDialogue(dialogueOptions[currentDialogueOption].dialogueOptions);
+            DialogueManager.Instance.DisplayDialogue(dialogueOptions[currentDialogueOption].dialogueOptions, profile.CurrentProfile.name, profile.CurrentProfile.image);
         }
     }
 
@@ -170,6 +174,13 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     #region IIntertactable
     public void Interact(string item)
     {
+
+        if (firstInteraction)
+        {
+            firstInteraction = false;
+            profile.IncreaseProfileStage();
+        }
+
         StopLookAt();
 
         StartCoroutine(StartTalking());
@@ -190,6 +201,11 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
         Vector3 closestPoint = thisCollider.ClosestPoint(playerPos);
         closestPoint.y = transform.position.y;
         return closestPoint;
+    }
+
+    public void UpdateProfile()
+    {
+        profile.IncreaseProfileStage();
     }
     #endregion
 }

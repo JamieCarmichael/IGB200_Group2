@@ -40,12 +40,12 @@ public class STDoOtherTask : SubTask
     {
         if (!CheckTasks())
         {
-            DialogueManager.Instance.DisplayDialogue(doingDialogue, null);
+            DialogueManager.Instance.DisplayDialogue(doingDialogue, NPC.ThisProfile.CurrentProfile.name, NPC.ThisProfile.CurrentProfile.image);
             return false;
         }
 
         //NPC.SetIcon(false);
-        DialogueManager.Instance.DisplayDialogue(finishedDialogue, onEndEvent);
+        DialogueManager.Instance.DisplayDialogue(finishedDialogue, NPC.ThisProfile.CurrentProfile.name, NPC.ThisProfile.CurrentProfile.image, onEndEvent);
         return true;
     }
 

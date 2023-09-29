@@ -133,6 +133,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3081211349995147200, guid: fa7584a14247614409c4ca71de702883,
         type: 3}
+      propertyPath: profile
+      value: 
+      objectReference: {fileID: 188213522}
+    - target: {fileID: 3081211349995147200, guid: fa7584a14247614409c4ca71de702883,
+        type: 3}
       propertyPath: dialogueOptions.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -306,6 +311,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 349855483907aab418e2ca8b95904dff, type: 3}
+--- !u!114 &188213522 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5372897635249355900, guid: f9823fa4ee8c53d4e9cd791dadb4c93f,
+    type: 3}
+  m_PrefabInstance: {fileID: 933574765}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8d3ddfc3d173584abae065a1f359e90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &285444477
 Mesh:
   m_ObjectHideFlags: 0
@@ -600,6 +617,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3081211349995147200, guid: fa7584a14247614409c4ca71de702883,
+        type: 3}
+      propertyPath: profile
+      value: 
+      objectReference: {fileID: 966991945}
     - target: {fileID: 3081211349995147200, guid: fa7584a14247614409c4ca71de702883,
         type: 3}
       propertyPath: dialogueOptions.Array.size
@@ -1268,7 +1290,19 @@ MonoBehaviour:
   taskName: Get  Materials
   onEndEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 866306750}
+        m_TargetAssemblyTypeName: TalkToNPC, Assembly-CSharp
+        m_MethodName: UpdateProfile
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   hasItem: 0
   getItemTaskName: Return material to Jane
   itemsNeeded:
@@ -2165,6 +2199,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96edf2cf0f091f84c9a784c5d8f63d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &966991945 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8685041909065743182, guid: f9823fa4ee8c53d4e9cd791dadb4c93f,
+    type: 3}
+  m_PrefabInstance: {fileID: 933574765}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8d3ddfc3d173584abae065a1f359e90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &991351152
 GameObject:
   m_ObjectHideFlags: 0
@@ -2727,7 +2773,19 @@ MonoBehaviour:
   taskName: Get tools
   onEndEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 323880098}
+        m_TargetAssemblyTypeName: TalkToNPC, Assembly-CSharp
+        m_MethodName: UpdateProfile
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   hasItem: 0
   getItemTaskName: Return toolbox to person 2
   itemsNeeded:
@@ -2888,6 +2946,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
+--- !u!114 &1211301632 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2549338027165902478, guid: f9823fa4ee8c53d4e9cd791dadb4c93f,
+    type: 3}
+  m_PrefabInstance: {fileID: 933574765}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8d3ddfc3d173584abae065a1f359e90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1220444617
 GameObject:
   m_ObjectHideFlags: 0
@@ -3670,7 +3740,19 @@ MonoBehaviour:
   taskName: Help others
   onEndEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 712637609}
+        m_TargetAssemblyTypeName: TalkToNPC, Assembly-CSharp
+        m_MethodName: UpdateProfile
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   NPC: {fileID: 712637609}
   doingDialogue:
   - Help other people
@@ -5093,6 +5175,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3081211349995147200, guid: fa7584a14247614409c4ca71de702883,
+        type: 3}
+      propertyPath: profile
+      value: 
+      objectReference: {fileID: 1211301632}
     - target: {fileID: 3081211349995147200, guid: fa7584a14247614409c4ca71de702883,
         type: 3}
       propertyPath: dialogueOptions.Array.size

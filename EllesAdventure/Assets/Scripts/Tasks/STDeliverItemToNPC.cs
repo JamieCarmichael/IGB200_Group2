@@ -58,17 +58,17 @@ public class STDeliverItemToNPC : SubTask
         if (!DeliverItem(PlayerManager.Instance.PlayerInteract.HeldItem))
         {
             // No item delivered.
-            DialogueManager.Instance.DisplayDialogue(noItemDialogue, null);
+            DialogueManager.Instance.DisplayDialogue(noItemDialogue, NPC.ThisProfile.CurrentProfile.name, NPC.ThisProfile.CurrentProfile.image);
             return false;
         }
         if (!CheckIfItemsAreDelivered())
         {
             // Item delivered.
-            DialogueManager.Instance.DisplayDialogue(deliverItemDialogue, null);
+            DialogueManager.Instance.DisplayDialogue(deliverItemDialogue, NPC.ThisProfile.CurrentProfile.name, NPC.ThisProfile.CurrentProfile.image);
             return false;
         }
         // Last item delivered.
-        DialogueManager.Instance.DisplayDialogue(lastItemDialogue, onEndEvent);
+        DialogueManager.Instance.DisplayDialogue(lastItemDialogue, NPC.ThisProfile.CurrentProfile.name, NPC.ThisProfile.CurrentProfile.image, onEndEvent);
 
         return true;
     }

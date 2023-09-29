@@ -25,7 +25,9 @@ public class TaskManager : MonoBehaviour
         }
 
         Instance = this;
-
+    }
+    private void Start()
+    {
         // Start tasks
         foreach (Task task in startTasks)
         {

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -6,86 +7,80 @@ using UnityEngine;
 /// </summary>
 public class Profile : MonoBehaviour
 {
-    #region Fields
-    [Tooltip("The name of this NPC.")]
-    [SerializeField] private string profileName;
-    [Tooltip("The objects that are initalially visable when the profile is made.")]
-    [SerializeField] private GameObject[] initialProfileObjects;
-    [Tooltip("The objects that are visable once the profile is comleted.")]
-    [SerializeField] private GameObject[] finalProfileObjects;
-
-    private ProfileState currentProfileState = ProfileState.Unwritten;
-    /// <summary>
-    /// The posible profile states.
-    /// </summary>
-    public enum ProfileState
+    [Serializable]
+    public struct ProfileInfo
     {
-        Unwritten,
-        Initial,
-        Final
+        public string name;
+        public string bio;
+        public string details;
+        public Sprite image;
     }
-    /// <summary>
-    /// Reutrns the name of this profile.
-    /// </summary>
-    public string ProfileName { get { return profileName; } }
+
+    #region Fields
+    [SerializeField] private ProfileManager profileManager;
+
+    [SerializeField] private int profileIndex = -1;
+
+    [SerializeField] private ProfileInfo[] profileStages;
+
+    public int profileStageIndex = -1;
+
+    public int ProfileStageIndex 
+    {  
+        get 
+        { 
+            return profileStageIndex; 
+        }
+        set
+        {
+            if (value >= profileStages.Length)
+            {
+                profileStageIndex = profileStages.Length - 1;
+            }
+            else if (value < 0)
+            {
+                profileStageIndex = 0;
+            }
+            profileStageIndex = value;
+        }
+    }
+    public ProfileInfo CurrentProfile
+    {
+        get
+        {
+            if (profileStageIndex < 0)
+            {
+                return profileStages[0];
+            }
+            if (profileStageIndex >= profileStages.Length)
+            {
+                return profileStages[profileStages.Length - 1];
+            }
+            return profileStages[profileStageIndex];
+        }
+    }
+
     #endregion
 
     #region Public Methods
     /// <summary>
-    /// Returns the current profile state.
-    /// </summary>
-    /// <returns></returns>
-    public ProfileState GetCurrentProfileState()
-    {
-        return currentProfileState;
-    }
-    /// <summary>
     /// Make the initial state for profile visable in the notepad.
     /// </summary>
-    public void MakeProfile()
+    public bool GetProfileInfo(out ProfileInfo profileInfo)
     {
-        currentProfileState = ProfileState.Initial;
-        foreach (GameObject profileObject in finalProfileObjects)
+        if (profileStageIndex < 0)
         {
-            profileObject.SetActive(false);
+            profileInfo = new ProfileInfo();
+            return false;
         }
-        foreach (GameObject profileObject in initialProfileObjects)
-        {
-            profileObject.SetActive(true);
-        }
+        profileInfo = profileStages[profileStageIndex];
+        return true;
+    }
 
-        UIManager.Instance.Notepad.UpdateNotepadPrompt();
-    }
-    /// <summary>
-    /// Make the final state for profile visable in the notepad.
-    /// </summary>
-    public void FinishProfile()
+    public void IncreaseProfileStage()
     {
-        currentProfileState = ProfileState.Final;
-        foreach (GameObject profileObject in initialProfileObjects)
-        {
-            profileObject.SetActive(false);
-        }
-        foreach (GameObject profileObject in finalProfileObjects)
-        {
-            profileObject.SetActive(true);
-        }
-
-        UIManager.Instance.Notepad.UpdateNotepadPrompt();
-    }
-    /// <summary>
-    /// Make this profile visable
-    /// </summary>
-    public void DisplayProfile()
-    {
-        gameObject.SetActive(true);
-    }
-    /// <summary>
-    /// Make this profile not visable.
-    /// </summary>
-    public void HideProfile()
-    {
-        gameObject.SetActive(false);
+        ProfileStageIndex++;
+        profileManager.EnableProfile(profileIndex);
     }
     #endregion
 }

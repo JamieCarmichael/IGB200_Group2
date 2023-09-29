@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -17,6 +18,10 @@ public class DialogueManager : MonoBehaviour
     [Tooltip("The text mesh pro text object that the dialogue is displayed in.")]
     [SerializeField] private TextMeshProUGUI textField;
 
+    [SerializeField] private TextMeshProUGUI nameTextField;
+
+    [SerializeField] private Image talkerImage;
+
     /// <summary>
     /// True if there is dialogue being displayed.
     /// </summary>
@@ -25,6 +30,14 @@ public class DialogueManager : MonoBehaviour
     /// The current dialogue object.
     /// </summary>
     private string[] currentDialogue;
+    /// <summary>
+    /// The name of the NPC currently talking.
+    /// </summary>
+    private string talkerName;
+    /// <summary>
+    /// The sprite of the NPC currently talking.
+    /// </summary>
+    private Sprite talkerSprite;
     /// <summary>
     /// The index of the next dialogue to be displayed.
     /// </summary>
@@ -75,6 +88,35 @@ public class DialogueManager : MonoBehaviour
         }
 
         currentDialogue = newDialogue;
+        talkerName = null;
+        talkerSprite = null;
+
+        dialogueObject.SetActive(true);
+        dialogueDisplayed = true;
+        dialogueIndex = 0;
+        NextDialogue();
+
+        playerInteract.enabled = false;
+        playerMovement.enabled = false;
+
+        InputManager.Instance.PlayerInput.InGame.Interact.performed += NextDialogue;
+    }
+
+    public void DisplayDialogue(string[] newDialogue, string newTalkerName, Sprite newTalkerSprite)
+    {
+        if (dialogueDisplayed)
+        {
+            return;
+        }
+        if (newDialogue.Length == 0)
+        {
+            return;
+        }
+
+        currentDialogue = newDialogue;
+        talkerName = newTalkerName;
+        talkerSprite = newTalkerSprite;
+
         dialogueObject.SetActive(true);
         dialogueDisplayed = true;
         dialogueIndex = 0;
@@ -109,6 +151,47 @@ public class DialogueManager : MonoBehaviour
         onFinishDialogueEvent = onFinishEvent;
 
         currentDialogue = newDialogue;
+        talkerName = null;
+        talkerSprite = null;
+
+        dialogueObject.SetActive(true);
+        dialogueDisplayed = true;
+        dialogueIndex = 0;
+        NextDialogue();
+
+        playerInteract.enabled = false;
+        playerMovement.enabled = false;
+
+        InputManager.Instance.PlayerInput.InGame.Interact.performed += NextDialogue;
+    }
+
+    /// <summary>
+    /// Show the dialogue object.
+    /// </summary>
+    /// <param name="newDialogue"></param>
+    /// <param name="newTalkerSprite"></param>
+    /// <param name="newTalkerName"></param>
+    /// <param name="onFinishEvent"></param>
+    public void DisplayDialogue(string[] newDialogue, string newTalkerName, Sprite newTalkerSprite, UnityEvent onFinishEvent)
+    {
+        PlayerManager.Instance.PlayerInteract.ClearAnimations();
+
+        if (dialogueDisplayed)
+        {
+            return;
+        }
+        if (newDialogue.Length == 0)
+        {
+            onFinishEvent?.Invoke();
+            return;
+        }
+
+        onFinishDialogueEvent = onFinishEvent;
+
+        currentDialogue = newDialogue;
+        talkerName = newTalkerName;
+        talkerSprite = newTalkerSprite;
+
         dialogueObject.SetActive(true);
         dialogueDisplayed = true;
         dialogueIndex = 0;
@@ -131,6 +214,24 @@ public class DialogueManager : MonoBehaviour
         {
             FinishDialogue();
             return;
+        }
+        if (talkerName != null && talkerName != "")
+        {
+            nameTextField.text = talkerName;
+            nameTextField.enabled = true;
+        }
+        else
+        {
+            nameTextField.enabled = false;
+        }
+        if (talkerSprite != null)
+        {
+            talkerImage.sprite = talkerSprite;
+            talkerImage.enabled = true;
+        }
+        else
+        {
+            talkerImage.enabled = false;
         }
 
         textField.text = currentDialogue[dialogueIndex];
