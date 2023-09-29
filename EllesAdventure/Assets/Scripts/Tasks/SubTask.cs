@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 /// <summary>
 /// Made By: Jamie Carmichael
-/// Details: 
+/// Details: A smaller task within a task that needs to be done. A step in the procedure.
 /// </summary>
 
 //[Serializable]

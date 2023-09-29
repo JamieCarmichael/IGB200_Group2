@@ -14,10 +14,7 @@ public class ProfileManager : MonoBehaviour
     /// <summary>
     /// The current profile being viewed.
     /// </summary>
-    public int currentProfile = 0;
-
-    public int minActiveProfileIndex = -1;
-    public int maxActiveProfileIndex = -1;
+    int currentProfile = 0;
 
     [SerializeField] private TextMeshProUGUI nameTextField;
     [SerializeField] private TextMeshProUGUI bioTextField;
@@ -39,23 +36,6 @@ public class ProfileManager : MonoBehaviour
     public void DisplayProfile()
     {
         gameObject.SetActive(true);
-
-        if (minActiveProfileIndex < 0)
-        {
-            nameTextField.enabled = false;
-            bioTextField.enabled = false;
-            detailsTextField.enabled = false;
-            image.enabled = false;
-            return;
-        }
-        if (maxActiveProfileIndex >= profiles.Length)
-        {
-            nameTextField.enabled = false;
-            bioTextField.enabled = false;
-            detailsTextField.enabled = false;
-            image.enabled = false;
-            return;
-        }
 
         if (!profiles[currentProfile].GetProfileInfo(out Profile.ProfileInfo profileInfo))
         {
@@ -90,7 +70,6 @@ public class ProfileManager : MonoBehaviour
         currentProfile = nextProfile;
         DisplayProfile();
 
-        //return true;
         return FindNextProfile() >= 0;
     }
     /// <summary>
@@ -106,7 +85,6 @@ public class ProfileManager : MonoBehaviour
         currentProfile = nextProfile;
         DisplayProfile();
 
-        //return true;
         return FindPreviousProfile() >= 0;
     }
     #endregion
@@ -118,12 +96,17 @@ public class ProfileManager : MonoBehaviour
     /// <returns></returns>
     public int FindNextProfile()
     {
+        if (currentProfile < 0 || currentProfile >= profiles.Length)
+        {
+            return -1;
+        }
+
         int newProfileIndex = currentProfile;
 
         for (int i = currentProfile; i < profiles.Length; i++)
         {
             newProfileIndex++;
-            if (newProfileIndex > maxActiveProfileIndex || newProfileIndex > profiles.Length)
+            if (newProfileIndex >= profiles.Length)
             {
                 return -1;
             }
@@ -146,7 +129,7 @@ public class ProfileManager : MonoBehaviour
         for (int i = currentProfile; i < profiles.Length; i--)
         {
             newProfileIndex--;
-            if (newProfileIndex < minActiveProfileIndex || newProfileIndex < 0)
+            if (newProfileIndex < 0)
             {
                 return -1;
             }
@@ -161,22 +144,6 @@ public class ProfileManager : MonoBehaviour
 
     public void EnableProfile(int profileIndex)
     {
-        if (minActiveProfileIndex < 0)
-        {
-            minActiveProfileIndex = profileIndex;
-            maxActiveProfileIndex = profileIndex;
-            currentProfile = profileIndex;
-            return;
-        }
-        if (minActiveProfileIndex > profileIndex)
-        {
-            minActiveProfileIndex = profileIndex;
-        }
-        if (maxActiveProfileIndex < profileIndex)
-        {
-            maxActiveProfileIndex = profileIndex;
-        }
-
         currentProfile = profileIndex;
     }
     #endregion

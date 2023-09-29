@@ -431,7 +431,6 @@ MonoBehaviour:
     bio: Scaffolding
     details: Details 2
     image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  profileStageIndex: -1
 --- !u!1 &453578191938818843
 GameObject:
   m_ObjectHideFlags: 0
@@ -1389,8 +1388,6 @@ MonoBehaviour:
   - {fileID: 2549338027165902478}
   - {fileID: 8685041909065743182}
   currentProfile: 0
-  minActiveProfileIndex: -1
-  maxActiveProfileIndex: -1
   nameTextField: {fileID: 8845411114852439366}
   bioTextField: {fileID: 8929685756996985132}
   detailsTextField: {fileID: 6188753728427680859}
@@ -2508,7 +2505,6 @@ MonoBehaviour:
     bio: Tools
     details: Details 2
     image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  profileStageIndex: -1
 --- !u!1 &3085139913122249248
 GameObject:
   m_ObjectHideFlags: 0
@@ -5600,7 +5596,6 @@ MonoBehaviour:
     bio: Foreman
     details: Details 2
     image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  profileStageIndex: -1
 --- !u!1 &8896520807289413032
 GameObject:
   m_ObjectHideFlags: 0

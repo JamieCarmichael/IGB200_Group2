@@ -3,7 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// Made By: Jamie Carmichael
-/// Details: A NPC profile object within the notepad.
+/// Details: A NPC profile.
 /// </summary>
 public class Profile : MonoBehaviour
 {
@@ -19,11 +19,13 @@ public class Profile : MonoBehaviour
     #region Fields
     [SerializeField] private ProfileManager profileManager;
 
+    [Tooltip("The index of profile being used. Set it to -1 if no profile is visable.")]
     [SerializeField] private int profileIndex = -1;
 
+    [Tooltip("The stages of the NPC's profile. Will start at the first and iterate forward.")]
     [SerializeField] private ProfileInfo[] profileStages;
 
-    public int profileStageIndex = -1;
+    private int profileStageIndex = -1;
 
     public int ProfileStageIndex 
     {  
@@ -44,6 +46,9 @@ public class Profile : MonoBehaviour
             profileStageIndex = value;
         }
     }
+    /// <summary>
+    /// The profile currently being displayed. If there is no profile being displayed the first profile is used.
+    /// </summary>
     public ProfileInfo CurrentProfile
     {
         get

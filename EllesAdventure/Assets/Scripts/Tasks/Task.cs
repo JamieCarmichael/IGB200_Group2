@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 /// <summary>
 /// Made By: Jamie Carmichael
-/// Details: 
+/// Details: A task. This is a collection of subtasks that need to be completed.
 /// </summary>
 
 public class Task : MonoBehaviour

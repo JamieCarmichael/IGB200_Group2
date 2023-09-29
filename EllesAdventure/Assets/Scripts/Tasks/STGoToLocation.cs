@@ -1,10 +1,9 @@
 using System;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 /// <summary>
 /// Made By: Jamie Carmichael
-/// Details: 
+/// Details: A subtasks to go to a location adn hit a trigger.
 /// </summary>
 
 [Serializable]

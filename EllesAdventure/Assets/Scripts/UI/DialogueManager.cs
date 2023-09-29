@@ -17,9 +17,9 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private GameObject dialogueObject;
     [Tooltip("The text mesh pro text object that the dialogue is displayed in.")]
     [SerializeField] private TextMeshProUGUI textField;
-
+    [Tooltip("The text field that the NPC talkings name is displayed in.")]
     [SerializeField] private TextMeshProUGUI nameTextField;
-
+    [Tooltip("The image that the NPC talkings image is displayed in.")]
     [SerializeField] private Image talkerImage;
 
     /// <summary>

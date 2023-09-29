@@ -3,7 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// Made By: Jamie Carmichael
-/// Details: 
+/// Details: A subtask to collect some items and deliver them to an NPC.
 /// </summary>
 
 [Serializable]

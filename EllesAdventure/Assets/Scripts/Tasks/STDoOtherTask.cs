@@ -3,7 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// Made By: Jamie Carmichael
-/// Details: 
+/// Details: A Subtask to do some other tasks for an NPC.
 /// </summary>
 
 [Serializable]
