@@ -32,13 +32,19 @@ public class STTalkToNPC : SubTask
         {
             task = GetComponent<Task>();
         }
-        NPC.SetCurrentTask(this, task.currentSubTask == 0);
+
+        NPC.SetCurrentTask(this, task.CurrentSubTask == 0);
         onEndEvent.AddListener(StopTask);
     }
 
     public override void StopTask()
     {
         task.FinishCurrentSubtask();
+    }
+
+    public override bool CheckTask()
+    {
+        return false;
     }
     #endregion
 }

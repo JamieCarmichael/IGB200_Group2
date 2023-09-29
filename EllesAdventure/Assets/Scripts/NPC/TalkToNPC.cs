@@ -77,9 +77,9 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     #endregion
 
     #region Public Methods
-    public void SetCurrentTask(SubTask newTask, bool isStartOfTask)
+    public void SetIcon(bool isNewTask)
     {
-        if (isStartOfTask)
+        if (isNewTask)
         {
             icon.ShowNewIcon();
         }
@@ -87,6 +87,11 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
         {
             icon.ShowRunningIcon();
         }
+    }
+
+    public void SetCurrentTask(SubTask newTask, bool isStartOfTask)
+    {
+        SetIcon(isStartOfTask);
 
         currentTask = newTask;
     }

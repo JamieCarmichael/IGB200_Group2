@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -11,30 +10,75 @@ using UnityEngine.Events;
 public class STDoOtherTask : SubTask
 {
     #region Fields
+    [SerializeField] private TalkToNPC NPC;
 
+    [TextArea]
+    [Tooltip("")]
+    [SerializeField] private string[] doingDialogue;
+    [TextArea]
+    [Tooltip("")]
+    [SerializeField] private string[] finishedDialogue;
+
+    [SerializeField] private Task[] tasksToBeDone;
     #endregion
 
-    public STDoOtherTask(Task theTask)
+    #region Public Methods
+    private bool CheckTasks()
     {
-        taskName = "5";
-        task = theTask;
+        for (int i = 0; i < tasksToBeDone.Length; i++)
+        {
+            if (tasksToBeDone[i].ThisTaskState != Task.TaskState.Complete)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
-    #region Public Methods
 
     public override bool DoSubtask()
     {
-        throw new NotImplementedException();
+        if (!CheckTasks())
+        {
+            DialogueManager.Instance.DisplayDialogue(doingDialogue, null);
+            return false;
+        }
+
+        DialogueManager.Instance.DisplayDialogue(finishedDialogue, onEndEvent);
+        return true;
     }
 
     public override void StartTask()
     {
-        throw new NotImplementedException();
+        if (task == null)
+        {
+            task = GetComponent<Task>();
+        }
+
+        NPC.SetCurrentTask(this, task.CurrentSubTask == 0);
+
+        onEndEvent.AddListener(StopTask);
+
+        foreach (Task task in tasksToBeDone)
+        {
+            task.StartTask(this);
+        }
     }
 
     public override void StopTask()
     {
-        throw new NotImplementedException();
+        task.FinishCurrentSubtask();
+    }
+
+    public override bool CheckTask()
+    {
+        if (!CheckTasks())
+        {
+            // Tasks not done
+            return false;
+        }
+        NPC.SetIcon(false);
+        return true;
     }
     #endregion
 }

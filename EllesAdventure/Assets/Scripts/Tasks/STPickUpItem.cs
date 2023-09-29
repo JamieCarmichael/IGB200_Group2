@@ -14,16 +14,16 @@ public class STPickUpItem : SubTask
 
     #endregion
 
-    public STPickUpItem(Task theTask)
-    {
-        taskName = "3";
-        task = theTask;
-    }
 
     #region Public Methods
 
     public override bool DoSubtask()
     {
+        if (task == null)
+        {
+            task = GetComponent<Task>();
+        }
+
         throw new NotImplementedException();
     }
 
@@ -33,6 +33,12 @@ public class STPickUpItem : SubTask
     }
 
     public override void StopTask()
+    {
+        throw new NotImplementedException();
+    }
+
+
+    public override bool CheckTask()
     {
         throw new NotImplementedException();
     }

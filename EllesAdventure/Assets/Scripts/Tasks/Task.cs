@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine.Events;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -13,7 +14,6 @@ public class Task : MonoBehaviour
     public enum TaskState
     {
         Incactive,
-        Available,
         Active,
         Complete
     }
@@ -29,9 +29,18 @@ public class Task : MonoBehaviour
 
     public TaskState taskState = TaskState.Incactive;
 
-    public int currentSubTask = 0;
+    private int currentSubTask = 0;
 
+    [SerializeField] private Task[] nextTasks;
 
+    [SerializeField] private UnityEvent startTaskEvent;
+
+    public int CurrentSubTask { get { return currentSubTask; } }
+
+    /// <summary>
+    /// If this task is assigned by STDoOtherTask than this is that task.
+    /// </summary>
+    private STDoOtherTask owningSubtask;
     #endregion
 
     #region Properties
@@ -97,11 +106,23 @@ public class Task : MonoBehaviour
             FinishTask();
         }
 
-        taskState = TaskState.Available;
+        taskState = TaskState.Active;
         currentSubTask = 0;
 
         // Set up first subtasks (Show icon for NPC)
         subTasks[0].StartTask();
+
+        // Add this task to the task manager
+        TaskManager.Instance.AddTask(this);
+
+        startTaskEvent?.Invoke();
+    }
+
+
+    public void StartTask(STDoOtherTask sTDoOtherTask)
+    {
+        owningSubtask = sTDoOtherTask;
+        StartTask();
     }
 
     private void FinishTask()
@@ -111,6 +132,16 @@ public class Task : MonoBehaviour
         if (buildBuildingOnComplete)
         {
             HouseProgress.Instance.IncreaseProgressLevel();
+        }
+
+        foreach (Task task in nextTasks)
+        {
+            task.StartTask();
+        }
+
+        if (owningSubtask != null)
+        {
+            owningSubtask.CheckTask();
         }
     }
     #endregion

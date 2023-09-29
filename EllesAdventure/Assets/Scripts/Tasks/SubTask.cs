@@ -29,7 +29,6 @@ public abstract class SubTask : MonoBehaviour
     #endregion
 
     #region Public Methods
-
     public virtual string GetName()
     {
         return taskName;
@@ -40,5 +39,7 @@ public abstract class SubTask : MonoBehaviour
     public abstract void StartTask();
 
     public abstract void StopTask();
+
+    public abstract bool CheckTask();
     #endregion
 }

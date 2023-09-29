@@ -78,7 +78,14 @@ public class Pickup : MonoBehaviour, IIntertactable
             highlightMaterials = new Material[renderers.Length];
             for (int i = 0; i < highlightMaterials.Length; i++)
             {
-                highlightMaterials[i] = renderers[i].materials[1];
+                if (renderers[i].materials.Length >= 2)
+                {
+                    highlightMaterials[i] = renderers[i].materials[1];
+                }
+                else
+                {
+                    Debug.LogWarning(gameObject.name + " has not highlight material!");
+                }
             }
         }
     }

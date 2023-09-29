@@ -10,10 +10,9 @@ public class TaskManager : MonoBehaviour
     #region Fields
     public static TaskManager Instance { get; private set; }
 
+    [SerializeField] private List<Task> startTasks = new List<Task>();
 
-    [SerializeField] private List<Task> allTasks = new List<Task>();
-
-    private List<Task> activeTasks = new List<Task>();
+    [SerializeField] private List<Task> activeTasks = new List<Task>();
     #endregion
 
     #region Unity Call Functions
@@ -27,16 +26,23 @@ public class TaskManager : MonoBehaviour
 
         Instance = this;
 
-        // Start first task
-        StartTask(allTasks[0]);
+        // Start tasks
+        foreach (Task task in startTasks)
+        {
+            StartTask(task);
+        }
     }
     #endregion
 
     #region Public Methods
-    public void StartTask(Task newTask)
+    private void StartTask(Task newTask)
+    {
+        newTask.StartTask();
+    }
+
+    public void AddTask(Task newTask)
     {
         activeTasks.Add(newTask);
-        newTask.StartTask();
     }
 
     public string GetTaskListForNotepad()

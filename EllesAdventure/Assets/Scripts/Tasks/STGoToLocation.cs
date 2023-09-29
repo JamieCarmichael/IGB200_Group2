@@ -35,6 +35,7 @@ public class STGoToLocation : SubTask
         {
             task = GetComponent<Task>();
         }
+
         triggerLocation.SetCurrentTask(this);
         onEndEvent.AddListener(StopTask);
     }
@@ -42,6 +43,11 @@ public class STGoToLocation : SubTask
     public override void StopTask()
     {
         task.FinishCurrentSubtask();
+    }
+
+    public override bool CheckTask()
+    {
+        return false;
     }
     #endregion
 }
