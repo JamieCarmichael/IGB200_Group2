@@ -86,6 +86,7 @@ public class Profile : MonoBehaviour
     {
         ProfileStageIndex++;
         profileManager.EnableProfile(profileIndex);
+        Notepad.Instance.UpdateNotepadPrompt();
     }
     #endregion
 }
