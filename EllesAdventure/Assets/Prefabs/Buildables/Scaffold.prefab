@@ -164,24 +164,24 @@ MonoBehaviour:
   m_Positions:
   - {x: -2, y: -1, z: 1}
   - {x: 2, y: -1, z: 1}
-  - {x: -2, y: 1, z: 1}
-  - {x: 2, y: 1, z: 1}
+  - {x: -2, y: 3, z: 1}
+  - {x: 2, y: 3, z: 1}
   - {x: 2, y: -1, z: 1}
   - {x: 2, y: -1, z: -1}
-  - {x: 2, y: 1, z: 1}
-  - {x: 2, y: 1, z: -1}
+  - {x: 2, y: 3, z: 1}
+  - {x: 2, y: 3, z: -1}
   - {x: 2, y: -1, z: -1}
   - {x: -2, y: -1, z: -1}
-  - {x: 2, y: 1, z: -1}
-  - {x: -2, y: 1, z: -1}
+  - {x: 2, y: 3, z: -1}
+  - {x: -2, y: 3, z: -1}
   - {x: -2, y: -1, z: -1}
   - {x: -2, y: -1, z: 1}
-  - {x: -2, y: 1, z: -1}
-  - {x: -2, y: 1, z: 1}
-  - {x: -2, y: 1, z: 1}
-  - {x: 2, y: 1, z: 1}
-  - {x: -2, y: 1, z: -1}
-  - {x: 2, y: 1, z: -1}
+  - {x: -2, y: 3, z: -1}
+  - {x: -2, y: 3, z: 1}
+  - {x: -2, y: 3, z: 1}
+  - {x: 2, y: 3, z: 1}
+  - {x: -2, y: 3, z: -1}
+  - {x: 2, y: 3, z: -1}
   - {x: -2, y: -1, z: -1}
   - {x: 2, y: -1, z: -1}
   - {x: -2, y: -1, z: 1}
@@ -189,20 +189,20 @@ MonoBehaviour:
   m_Textures0:
   - {x: 2, y: -1}
   - {x: -2, y: -1}
-  - {x: 2, y: 1}
-  - {x: -2, y: 1}
+  - {x: 2, y: 3}
+  - {x: -2, y: 3}
   - {x: 1, y: -1}
   - {x: -1, y: -1}
-  - {x: 1, y: 1}
-  - {x: -1, y: 1}
+  - {x: 1, y: 3}
+  - {x: -1, y: 3}
   - {x: 2, y: -1}
   - {x: -2, y: -1}
-  - {x: 2, y: 1}
-  - {x: -2, y: 1}
+  - {x: 2, y: 3}
+  - {x: -2, y: 3}
   - {x: 1, y: -1}
   - {x: -1, y: -1}
-  - {x: 1, y: 1}
-  - {x: -1, y: 1}
+  - {x: 1, y: 3}
+  - {x: -1, y: 3}
   - {x: -2, y: 1}
   - {x: 2, y: 1}
   - {x: -2, y: -1}
@@ -247,7 +247,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 796
+  m_VersionIndex: 1148
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -387,6 +387,7 @@ MonoBehaviour:
   sign: {fileID: 6654095403576499701}
   cantBuildDialoge:
   - You can build this yet!
+  showPrompt: 0
   proptLocation: {fileID: 4082787371162452573}
   buildProptText: E to make building
   destroyProptText: E to return materials
