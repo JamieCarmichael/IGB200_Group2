@@ -115,17 +115,23 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
 
         #endregion
 
-        #region Private Methods
-        /// <summary>
-        /// Makes the current lot of dialoge and shows it with the dialogue manager.
-        /// </summary>
-        private void MakeDialogue()
+    #region Private Methods
+    /// <summary>
+    /// Makes the current lot of dialoge and shows it with the dialogue manager.
+    /// </summary>
+    private void MakeDialogue()
     {
+        SubTask startOfMethodTask = currentTask;
         if (currentTask != null)
         {
             if (currentTask.DoSubtask())
             {
-                currentTask = null;
+                // If the current task is the task from the start of the method then remove it.
+                // This is because the task may be replaced when doing the task.
+                if (currentTask == startOfMethodTask)
+                {
+                    currentTask = null;
+                }
                 icon.HideIcon();
             }
         }
