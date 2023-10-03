@@ -796,7 +796,7 @@ GameObject:
   - component: {fileID: 3411137431029356285}
   - component: {fileID: 6734149531088186509}
   m_Layer: 7
-  m_Name: Gate
+  m_Name: GateR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -829,7 +829,7 @@ Animator:
   m_GameObject: {fileID: 7924682018057508865}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 2437e984b2be9384ab863465715f1df3, type: 2}
+  m_Controller: {fileID: 9100000, guid: 0853dd18b97ef4146b2aef46fc913880, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -852,12 +852,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 715c8a031ef8aa945a460decdaa77d81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactAminationString: ellePickUp
+  interactAminationString: 
   intertactable: 0
-  openTime: 1
-  afterOpenEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  isOpen: 0
   proptLocation: {fileID: 4602905431483851756}
   proptText: E to open
   highlight: 0

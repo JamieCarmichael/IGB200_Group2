@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -44,6 +43,7 @@ public class Switch : MonoBehaviour, IIntertactable
     [Tooltip("The event called after the lever had been used.")]
     [SerializeField] private UnityEvent afterLeverEvent;
 
+    [SerializeField] bool isOpen = true;
 
     [Header("Text Prompt")]
     [Tooltip("The transform of the object that the text prompt will apear over.")]
@@ -56,12 +56,19 @@ public class Switch : MonoBehaviour, IIntertactable
     // Object renderers to have highlight applied.
     private Renderer[] renderers;
     private Material[] highlightMaterials;
+
+    private Animator animator;
+
+    private bool isMoving = false;
     #endregion
 
     #region Unity Call Functions
     private void Start()
     {
         thisCollider = gameObject.GetComponent<Collider>();
+        animator = GetComponent<Animator>();
+
+        animator.SetBool("Open", isOpen);
 
         if (highlight)
         {
@@ -78,12 +85,19 @@ public class Switch : MonoBehaviour, IIntertactable
     #region IIntertactable
     public void Interact(string item)
     {
-        gameObject.GetComponent<Animator>().SetTrigger("Open");
+        if (isMoving)
+        {
+            return;
+        }
+        isOpen = !isOpen;
+        animator.SetBool("Open", isOpen);
         Invoke("AfterLever", openTime);
+        isMoving = true;
     }
 
     private void AfterLever()
     {
+        isMoving = false;
         afterLeverEvent.Invoke();
     }
 

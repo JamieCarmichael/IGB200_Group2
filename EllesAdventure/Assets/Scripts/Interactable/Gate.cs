@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -31,12 +30,9 @@ public class Gate : MonoBehaviour, IIntertactable
     }
 
     [Tooltip("If true this object can be interacted with.")]
-    [SerializeField] private bool intertactable = false; 
-    [Tooltip("The is how long the gate takes to open. After this time the after open event runs.")]
-    [SerializeField] private float openTime = 1.0f;
-    [Tooltip("This event is called after the gate has finished opening.")]
-    [SerializeField] private UnityEvent afterOpenEvent;
+    [SerializeField] private bool intertactable = false;
 
+    [SerializeField] bool isOpen = false;
 
     [Header("Text Prompt")]
     [Tooltip("The transform of the object that the text prompt will apear over.")]
@@ -49,12 +45,15 @@ public class Gate : MonoBehaviour, IIntertactable
     // Object renderers to have highlight applied.
     private Renderer[] renderers;
     private Material[] highlightMaterials;
+
+    private Animator animator;
     #endregion
 
     #region Unity Call Functions
     private void Start()
     {
         thisCollider = gameObject.GetComponent<Collider>();
+        animator = GetComponent<Animator>();
 
         if (highlight)
         {
@@ -65,6 +64,15 @@ public class Gate : MonoBehaviour, IIntertactable
                 highlightMaterials[i] = renderers[i].materials[1];
             }
         }
+
+        if (isOpen)
+        {
+            OpenGate();
+        }
+        else
+        {
+            CloseGate();
+        }
     }
     #endregion
 
@@ -74,24 +82,32 @@ public class Gate : MonoBehaviour, IIntertactable
     /// </summary>
     public void OpenGate()
     {
-        gameObject.GetComponent<Animator>().SetTrigger("Open");
-        Invoke("AfterOpenGate", openTime);
-        this.enabled = false;
+        animator.SetBool("Open", true);
+        isOpen = true;
     }
-
-    /// <summary>
-    /// This is invoked after the gate has finished opening.
-    /// </summary>
-    private void AfterOpenGate()
+    public void CloseGate()
     {
-        afterOpenEvent.Invoke();
+        animator.SetBool("Open", false);
+        isOpen = false;
+    }
+    public void ToggleOpen()
+    {
+        isOpen = !isOpen;
+        if (isOpen)
+        {
+            OpenGate();
+        }
+        else
+        {
+            CloseGate();
+        }
     }
     #endregion
 
     #region IIntertactable
     public void Interact(string item)
     {
-        OpenGate();
+        ToggleOpen();
     }
 
     public void LookAt()
