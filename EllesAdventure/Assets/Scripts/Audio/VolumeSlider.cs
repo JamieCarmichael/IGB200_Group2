@@ -9,6 +9,9 @@ using UnityEngine.UI;
 public class VolumeSlider : MonoBehaviour 
 {
     #region Fields
+    [Range(0,1)]
+    [SerializeField] float defaultValue = 0.7f;
+
     [Tooltip("This is the audio mixer being used in to set the volume.")]
     [SerializeField] AudioMixer audioMixer;
     [Tooltip("This is the volume parameter that is being changed.")]
@@ -33,7 +36,7 @@ public class VolumeSlider : MonoBehaviour
     {
         slider.onValueChanged.AddListener(HandleSliderValue);
         //Loads the value so that it is the same as the last time the game was played.
-        float volumeValue = PlayerPrefs.GetFloat(volumeParameter, 0.5f);
+        float volumeValue = PlayerPrefs.GetFloat(volumeParameter, defaultValue);
         slider.value = volumeValue;
         HandleSliderValue(volumeValue);
     }

@@ -43,17 +43,22 @@ public class BuildPosition : MonoBehaviour, IIntertactable
     [SerializeField] private string[] cantBuildDialoge = new string[1] { "You can build this yet!" };
 
 
+    [Header("Effects")]
+    [SerializeField] private Effect onBuildEffect;
+    [SerializeField] private Effect onDestroyEffect;
+    [SerializeField] private Effect onAddMaterialEffect;
+
     [Header("Text Prompt")]
     [Tooltip("If true prompts are shown.")]
     [SerializeField] private bool showPrompt = false;
     [Tooltip("The transform of the object that the text prompt will apear over.")]
     [SerializeField] private Transform proptLocation;
-    [Tooltip("The text displayed in the text prompt when the building is ready to be built.")]
-    [SerializeField] private string buildProptText;
+    //[Tooltip("The text displayed in the text prompt when the building is ready to be built.")]
+    //[SerializeField] private string buildProptText;
     [Tooltip("The text displayed in the text prompt when the building can be destroyed.")]
     [SerializeField] private string destroyProptText;
-    [Tooltip("The text displayed in the text prompt when materials can be added.")]
-    [SerializeField] private string addProptText;
+    //[Tooltip("The text displayed in the text prompt when materials can be added.")]
+    //[SerializeField] private string addProptText;
     #endregion
 
     #region Unity Call Functions
@@ -145,6 +150,15 @@ public class BuildPosition : MonoBehaviour, IIntertactable
         isBuilt = false;
         materialsRequired = (BuildingSign.ItemDetails[])buildingMaterial.Clone();
 
+        // Only make effect if items have been added.
+        if (itemsUsed.Count > 0 )
+        {
+            if (onDestroyEffect != null)
+            {
+                onDestroyEffect.PlayEffect();
+            }
+        }
+
         foreach (Pickup item in itemsUsed)
         {
             item.ReturnToStart();
@@ -180,10 +194,16 @@ public class BuildPosition : MonoBehaviour, IIntertactable
         Vector3 BL = b.min;
         Vector3 TR = b.max;
 
+        // Player is standing at a higher level than the building.
+        if (playerPos.y > TR.y)
+        {
+            return true;
+        }
         if (playerPos.x < BL.x || playerPos.x > TR.x || playerPos.z < BL.z || playerPos.z > TR.z)
         {
             return false;
         }
+
         return true;
     }
     #endregion
@@ -232,11 +252,19 @@ public class BuildPosition : MonoBehaviour, IIntertactable
 
         if (CheckIfBuildingHasAllMaterials())
         {
+            if (onBuildEffect != null)
+            {
+                onBuildEffect.PlayEffect();
+            }
             MakeBuilding();
             return;
         }
         if (UseItem(item))
         {
+            if (onAddMaterialEffect != null)
+            {
+                onAddMaterialEffect.PlayEffect();
+            }
 
             // Update visual
             DisplayMaterialRequired();
@@ -267,18 +295,26 @@ public class BuildPosition : MonoBehaviour, IIntertactable
                 return;
             }
 
-            if (CheckIfBuildingHasAllMaterials())
+            //if (CheckIfBuildingHasAllMaterials())
+            //{
+            //    UIManager.Instance.TextPrompt.DisplayPrompt(proptLocation.position, buildProptText);
+            //    return;
+            //}
+            //if (PlayerManager.Instance.PlayerInteract.HeldItem != "")
+            //{
+            //    UIManager.Instance.TextPrompt.DisplayPrompt(proptLocation.position, addProptText);
+            //    return;
+            //}
+
+            // If some materials are delivered but not all materials.
+            if (itemsUsed.Count > 0 && !CheckIfBuildingHasAllMaterials())
             {
-                UIManager.Instance.TextPrompt.DisplayPrompt(proptLocation.position, buildProptText);
-                return;
-            }
-            if (PlayerManager.Instance.PlayerInteract.HeldItem != "")
-            {
-                UIManager.Instance.TextPrompt.DisplayPrompt(proptLocation.position, addProptText);
+                UIManager.Instance.TextPrompt.DisplayPrompt(proptLocation.position, destroyProptText);
                 return;
             }
 
-            UIManager.Instance.TextPrompt.DisplayPrompt(proptLocation.position, destroyProptText);
+
+            StopLookAt();
         }
     }
 

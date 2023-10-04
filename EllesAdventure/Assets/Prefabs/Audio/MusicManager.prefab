@@ -45,9 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03cb215c0e8d32c488c1e6a5a5a642af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenuMusic: []
-  inGameMusic: []
-  randomClip: 0
+  mainMenuMusic:
+  - {fileID: 8300000, guid: 4d91170a24e5ff940a1b5e1b872c6cdd, type: 3}
+  inGameMusic:
+  - {fileID: 8300000, guid: 4d91170a24e5ff940a1b5e1b872c6cdd, type: 3}
+  randomClip: 1
   finishSongBeforeChangeMusic: 1
 --- !u!82 &86214428200514158
 AudioSource:

@@ -123,12 +123,22 @@ public class PlayerMovement : MonoBehaviour
     /// If true the player moves normally.
     /// </summary>
     private bool canMove = true;
+
+    [Header("Audio")]
+    private AudioSource audioSource;
+
+    [SerializeField] private AudioClip walkingSound;
+
+    [SerializeField] private AnimationCurve pitchChange;
+    [SerializeField] private float pitchChangeTime;
+    private float pitchTimer = 0.0f;
     #endregion
 
     #region Unity Call Methods
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
+        audioSource = GetComponent<AudioSource>();
 
         fromDirection = transform.forward;
         toDirection = transform.forward;
@@ -160,6 +170,26 @@ public class PlayerMovement : MonoBehaviour
             characterController.Move(new Vector3(movementVector.x, movementVector.y + verticalVelocity, movementVector.z) * Time.deltaTime);
 
             CheckWithinPlayArea();
+        }
+
+        audioSource.pitch = pitchChange.Evaluate(pitchTimer / pitchChangeTime);
+        pitchTimer += Time.deltaTime;
+        while (pitchTimer > pitchChangeTime)
+        {
+            pitchTimer -= pitchChangeTime;
+        }
+        if (animator.GetBool(animMove))
+        {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+            audioSource.UnPause();
+            audioSource.clip = walkingSound;
+        }
+        else
+        {
+            audioSource.Pause();
         }
     }
     #endregion

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -51,6 +52,8 @@ public class Pickup : MonoBehaviour, IIntertactable
 
     public string ItemIdentifier { get { return itemIdentifier; } }
 
+    [SerializeField] private Effect putDownEffect;
+
     [Header("Text Prompt")]
     [Tooltip("The transform of the object that the text prompt will apear over.")]
     [SerializeField] private Transform proptLocation;
@@ -61,7 +64,7 @@ public class Pickup : MonoBehaviour, IIntertactable
 
     // Object renderers to have highlight applied.
     private Renderer[] renderers;
-    private Material[] highlightMaterials;
+    private List<Material> highlightMaterials;
 
     #endregion
 
@@ -74,16 +77,12 @@ public class Pickup : MonoBehaviour, IIntertactable
         if (highlight)
         {
             renderers = GetComponentsInChildren<Renderer>();
-            highlightMaterials = new Material[renderers.Length];
-            for (int i = 0; i < highlightMaterials.Length; i++)
+            highlightMaterials = new List<Material>();
+            for (int i = 0; i < renderers.Length; i++)
             {
                 if (renderers[i].materials.Length >= 2)
                 {
-                    highlightMaterials[i] = renderers[i].materials[1];
-                }
-                else
-                {
-                    Debug.LogWarning(gameObject.name + " has not highlight material!");
+                    highlightMaterials.Add(renderers[i].materials[1]);
                 }
             }
         }
@@ -96,6 +95,11 @@ public class Pickup : MonoBehaviour, IIntertactable
         isHeld = false;
         transform.parent = null;
         transform.position = newPos;
+        
+        if (putDownEffect != null)
+        {
+            putDownEffect.PlayEffect();  
+        }
     }
 
     public void Use()
@@ -137,7 +141,7 @@ public class Pickup : MonoBehaviour, IIntertactable
 
             if (highlight)
             {
-                for (int i = 0; i < highlightMaterials.Length; i++)
+                for (int i = 0; i < highlightMaterials.Count; i++)
                 {
                     highlightMaterials[i].SetFloat("_alpha", 1);
                 }
@@ -154,7 +158,7 @@ public class Pickup : MonoBehaviour, IIntertactable
         UIManager.Instance.TextPrompt.HidePrompt();
         if (highlight)
         {
-            for (int i = 0; i < highlightMaterials.Length; i++)
+            for (int i = 0; i < highlightMaterials.Count; i++)
             {
                 highlightMaterials[i].SetFloat("_alpha", 0);
             }

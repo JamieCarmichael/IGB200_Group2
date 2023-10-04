@@ -53,6 +53,14 @@ public class PlayerMovementLadder : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private string animGoToLadder = "";
     [SerializeField] private string animClimbLadder = "";
+
+    [Header("Audio")]
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip climbingSound;
+
+    [SerializeField] private AnimationCurve pitchChange;
+    [SerializeField] private float pitchChangeTime;
+    private float pitchTimer = 0.0f;
     #endregion
 
     #region Unity Call Functions
@@ -62,10 +70,22 @@ public class PlayerMovementLadder : MonoBehaviour
         {
             ClimbLadder();
         }
+
+
+        audioSource.pitch = pitchChange.Evaluate(pitchTimer / pitchChangeTime);
+        pitchTimer += Time.deltaTime;
+        while (pitchTimer > pitchChangeTime)
+        {
+            pitchTimer -= pitchChangeTime;
+        }
     }
     private void OnEnable()
     {
         InputManager.Instance.PlayerInput.InGame.Interact.performed += DetachFromLadder;
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
     }
     private void OnDisable()
     {
@@ -134,6 +154,21 @@ public class PlayerMovementLadder : MonoBehaviour
                 DetachFromLadder();
             }
         }
+
+
+        if (moveInput != Vector2.zero)
+        {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+            audioSource.UnPause();
+            audioSource.clip = climbingSound;
+        }
+        else
+        {
+            audioSource.Pause();
+        }
     }
     /// <summary>
     /// Get off the top of the ladder.
@@ -159,6 +194,7 @@ public class PlayerMovementLadder : MonoBehaviour
         {
             animator.SetBool(animClimbLadder, false);
         }
+
         PlayerManager.Instance.StandardMovement();
     }
     /// <summary>
@@ -244,6 +280,7 @@ public class PlayerMovementLadder : MonoBehaviour
         {
             animator.SetBool(animClimbLadder, true);
         }
+
         inputAccepted = true;
     }
 
@@ -277,6 +314,7 @@ public class PlayerMovementLadder : MonoBehaviour
         {
             animator.SetBool(animClimbLadder, true);
         }
+
         inputAccepted = true;
     }
 

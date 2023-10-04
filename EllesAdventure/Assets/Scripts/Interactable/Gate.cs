@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -34,6 +35,9 @@ public class Gate : MonoBehaviour, IIntertactable
 
     [SerializeField] bool isOpen = false;
 
+
+    [SerializeField] private Effect onMoveEffect;
+
     [Header("Text Prompt")]
     [Tooltip("The transform of the object that the text prompt will apear over.")]
     [SerializeField] private Transform proptLocation;
@@ -67,11 +71,11 @@ public class Gate : MonoBehaviour, IIntertactable
 
         if (isOpen)
         {
-            OpenGate();
+            OpenGate(false);
         }
         else
         {
-            CloseGate();
+            CloseGate(false);
         }
     }
     #endregion
@@ -82,11 +86,37 @@ public class Gate : MonoBehaviour, IIntertactable
     /// </summary>
     public void OpenGate()
     {
+        if (onMoveEffect != null)
+        {
+            onMoveEffect.PlayEffect();
+        }
+        animator.SetBool("Open", true);
+        isOpen = true;
+    }
+    public void OpenGate(bool playEffect)
+    {
+        if (playEffect && onMoveEffect != null)
+        {
+            onMoveEffect.PlayEffect();
+        }
         animator.SetBool("Open", true);
         isOpen = true;
     }
     public void CloseGate()
     {
+        if (onMoveEffect != null)
+        {
+            onMoveEffect.PlayEffect();
+        }
+        animator.SetBool("Open", false);
+        isOpen = false;
+    }
+    public void CloseGate(bool playEffect)
+    {
+        if (playEffect && onMoveEffect != null)
+        {
+            onMoveEffect.PlayEffect();
+        }
         animator.SetBool("Open", false);
         isOpen = false;
     }
