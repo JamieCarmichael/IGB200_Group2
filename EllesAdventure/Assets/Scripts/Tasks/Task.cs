@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.Rendering.VolumeComponent;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -56,8 +57,8 @@ public class Task : MonoBehaviour
         }
 
         taskDescription += taskName;
-        taskDescription += "\n\t";
-        taskDescription += subTasks[currentSubTask].GetName();
+        taskDescription += "\n";
+        taskDescription += "<indent=15%>" + subTasks[currentSubTask].GetName() + "</indent>";
         // Add name of current subtask
 
         if (taskState == TaskState.Complete)
@@ -85,6 +86,8 @@ public class Task : MonoBehaviour
 
     public void FinishCurrentSubtask()
     {
+        Notepad.Instance.UpdateNotepadPrompt();
+
         currentSubTask++;
         // If not more sub stasks left then task is complete
         if (currentSubTask >= subTasks.Length)

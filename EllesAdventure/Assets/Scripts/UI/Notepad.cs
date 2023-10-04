@@ -68,6 +68,10 @@ public class Notepad : MonoBehaviour
     [SerializeField] private float promptFullVisabilityTime = 1.0f;
     [Tooltip("How many second it will take for the prompt to got from full visability to not visable.")]
     [SerializeField] private float promtFadeTime = 1.0f;
+
+    [Header("Audio")]
+    [SerializeField] private Effect.Sound updateNotepadSound;
+    private AudioSource audioSource;
     #endregion
 
     #region Unity Call Functions
@@ -80,6 +84,8 @@ public class Notepad : MonoBehaviour
         }
 
         Instance = this;
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void OnEnable()
@@ -277,6 +283,8 @@ public class Notepad : MonoBehaviour
     public void UpdateNotepadPrompt()
     {
         UIManager.Instance.Prompt.StartPrompt(notepadUpdateSprite, promptFullVisabilityTime, promtFadeTime);
+        audioSource.PlayOneShot(updateNotepadSound.clip, updateNotepadSound.volume);
+
     }
     #endregion
 }

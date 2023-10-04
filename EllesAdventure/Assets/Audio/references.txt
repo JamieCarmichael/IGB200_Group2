@@ -12,7 +12,15 @@ Drop Wood:
 https://www.zapsplat.com/music/1x4-plank-of-wood-drop-or-set-down-20/
 Gate:
 https://www.zapsplat.com/music/large-metal-gate-squeaky-short-movement-1/
+
+Player:
 Walking:
 https://www.zapsplat.com/music/flip-flops-walking-on-gritty-garage-floor/
 Ladder:
 https://www.zapsplat.com/music/footsteps-climbing-metal-stepladder-1/
+
+UI:
+Notepad
+https://www.zapsplat.com/music/game-tone-win-chime-4/
+Button:
+https://www.zapsplat.com/music/game-tone-sci-fi-button-select-or-menu-sound-3/
