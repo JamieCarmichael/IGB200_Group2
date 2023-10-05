@@ -86,7 +86,7 @@ public class Task : MonoBehaviour
 
     public void FinishCurrentSubtask()
     {
-        Notepad.Instance.UpdateNotepadPrompt();
+        Notepad.Instance.UpdateNotepadPrompt(Notepad.Pages.Tasks);
 
         currentSubTask++;
         // If not more sub stasks left then task is complete

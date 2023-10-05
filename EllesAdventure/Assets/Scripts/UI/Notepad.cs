@@ -280,8 +280,9 @@ public class Notepad : MonoBehaviour
         }
     }
 
-    public void UpdateNotepadPrompt()
+    public void UpdateNotepadPrompt(Pages newPage)
     {
+        page = newPage;
         UIManager.Instance.Prompt.StartPrompt(notepadUpdateSprite, promptFullVisabilityTime, promtFadeTime);
         audioSource.PlayOneShot(updateNotepadSound.clip, updateNotepadSound.volume);
 
