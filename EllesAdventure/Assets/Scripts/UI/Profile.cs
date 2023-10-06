@@ -11,7 +11,9 @@ public class Profile : MonoBehaviour
     public struct ProfileInfo
     {
         public string name;
+        [TextArea]
         public string bio;
+        [TextArea]
         public string details;
         public Sprite image;
     }
