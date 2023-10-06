@@ -567,7 +567,7 @@ MonoBehaviour:
   interactAminationString: 
   sign: {fileID: 6284075344062333785}
   cantBuildDialoge:
-  - You can build this yet!
+  - Not sure I can use this yet...
   onBuildEffect: {fileID: 935405128481527678}
   onDestroyEffect: {fileID: 2033175979288693590}
   onAddMaterialEffect: {fileID: 7808917931044883137}
