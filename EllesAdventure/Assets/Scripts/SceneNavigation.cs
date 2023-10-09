@@ -32,14 +32,22 @@ public class SceneNavigation : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         SceneManager.LoadSceneAsync(newScene, LoadSceneMode.Single);
+
+        GatherTestData.Instance.AddLineWithClockTime($"Change scene to: {newScene} : ");
+        GatherTestData.Instance.ResetGameTimer();
     }
 
     public void ReloadScene()
     {
+        string sceneName = SceneManager.GetActiveScene().name;
+
         Time.timeScale = 1.0f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+
+        GatherTestData.Instance.AddLineWithClockTime($"Change scene to: {sceneName} : ");
+        GatherTestData.Instance.ResetGameTimer();
     }
 
     public void Quit()
