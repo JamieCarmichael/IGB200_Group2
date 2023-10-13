@@ -32,6 +32,9 @@ public class SceneNavigation : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         SceneManager.LoadSceneAsync(newScene, LoadSceneMode.Single);
+
+        GatherTestData.Instance.AddLineWithClockTime($"Change scene to: {newScene} : ");
+        GatherTestData.Instance.ResetGameTimer();
     }
 
     public void ReloadScene()
@@ -42,6 +45,9 @@ public class SceneNavigation : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+
+        GatherTestData.Instance.AddLineWithClockTime($"Change scene to: {sceneName} : ");
+        GatherTestData.Instance.ResetGameTimer();
     }
 
     public void Quit()

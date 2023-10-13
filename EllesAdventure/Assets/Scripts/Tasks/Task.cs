@@ -85,6 +85,8 @@ public class Task : MonoBehaviour
 
     public void FinishCurrentSubtask()
     {
+        GatherTestData.Instance.AddLineWithGameTime("Finish subtask: " + taskName + " - " + subTasks[currentSubTask].GetName());
+
         Notepad.Instance.UpdateNotepadPrompt(Notepad.Pages.Tasks);
 
         currentSubTask++;
@@ -100,6 +102,8 @@ public class Task : MonoBehaviour
 
     public void StartTask()
     {
+        GatherTestData.Instance.AddLineWithGameTime("Start task: " + taskName);
+
         subTasks = GetComponents<SubTask>();
         if (subTasks.Length < 0) 
         {
@@ -128,6 +132,8 @@ public class Task : MonoBehaviour
 
     private void FinishTask()
     {
+        GatherTestData.Instance.AddLineWithGameTime("Finish task: " + taskName);
+
         taskState = TaskState.Complete;
 
         if (buildBuildingOnComplete)
