@@ -37,10 +37,8 @@ public class BuildPosition : MonoBehaviour, IIntertactable
 
     private List<Pickup> itemsUsed = new List<Pickup>();
 
-
-    [TextArea]
     [Tooltip("The dialoge when the trigger is activated")]
-    [SerializeField] private string[] cantBuildDialoge = new string[1] { "You can build this yet!" };
+    [SerializeField] private DialogueManager.DialogueSequence cantBuildDialogeSequence;
 
 
     [Header("Effects")]
@@ -241,7 +239,7 @@ public class BuildPosition : MonoBehaviour, IIntertactable
         // Cant make this building.
         if (!PlayerManager.Instance.PlayerInteract.CanMakeBuidlingType(buildingType))
         {
-            DialogueManager.Instance.DisplayDialogue(cantBuildDialoge);
+            DialogueManager.Instance.DisplayDialogue(cantBuildDialogeSequence);
             return;
         }
         if (isBuilt)

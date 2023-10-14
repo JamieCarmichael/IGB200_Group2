@@ -8,13 +8,6 @@ using UnityEngine;
 /// </summary>
 public class TalkToNPC : MonoBehaviour, IIntertactable
 {
-    [Serializable]
-    struct DialogueOption
-    {
-        [TextArea]
-        public string[] dialogueOptions;
-    }
-
     #region Fields
     [SerializeField] private Profile profile;
 
@@ -44,8 +37,10 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
     }
 
     private bool intertactable = true;
+
     [Tooltip("A list of all dialogue options. The first one is the start dialogue others can be used as the situation changes.")]
-    [SerializeField] private DialogueOption[] dialogueOptions;
+    [SerializeField] private DialogueManager.DialogueSequence[] dialogueSequences;
+
 
     private int currentDialogueOption = 0;
 
@@ -137,7 +132,7 @@ public class TalkToNPC : MonoBehaviour, IIntertactable
         }
         else
         {
-            DialogueManager.Instance.DisplayDialogue(dialogueOptions[currentDialogueOption].dialogueOptions, profile.CurrentProfile.name, profile.CurrentProfile.image);
+            DialogueManager.Instance.DisplayDialogue(dialogueSequences[currentDialogueOption], profile.CurrentProfile.name, profile.CurrentProfile.image);
         }
     }
 

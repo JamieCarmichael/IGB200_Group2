@@ -17,25 +17,23 @@ public class STDeliverItemToNPC : SubTask
     }
 
     #region Fields
-    [SerializeField] private bool hasItem = false;
+    private bool hasItem = false;
 
+    [Tooltip("The name of the task displayued in the Notepad when the item being retrieved is held.")]
     [SerializeField] private string getItemTaskName;
 
     [SerializeField] private NumberOfItems[] itemsNeeded;
 
     [SerializeField] private TalkToNPC NPC;
 
-    [TextArea]
-    [Tooltip("")]
-    [SerializeField] private string[] deliverItemDialogue;
+    [Tooltip("The dialogue displayed when an item is delivered if it is not the last item.")]
+    [SerializeField] private DialogueManager.DialogueSequence deliverItemDialogueSequence;
 
-    [TextArea]
-    [Tooltip("")]
-    [SerializeField] private string[] noItemDialogue;
+    [Tooltip("The dialogue displayed when a desired item is not held.")]
+    [SerializeField] private DialogueManager.DialogueSequence noItemDialogueSequence;
 
-    [TextArea]
-    [Tooltip("")]
-    [SerializeField] private string[] lastItemDialogue;
+    [Tooltip("The dialogue displayed when the item delivered is the last item needed for the task.")]
+    [SerializeField] private DialogueManager.DialogueSequence lastItemDialogueSequence;
     #endregion
 
 
@@ -58,17 +56,17 @@ public class STDeliverItemToNPC : SubTask
         if (!DeliverItem(PlayerManager.Instance.PlayerInteract.HeldItem))
         {
             // No item delivered.
-            DialogueManager.Instance.DisplayDialogue(noItemDialogue, NPC.ThisProfile.CurrentProfile.name, NPC.ThisProfile.CurrentProfile.image);
+            DialogueManager.Instance.DisplayDialogue(noItemDialogueSequence, NPC.ThisProfile.CurrentProfile.name, NPC.ThisProfile.CurrentProfile.image);
             return false;
         }
         if (!CheckIfItemsAreDelivered())
         {
             // Item delivered.
-            DialogueManager.Instance.DisplayDialogue(deliverItemDialogue, NPC.ThisProfile.CurrentProfile.name, NPC.ThisProfile.CurrentProfile.image);
+            DialogueManager.Instance.DisplayDialogue(deliverItemDialogueSequence, NPC.ThisProfile.CurrentProfile.name, NPC.ThisProfile.CurrentProfile.image);
             return false;
         }
         // Last item delivered.
-        DialogueManager.Instance.DisplayDialogue(lastItemDialogue, NPC.ThisProfile.CurrentProfile.name, NPC.ThisProfile.CurrentProfile.image, onEndEvent);
+        DialogueManager.Instance.DisplayDialogue(lastItemDialogueSequence, NPC.ThisProfile.CurrentProfile.name, NPC.ThisProfile.CurrentProfile.image, onEndEvent);
 
         return true;
     }

@@ -892,6 +892,7 @@ MonoBehaviour:
   textField: {fileID: 4462864591481299137}
   nameTextField: {fileID: 910578269182088298}
   talkerImage: {fileID: 7283356476903357224}
+  continePrompt: {fileID: 8828316433870170046}
 --- !u!1 &1193014982616455554
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,12 +12,11 @@ public class STDoOtherTask : SubTask
     #region Fields
     [SerializeField] private TalkToNPC NPC;
 
-    [TextArea]
     [Tooltip("")]
-    [SerializeField] private string[] doingDialogue;
-    [TextArea]
+    [SerializeField] private DialogueManager.DialogueSequence doingDialogueSequence;
+
     [Tooltip("")]
-    [SerializeField] private string[] finishedDialogue;
+    [SerializeField] private DialogueManager.DialogueSequence finishedDialogueSequence;
 
     [SerializeField] private Task[] tasksToBeDone;
     #endregion
@@ -40,12 +39,12 @@ public class STDoOtherTask : SubTask
     {
         if (!CheckTasks())
         {
-            DialogueManager.Instance.DisplayDialogue(doingDialogue, NPC.ThisProfile.CurrentProfile.name, NPC.ThisProfile.CurrentProfile.image);
+            DialogueManager.Instance.DisplayDialogue(doingDialogueSequence, NPC.ThisProfile.CurrentProfile.name, NPC.ThisProfile.CurrentProfile.image);
             return false;
         }
 
         //NPC.SetIcon(false);
-        DialogueManager.Instance.DisplayDialogue(finishedDialogue, NPC.ThisProfile.CurrentProfile.name, NPC.ThisProfile.CurrentProfile.image, onEndEvent);
+        DialogueManager.Instance.DisplayDialogue(finishedDialogueSequence, NPC.ThisProfile.CurrentProfile.name, NPC.ThisProfile.CurrentProfile.image, onEndEvent);
         return true;
     }
 

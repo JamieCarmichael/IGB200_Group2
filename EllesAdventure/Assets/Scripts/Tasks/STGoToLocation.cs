@@ -12,9 +12,8 @@ public class STGoToLocation : SubTask
     #region Fields
     [SerializeField] private PlayerTriggerLocation triggerLocation;
 
-    [TextArea]
     [Tooltip("The dialoge when the trigger is activated")]
-    [SerializeField] private string[] dialogue;
+    [SerializeField] private DialogueManager.DialogueSequence dialogueSequence;
 
     #endregion
 
@@ -23,7 +22,7 @@ public class STGoToLocation : SubTask
 
     public override bool DoSubtask()
     {
-        DialogueManager.Instance.DisplayDialogue(dialogue, onEndEvent);
+        DialogueManager.Instance.DisplayDialogue(dialogueSequence, onEndEvent);
 
         return true;
     }

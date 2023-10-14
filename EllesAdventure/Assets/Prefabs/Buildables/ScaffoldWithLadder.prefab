@@ -568,6 +568,11 @@ MonoBehaviour:
   sign: {fileID: 6284075344062333785}
   cantBuildDialoge:
   - Not sure I can use this yet...
+  cantBuildDialogeSequence:
+    dialogueItems:
+    - dialogue: Not sure I can use this yet...
+      lookCamera: {fileID: 0}
+      dialogueLockTime: 0
   onBuildEffect: {fileID: 935405128481527678}
   onDestroyEffect: {fileID: 2033175979288693590}
   onAddMaterialEffect: {fileID: 7808917931044883137}

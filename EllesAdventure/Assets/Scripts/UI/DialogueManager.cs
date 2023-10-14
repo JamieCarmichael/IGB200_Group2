@@ -3,13 +3,33 @@ using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using System;
+using Cinemachine;
+using System.Collections;
 
 /// <summary>
 /// Made By: Jamie Carmichael
 /// Details: Displays dialogue text on screen.
 /// </summary>
-public class DialogueManager : MonoBehaviour 
+public class DialogueManager : MonoBehaviour
 {
+    [Serializable]
+    public struct DialogueSequence
+    {
+        public DialogueItem[] dialogueItems;
+    }
+
+    [Serializable]
+    public struct DialogueItem
+    {
+        [TextArea]
+        public string dialogue;
+        [Tooltip("If a cinemachine virtual camera is put in here the camera will change to use this virtual camera during the dialogue.")]
+        public CinemachineVirtualCamera lookCamera;
+        [Tooltip("The player will not be able to continue the dialogue for this period of time (seconds).")]
+        public float dialogueLockTime;
+    }
+
     #region Fields
     public static DialogueManager Instance { get; private set; }
 
@@ -22,14 +42,16 @@ public class DialogueManager : MonoBehaviour
     [Tooltip("The image that the NPC talkings image is displayed in.")]
     [SerializeField] private Image talkerImage;
 
+    [SerializeField] private GameObject continePrompt;
+
     /// <summary>
     /// True if there is dialogue being displayed.
     /// </summary>
     private bool dialogueDisplayed = false;
     /// <summary>
-    /// The current dialogue object.
+    /// The current dialogue sequence.
     /// </summary>
-    private string[] currentDialogue;
+    private DialogueSequence currentDialogueSequence;
     /// <summary>
     /// The name of the NPC currently talking.
     /// </summary>
@@ -41,7 +63,7 @@ public class DialogueManager : MonoBehaviour
     /// <summary>
     /// The index of the next dialogue to be displayed.
     /// </summary>
-    private int dialogueIndex = 0; 
+    private int dialogueIndex = 0;
 
     /// <summary>
     /// The players movement script.
@@ -53,6 +75,9 @@ public class DialogueManager : MonoBehaviour
     private PlayerInteract playerInteract;
 
     private UnityEvent onFinishDialogueEvent;
+
+    private bool isWaiting = false;
+    private CinemachineVirtualCamera currentCamera;
     #endregion
 
     #region Unity Call Functions
@@ -76,18 +101,18 @@ public class DialogueManager : MonoBehaviour
     /// Show the dialogue object.
     /// </summary>
     /// <param name="newDialogue"></param>
-    public void DisplayDialogue(string[] newDialogue)
+    public void DisplayDialogue(DialogueSequence newDialogue)
     {
         if (dialogueDisplayed)
         {
             return;
         }
-        if (newDialogue.Length == 0)
+        if (newDialogue.dialogueItems.Length == 0)
         {
             return;
         }
 
-        currentDialogue = newDialogue;
+        currentDialogueSequence = newDialogue;
         talkerName = null;
         talkerSprite = null;
 
@@ -102,18 +127,19 @@ public class DialogueManager : MonoBehaviour
         InputManager.Instance.PlayerInput.InGame.Interact.performed += NextDialogue;
     }
 
-    public void DisplayDialogue(string[] newDialogue, string newTalkerName, Sprite newTalkerSprite)
+    public void DisplayDialogue(DialogueSequence newDialogue, string newTalkerName, Sprite newTalkerSprite)
     {
         if (dialogueDisplayed)
         {
             return;
         }
-        if (newDialogue.Length == 0)
+        if (newDialogue.dialogueItems.Length == 0)
         {
             return;
         }
 
-        currentDialogue = newDialogue;
+        currentDialogueSequence = newDialogue;
+
         talkerName = newTalkerName;
         talkerSprite = newTalkerSprite;
 
@@ -128,13 +154,12 @@ public class DialogueManager : MonoBehaviour
         InputManager.Instance.PlayerInput.InGame.Interact.performed += NextDialogue;
     }
 
-
     /// <summary>
     /// Show the dialogue object.
     /// </summary>
     /// <param name="newDialogue"></param>
     /// <param name="onFinishEvent"></param>
-    public void DisplayDialogue(string[] newDialogue, UnityEvent onFinishEvent)
+    public void DisplayDialogue(DialogueSequence newDialogue, UnityEvent onFinishEvent)
     {
         PlayerManager.Instance.PlayerInteract.ClearAnimations();
 
@@ -142,7 +167,8 @@ public class DialogueManager : MonoBehaviour
         {
             return;
         }
-        if (newDialogue.Length == 0)
+
+        if (newDialogue.dialogueItems.Length == 0)
         {
             onFinishEvent?.Invoke();
             return;
@@ -150,7 +176,7 @@ public class DialogueManager : MonoBehaviour
 
         onFinishDialogueEvent = onFinishEvent;
 
-        currentDialogue = newDialogue;
+        currentDialogueSequence = newDialogue;
         talkerName = null;
         talkerSprite = null;
 
@@ -164,7 +190,6 @@ public class DialogueManager : MonoBehaviour
 
         InputManager.Instance.PlayerInput.InGame.Interact.performed += NextDialogue;
     }
-
     /// <summary>
     /// Show the dialogue object.
     /// </summary>
@@ -172,7 +197,7 @@ public class DialogueManager : MonoBehaviour
     /// <param name="newTalkerSprite"></param>
     /// <param name="newTalkerName"></param>
     /// <param name="onFinishEvent"></param>
-    public void DisplayDialogue(string[] newDialogue, string newTalkerName, Sprite newTalkerSprite, UnityEvent onFinishEvent)
+    public void DisplayDialogue(DialogueSequence newDialogue, string newTalkerName, Sprite newTalkerSprite, UnityEvent onFinishEvent)
     {
         PlayerManager.Instance.PlayerInteract.ClearAnimations();
 
@@ -180,7 +205,7 @@ public class DialogueManager : MonoBehaviour
         {
             return;
         }
-        if (newDialogue.Length == 0)
+        if (newDialogue.dialogueItems.Length == 0)
         {
             onFinishEvent?.Invoke();
             return;
@@ -188,7 +213,7 @@ public class DialogueManager : MonoBehaviour
 
         onFinishDialogueEvent = onFinishEvent;
 
-        currentDialogue = newDialogue;
+        currentDialogueSequence = newDialogue;
         talkerName = newTalkerName;
         talkerSprite = newTalkerSprite;
 
@@ -205,12 +230,26 @@ public class DialogueManager : MonoBehaviour
     #endregion
 
     #region Private Methods
+
     /// <summary>
     /// Display the text for the next dialogue option.
     /// </summary>
     private void NextDialogue()
     {
-        if (dialogueIndex >= currentDialogue.Length)
+        if (isWaiting)
+        {
+            return;
+        }
+        // Hide prompt
+        continePrompt.SetActive(false);
+
+        // Reset the camera being used.
+        if (currentCamera != null)
+        {
+            currentCamera.gameObject.SetActive(false);
+        }
+
+        if (dialogueIndex >= currentDialogueSequence.dialogueItems.Length)
         {
             FinishDialogue();
             return;
@@ -234,7 +273,24 @@ public class DialogueManager : MonoBehaviour
             talkerImage.enabled = false;
         }
 
-        textField.text = currentDialogue[dialogueIndex];
+        textField.text = currentDialogueSequence.dialogueItems[dialogueIndex].dialogue;
+
+        isWaiting = true;
+        StartCoroutine(EnableNext(currentDialogueSequence.dialogueItems[dialogueIndex].dialogueLockTime));
+        // set camera
+        if (currentDialogueSequence.dialogueItems[dialogueIndex].lookCamera != null)
+        {
+            currentCamera = currentDialogueSequence.dialogueItems[dialogueIndex].lookCamera;
+            currentCamera.gameObject.SetActive(true);
+        }
+        else
+        {
+            if (currentCamera != null)
+            {
+                currentCamera.gameObject.SetActive(false);
+            }
+            currentCamera = null;
+        }
 
         dialogueIndex++;
     }
@@ -264,6 +320,20 @@ public class DialogueManager : MonoBehaviour
         playerMovement.enabled = true;
 
         InputManager.Instance.PlayerInput.InGame.Interact.performed -= NextDialogue;
+    }
+
+    /// <summary>
+    /// A corutine to make it so the dialogue can not contunue until timer has run.
+    /// </summary>
+    /// <param name="waitTime"></param>
+    /// <returns></returns>
+    private IEnumerator EnableNext(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        isWaiting = false;
+
+        // Hide prompt
+        continePrompt.SetActive(true);
     }
     #endregion
 }
