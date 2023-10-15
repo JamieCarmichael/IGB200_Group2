@@ -1,15 +1,22 @@
-using UnityEditor;
 using UnityEngine;
 
 /// <summary>
 /// Made By: Jamie Carmichael
 /// Details: A ladder object that the player can climb on.
 /// </summary>
-public class Ladder : MonoBehaviour, IIntertactable
+public class Ladder : MonoBehaviour
 {
     #region Fields
-    [Tooltip("The position that the player goes to to start climbing the laddder.")]
-    [SerializeField] private Transform climbOnPosition;
+    [Tooltip("A value from -1 to 1; 1 is facing towards the same direction as the ladder. -1 is facing the opposit direction. 0 is parallel.")]
+    [SerializeField] private float facingDot = 0.6f;
+    [Tooltip("A value from -1 to 1; 1 is facing towards the same direction as the ladder. -1 is facing the opposit direction. 0 is parallel.")]
+    [SerializeField] private float headingDot = 0.6f;
+
+    [SerializeField] private Transform bottomOfLadder;
+    public Transform BottomOfLadder { get { return bottomOfLadder; } }
+
+    [SerializeField] private Transform topOfLadder;
+    public Transform TopOfLadder { get { return topOfLadder; } }
 
     /// <summary>
     /// The collider for this object.
@@ -19,92 +26,45 @@ public class Ladder : MonoBehaviour, IIntertactable
     /// The collider for this object.
     /// </summary>
     public Collider ThisCollider { get { return thisCollider; } } 
-    public string InteractAminationString
-    {
-        get
-        {
-            return interactAminationString;
-        }
-    }
-
-    [Tooltip("The string for the trigger to run the animation for this interaction.")]
-    [SerializeField] private string interactAminationString;
-
-    public bool Intertactable
-    {
-        get
-        {
-            return intertactable;
-        }
-    }
-    [Tooltip("If true this object can be interacted with.")]
-    [SerializeField] private bool intertactable = false;
-
-
-    [Header("Text Prompt")]
-    [Tooltip("The transform of the object that the text prompt will apear over.")]
-    [SerializeField] private Transform proptLocation;
-    [Tooltip("The text displayed in the text prompt.")]
-    [SerializeField] private string proptText;
-    [Tooltip("If true this object will have a highlight that activates when the objects is selected.")]
-    [SerializeField] private bool highlight = false;
-
-    // Object renderers to have highlight applied.
-    private Renderer[] renderers;
-    private Material[] highlightMaterials;
     #endregion
 
     #region Unity Call Functions
     private void Start()
     {
         thisCollider = GetComponent<Collider>();
-
-        if (highlight)
-        {
-            renderers = GetComponentsInChildren<Renderer>();
-            highlightMaterials = new Material[renderers.Length];
-            for (int i = 0; i < highlightMaterials.Length; i++)
-            {
-                highlightMaterials[i] = renderers[i].materials[1];
-            }
-        }
     }
-    #endregion
 
-    #region IIntertactable
-    public void Interact(string item)
+    private void OnTriggerStay(Collider other)
     {
+        // Not the player
+        if (other.tag != "Player")
+        {
+            return;
+        }
+        // Find the direction the ladder is facing. 
+        Vector3 ladderFacing = transform.forward;
+        // If the player is behind the ladder (At the top of the ladder facing towards it) then flip the direction.
+        bool behindLadder = Vector3.Dot(transform.position - other.transform.position, transform.forward) < 0;
+        if (behindLadder)
+        {
+            ladderFacing = -transform.forward;
+        }
+
+        // Not facing in the direction of the ladder
+        float directionFacingDot = Vector3.Dot(ladderFacing, other.transform.forward);
+        if (directionFacingDot < facingDot)
+        {
+            return;
+        }
+        // Not moving towards the ladder.
+        float directionHeadingDot = Vector3.Dot(ladderFacing, PlayerManager.Instance.PlayerMovement.MovementVector);
+        if (directionHeadingDot < headingDot)
+        {
+            return;
+        }
+
+        // Interact with the ladder.
         PlayerManager.Instance.ClimbLadder(this);
-        StopLookAt();
-    }
-    public void LookAt()
-    {
-        UIManager.Instance.TextPrompt.DisplayPrompt(proptLocation.position, proptText);
-
-        if (highlight)
-        {
-            for (int i = 0; i < highlightMaterials.Length; i++)
-            {
-                highlightMaterials[i].SetFloat("_alpha", 1);
-            }
-        }
-    }
-
-    public void StopLookAt()
-    {
-        UIManager.Instance.TextPrompt.HidePrompt();
-        if (highlight)
-        {
-            for (int i = 0; i < highlightMaterials.Length; i++)
-            {
-                highlightMaterials[i].SetFloat("_alpha", 0);
-            }
-        }
-    }
-
-    public Vector3 GetClosestPoint(Vector3 playerPos)
-    {
-        return climbOnPosition.position;
     }
     #endregion
 }

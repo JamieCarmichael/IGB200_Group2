@@ -61,6 +61,9 @@ public class PlayerMovementLadder : MonoBehaviour
     [SerializeField] private AnimationCurve pitchChange;
     [SerializeField] private float pitchChangeTime;
     private float pitchTimer = 0.0f;
+
+    private float animationTimer;
+    [SerializeField] private float waitToStopMovingTime = 0.5f;
     #endregion
 
     #region Unity Call Functions
@@ -100,7 +103,10 @@ public class PlayerMovementLadder : MonoBehaviour
     /// <param name="ladder"></param>
     public void AttachToLadder(Ladder ladder)
     {
-        characterController = GetComponent<CharacterController>();
+        if (characterController == null)
+        {
+            characterController = GetComponent<CharacterController>();
+        }
         halfwidth = characterController.radius;
         halfHeight = characterController.height / 2;
 
@@ -112,8 +118,10 @@ public class PlayerMovementLadder : MonoBehaviour
 
         Vector3 center = bounds.center;
         Vector3 extents = bounds.extents;
-        ladderBottom = collider.ClosestPoint(center + new Vector3(0, -extents.y, -extents.z + halfwidth));
-        ladderTop = collider.ClosestPoint(center + new Vector3(0, extents.y, -extents.z + halfwidth));
+        //ladderBottom = collider.ClosestPoint(center + new Vector3(0, -extents.y, -extents.z + halfwidth));
+        ladderBottom = ladder.BottomOfLadder.position;
+        //ladderTop = collider.ClosestPoint(center + new Vector3(0, extents.y, -extents.z + halfwidth));
+        ladderTop = ladder.TopOfLadder.position;
         upDirection = (ladderTop - ladderBottom).normalized;
 
         // If player is above ladder then climb down onto it.
@@ -143,6 +151,7 @@ public class PlayerMovementLadder : MonoBehaviour
             characterController.Move(upDirection * climbSpeed * Time.deltaTime);
             if (transform.position.y + halfHeight > ladderTop.y)
             {
+                animator.enabled = true;
                 ClimbOverLadder();
             }
         }
@@ -151,10 +160,10 @@ public class PlayerMovementLadder : MonoBehaviour
             characterController.Move(-upDirection * climbSpeed * Time.deltaTime);
             if (transform.position.y - getOffLadderDiatance < ladderBottom.y)
             {
+                animator.enabled = true;
                 DetachFromLadder();
             }
         }
-
 
         if (moveInput != Vector2.zero)
         {
@@ -164,10 +173,21 @@ public class PlayerMovementLadder : MonoBehaviour
             }
             audioSource.UnPause();
             audioSource.clip = climbingSound;
+
+            animator.enabled = true;
         }
         else
         {
             audioSource.Pause();
+
+            if (animationTimer > waitToStopMovingTime)
+            {
+                animator.enabled = false;
+            }
+            else
+            {
+                animationTimer += Time.deltaTime;
+            }
         }
     }
     /// <summary>
@@ -175,7 +195,7 @@ public class PlayerMovementLadder : MonoBehaviour
     /// </summary>
     private void ClimbOverLadder()
     {
-        StartCoroutine(ClimbTo(ladderTop));
+        StartCoroutine(ClimbOff());
     }
     /// <summary>
     /// Get off the ladder. Will disconnect and return to normal movement.
@@ -202,36 +222,47 @@ public class PlayerMovementLadder : MonoBehaviour
     /// </summary>
     /// <param name="newPosition"></param>
     /// <returns></returns>
-    private IEnumerator ClimbTo(Vector3 newPosition)
+    private IEnumerator ClimbOff()
     {
         inputAccepted = false;
-        Vector3 toVector = newPosition - transform.position;
-        float timeToMove = toVector.magnitude / climbSpeed;
-
-        float moveTimer = 0.0f;
-        Vector3 movePostion = Vector3.zero;
 
         animator.SetBool(animGoToLadder, true);
-        // Climb up ledge.
+
+        // Move Up ladder.
+        characterController.enabled = false;
+        Vector3 a = ladderTop - (ladder.transform.forward * (halfwidth * 2));
+        Vector3 b = transform.position;
+        float timeToMove = (a - b).magnitude / climbSpeed;
+        float moveTimer = 0.0f;
         while (moveTimer < timeToMove)
         {
             moveTimer += Time.deltaTime;
-            movePostion = toVector.normalized * climbSpeed * Time.deltaTime;
-            characterController.Move(movePostion);
+
+            Vector3 v = Vector3.Lerp(b, a, moveTimer / timeToMove);
+            transform.position = v;
+
+            RotatePlayer(ladder.transform.forward, timeToMove - moveTimer);
             yield return null;
         }
 
-        // Step forward from top of ledge.
-        toVector = transform.forward;
-        timeToMove = (halfwidth * 2) / climbSpeed;
+        // Move Away from top
+        a = ladderTop + (ladder.transform.forward * (halfwidth * 2));
+        b = transform.position;
+        timeToMove = (a - b).magnitude / climbSpeed;
         moveTimer = 0.0f;
         while (moveTimer < timeToMove)
         {
             moveTimer += Time.deltaTime;
-            movePostion = toVector.normalized * climbSpeed * Time.deltaTime;
-            characterController.Move(movePostion);
+
+            Vector3 v = Vector3.Lerp(b, a, moveTimer / timeToMove);
+            transform.position = v;
+
+            RotatePlayer(ladder.transform.forward, timeToMove - moveTimer);
             yield return null;
         }
+        characterController.enabled = true;
+
+
         animator.SetBool(animGoToLadder, false);
         inputAccepted = true;
 
@@ -252,36 +283,52 @@ public class PlayerMovementLadder : MonoBehaviour
         float timeToMove = toVector.magnitude / climbSpeed;
         float moveTimer = 0.0f;
 
+
         animator.SetBool(animGoToLadder, true);
         // Climb up ledge.
+        
+        // Move to top
+        characterController.enabled = false;
+        Vector3 a = ladderTop - (ladder.transform.forward * (halfwidth * 2));
+        Vector3 b = transform.position;
         while (moveTimer < timeToMove)
         {
             moveTimer += Time.deltaTime;
-            movePostion = toVector.normalized * climbSpeed * Time.deltaTime;
-            characterController.Move(movePostion);
+
+            Vector3 v = Vector3.Lerp(b, a, moveTimer / timeToMove);
+            transform.position = v;
 
             RotatePlayer(ladder.transform.forward, timeToMove - moveTimer);
             yield return null;
         }
-
-        // Climb down ladder.
+        // Move down ladder.
         toVector = -upDirection;
         timeToMove = halfHeight / climbSpeed;
         moveTimer = 0.0f;
+        a = a + (toVector.normalized * halfHeight);
+        b = transform.position;
         while (moveTimer < timeToMove)
         {
             moveTimer += Time.deltaTime;
-            movePostion = toVector.normalized * climbSpeed * Time.deltaTime;
-            characterController.Move(movePostion);
+
+            Vector3 v = Vector3.Lerp(b, a, moveTimer / timeToMove);
+            transform.position = v;
+
+            RotatePlayer(ladder.transform.forward, timeToMove - moveTimer);
             yield return null;
         }
+        characterController.enabled = true;
+
         animator.SetBool(animGoToLadder, false);
+        yield return null;
         if (animClimbLadder != "")
         {
             animator.SetBool(animClimbLadder, true);
         }
 
         inputAccepted = true;
+
+        animationTimer = 0.0f;
     }
 
     /// <summary>
@@ -292,23 +339,29 @@ public class PlayerMovementLadder : MonoBehaviour
     {
         inputAccepted = false;
 
-        Vector3 movePostion = Vector3.zero;
-
         Vector3 toVector = (ladderBottom - (ladder.transform.forward * (halfwidth * 2))) - transform.position;
         float timeToMove = toVector.magnitude / climbSpeed;
         float moveTimer = 0.0f;
 
         animator.SetBool(animGoToLadder, true);
-        // Climb up ledge.
+
+        characterController.enabled = false;
+        Vector3 a = ladderBottom - (ladder.transform.forward * (halfwidth * 2));
+        Vector3 b = transform.position;
+
         while (moveTimer < timeToMove)
         {
             moveTimer += Time.deltaTime;
-            movePostion = toVector.normalized * climbSpeed * Time.deltaTime;
-            characterController.Move(movePostion);
+
+            Vector3 v = Vector3.Lerp(b, a, moveTimer / timeToMove);
+            transform.position = v;
 
             RotatePlayer(ladder.transform.forward, timeToMove - moveTimer);
             yield return null;
         }
+        characterController.enabled = true;
+        yield return null;
+
         animator.SetBool(animGoToLadder, false);
         if (animClimbLadder != "")
         {
@@ -316,6 +369,8 @@ public class PlayerMovementLadder : MonoBehaviour
         }
 
         inputAccepted = true;
+
+        animationTimer = 0.0f;
     }
 
     /// <summary>

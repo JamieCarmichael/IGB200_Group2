@@ -1,7 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using Cinemachine;
 
 /// <summary>
 /// Made By: Jamie Carmichael
@@ -23,6 +21,11 @@ public class PlayerMovement : MonoBehaviour
     /// The velocity of the players horizontal movement.
     /// </summary>
     private Vector3 movementVector = Vector3.zero;
+    /// <summary>
+    /// The velocity of the players horizontal movement.
+    /// </summary>
+    public Vector3 MovementVector { get { return movementVector; } }
+
     /// <summary>
     /// The players current speed.
     /// </summary>

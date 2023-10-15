@@ -63,6 +63,8 @@ public class PlayerManager : MonoBehaviour
         playerMovement.enabled = false;
         playerInteract.enabled = false;
         playerMovementLadder.AttachToLadder(ladder);
+
+        UIManager.Instance.TextPrompt.HidePrompt();
     }
 
     /// <summary>
