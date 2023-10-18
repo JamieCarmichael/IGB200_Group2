@@ -439,10 +439,6 @@ MonoBehaviour:
     bio: Scaffolding
     details: Details 1
     image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  - name: Laya Stein
-    bio: Scaffolding
-    details: Details 2
-    image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &453578191938818843
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,7 +516,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1483,6 +1479,9 @@ MonoBehaviour:
   - {fileID: 5372897635249355900}
   - {fileID: 2549338027165902478}
   - {fileID: 8685041909065743182}
+  - {fileID: 4926528727318244275}
+  - {fileID: 1312640289183981105}
+  - {fileID: 8709164446686276691}
   nameTextField: {fileID: 8845411114852439366}
   bioTextField: {fileID: 8929685756996985132}
   detailsTextField: {fileID: 6188753728427680859}
@@ -2518,7 +2517,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2631,10 +2630,6 @@ MonoBehaviour:
   - name: Shamus Rusten
     bio: Tools
     details: Details 1
-    image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  - name: Shamus Rusten
-    bio: Tools
-    details: Details 2
     image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &3085139913122249248
 GameObject:
@@ -3264,7 +3259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notebookObject: {fileID: 8945718359634313333}
-  notepadAquired: 1
+  notepadAquired: 0
   nextButton: {fileID: 2641502090623058707}
   previousButton: {fileID: 1497526383410616468}
   taskTextField: {fileID: 7045988225174090829}
@@ -4605,7 +4600,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -4873,7 +4868,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5993,12 +5988,11 @@ MonoBehaviour:
   profileIndex: 0
   profileStages:
   - name: Jane Blight
-    bio: Foreman
-    details: Details 1
-    image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  - name: Jane Blight
-    bio: Foreman
-    details: Details 2
+    bio: Hardworking, soft-spoken, analytical, wants to do her best at work.
+    details: "The job of Foreman means that it\u2019s Jane\u2019s responsibility
+      to coordinate the other workers in her team. She allocates their general and
+      daily work duties and schedules that align with the current construction project
+      plan. "
     image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &8896520807289413032
 GameObject:
@@ -6785,31 +6779,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3936494653202953771, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3936494653202953771, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3936494653202953771, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 8896520807289413032}
-    - target: {fileID: 3936494653202953771, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3936494653202953771, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 5223747565637479263, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -6820,31 +6789,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
       objectReference: {fileID: 318393389945954293}
-    - target: {fileID: 5971353811348922670, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5971353811348922670, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5971353811348922670, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 8896520807289413032}
-    - target: {fileID: 5971353811348922670, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5971353811348922670, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 6178226540927291834, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
         type: 3}
       propertyPath: m_Name
@@ -6855,31 +6799,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
       objectReference: {fileID: 318393389945954293}
-    - target: {fileID: 9140896248609686659, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9140896248609686659, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9140896248609686659, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 8896520807289413032}
-    - target: {fileID: 9140896248609686659, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9140896248609686659, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-        type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -80,7 +80,7 @@ public class Profile : MonoBehaviour
             profileInfo = new ProfileInfo();
             return false;
         }
-        profileInfo = profileStages[profileStageIndex];
+        profileInfo = CurrentProfile;
         return true;
     }
 

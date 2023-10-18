@@ -109,6 +109,7 @@ public class Pickup : MonoBehaviour, IIntertactable
 
     public void ReturnToStart()
     {
+        isHeld = false;
         transform.position = startPos;
         gameObject.SetActive(true);
     }
