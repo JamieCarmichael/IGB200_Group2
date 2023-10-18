@@ -61,17 +61,11 @@ public class Notepad : MonoBehaviour
 
     private bool notepadVisable = false;
 
-    [Header("UI prompt")]
-    [Tooltip("The sprite shown when the notepad has been updated.")]
-    [SerializeField] private Sprite notepadUpdateSprite;
-    [Tooltip("How many seconds the prompt will be at full visability.")]
-    [SerializeField] private float promptFullVisabilityTime = 1.0f;
-    [Tooltip("How many second it will take for the prompt to got from full visability to not visable.")]
-    [SerializeField] private float promtFadeTime = 1.0f;
-
     [Header("Audio")]
     [SerializeField] private Effect.Sound updateNotepadSound;
     private AudioSource audioSource;
+
+    private Animator animator;
     #endregion
 
     #region Unity Call Functions
@@ -86,6 +80,7 @@ public class Notepad : MonoBehaviour
         Instance = this;
 
         audioSource = GetComponent<AudioSource>();
+        animator = GetComponent<Animator>();
     }
 
     private void OnEnable()
@@ -128,7 +123,7 @@ public class Notepad : MonoBehaviour
         {
             notepadVisable = !notepadVisable;
 
-            notebookObject.SetActive(notepadVisable);
+            animator.SetBool("IsVisable", notepadVisable);
 
             if (notepadVisable)
             {
@@ -146,13 +141,14 @@ public class Notepad : MonoBehaviour
 
         }
     }
+
     /// <summary>
     /// Hide the notepad
     /// </summary>
     public void HideNotepad()
     {
         notepadVisable = false;
-        notebookObject.SetActive(false);
+        animator.SetBool("IsVisable", false);
     }
 
     /// <summary>
@@ -283,9 +279,13 @@ public class Notepad : MonoBehaviour
     public void UpdateNotepadPrompt(Pages newPage)
     {
         page = newPage;
-        UIManager.Instance.Prompt.StartPrompt(notepadUpdateSprite, promptFullVisabilityTime, promtFadeTime);
-        audioSource.PlayOneShot(updateNotepadSound.clip, updateNotepadSound.volume);
+        ShowPage();
 
+        if (notepadAquired)
+        {
+            animator.SetTrigger("Peek");
+            audioSource.PlayOneShot(updateNotepadSound.clip, updateNotepadSound.volume);
+        }
     }
     #endregion
 }
