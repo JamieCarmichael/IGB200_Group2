@@ -8,15 +8,6 @@ using UnityEngine.UI;
 public class MouseSensitivityOption : MonoBehaviour 
 {
     #region Fields
-    private const string MOUSE_SENSITIVITY_X = "MouseSensitivityX";
-    private const string MOUSE_SENSITIVITY_Y = "MouseSensitivityY";
-
-    [Header("Mouse Sensitivity")]
-    [Tooltip("The slider for the horizontal mouse sensitivity.")]
-    [SerializeField] private Slider mouseSensitivityXSlider;
-    [Tooltip("The slider for the vertical mouse sensitivity.")]
-    [SerializeField] private Slider mouseSensitivityYSlider;
-
     private float defaultSensitivityValue = 10.0f;
 
     private bool inGame = false;
@@ -30,7 +21,17 @@ public class MouseSensitivityOption : MonoBehaviour
     }
     #endregion
 
-    #region Public Methods
+    #region Two Sliders
+    /*
+    private const string MOUSE_SENSITIVITY_X = "MouseSensitivityX";
+    private const string MOUSE_SENSITIVITY_Y = "MouseSensitivityY";
+
+
+    [Header("Mouse Sensitivity")]
+    [Tooltip("The slider for the horizontal mouse sensitivity.")]
+    [SerializeField] private Slider mouseSensitivityXSlider;
+    [Tooltip("The slider for the vertical mouse sensitivity.")]
+    [SerializeField] private Slider mouseSensitivityYSlider;
 
     /// <summary>
     /// Sets up the sliders for the mouse sensitivity.
@@ -52,9 +53,7 @@ public class MouseSensitivityOption : MonoBehaviour
         mouseSensitivityYSlider.value = mouseSensitivity.y;
         SetMouseSensitivity();
     }
-    #endregion
 
-    #region Private Methods
     /// <summary>
     /// Sets the mouse sensitivity on the horizontal axis. To be used by the slider.
     /// </summary>
@@ -99,6 +98,65 @@ public class MouseSensitivityOption : MonoBehaviour
         if (inGame)
         {
             PlayerManager.Instance.PlayerMovement.SetMouseSentitivity(mouseSensitivityXSlider.value, mouseSensitivityYSlider.value);
+        }
+    }
+    */
+    #endregion
+
+    #region One Slider
+
+    private const string MOUSE_SENSITIVITY = "MouseSensitivity";
+
+    [Tooltip("The slider for the mouse sensitivity.")]
+    [SerializeField] private Slider mouseSensitivitySlider;
+
+
+    /// <summary>
+    /// Sets up the sliders for the mouse sensitivity.
+    /// </summary>
+    private void SetUpMouseSensitivity()
+    {
+        // Add listeners
+        mouseSensitivitySlider.onValueChanged.AddListener(SetMouseSensitivitySlider);
+
+        float mouseSensitivity = defaultSensitivityValue;
+
+        // Get saved value from player prefs
+        mouseSensitivity = PlayerPrefs.GetFloat(MOUSE_SENSITIVITY, mouseSensitivity);
+
+        // Set default values
+        mouseSensitivitySlider.value = mouseSensitivity;
+        SetMouseSensitivity();
+    }
+
+    /// <summary>
+    /// Sets the mouse sensitivity on the verticle axis. To be used by the slider.
+    /// </summary>
+    /// <param name="value"></param>
+    private void SetMouseSensitivitySlider(float value)
+    {
+        PlayerPrefs.SetFloat(MOUSE_SENSITIVITY, value);
+        PlayerPrefs.Save();
+
+        if (inGame)
+        {
+            PlayerManager.Instance.PlayerMovement.SetMouseSentitivity(mouseSensitivitySlider.value, mouseSensitivitySlider.value);
+        }
+    }
+
+    /// <summary>
+    /// Set the mouse sensitivity. Reads the values on the sliders.
+    /// </summary>
+    private void SetMouseSensitivity()
+    {
+        float sensitivity = mouseSensitivitySlider.value;
+
+        PlayerPrefs.SetFloat(MOUSE_SENSITIVITY, sensitivity);
+        PlayerPrefs.Save();
+
+        if (inGame)
+        {
+            PlayerManager.Instance.PlayerMovement.SetMouseSentitivity(mouseSensitivitySlider.value, mouseSensitivitySlider.value);
         }
     }
     #endregion
