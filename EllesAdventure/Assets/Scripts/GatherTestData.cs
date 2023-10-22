@@ -5,11 +5,10 @@ using System;
 /// <summary>
 /// Made By: Jamie Carmichael
 /// Details: This script is destigned for logging data to a text file during testing.
-///             Used by: - SceneNavigation - SwitchScene, ReloadScene.
-///                      - Task - FinishTask, StartTask, FinishCurrentSubtask.
 /// </summary>
 public class GatherTestData : MonoBehaviour 
 {
+
     #region Fields
     /// <summary>
     /// The singleton instance of this object in the game.
