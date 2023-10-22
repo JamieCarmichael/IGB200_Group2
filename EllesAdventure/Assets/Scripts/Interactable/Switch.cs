@@ -66,9 +66,9 @@ public class Switch : MonoBehaviour, IIntertactable
     private void Start()
     {
         thisCollider = gameObject.GetComponent<Collider>();
-        animator = GetComponent<Animator>();
+        //animator = GetComponent<Animator>();
 
-        animator.SetBool("Open", isOpen);
+        //animator.SetBool("Open", isOpen);
 
         if (highlight)
         {
@@ -90,7 +90,7 @@ public class Switch : MonoBehaviour, IIntertactable
             return;
         }
         isOpen = !isOpen;
-        animator.SetBool("Open", isOpen);
+        //animator.SetBool("Open", isOpen);
         Invoke("AfterLever", openTime);
         isMoving = true;
     }
