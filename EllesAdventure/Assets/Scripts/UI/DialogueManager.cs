@@ -22,7 +22,7 @@ public class DialogueManager : MonoBehaviour
     [Serializable]
     public struct DialogueItem
     {
-        [TextArea]
+        [TextAreaAttribute(minLines:3, maxLines:10)]
         public string dialogue;
         [Tooltip("If a cinemachine virtual camera is put in here the camera will change to use this virtual camera during the dialogue.")]
         public CinemachineVirtualCamera lookCamera;
