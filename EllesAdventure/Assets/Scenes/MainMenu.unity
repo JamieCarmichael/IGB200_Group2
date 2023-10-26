@@ -789,18 +789,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 645259508}
   m_CullTransparentMesh: 1
---- !u!114 &730466430 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1097879330020008546, guid: c2ac7c49794b1b643b9bba11cf8d22d8,
-    type: 3}
-  m_PrefabInstance: {fileID: 7303865204310190453}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88de6809446ff3e4281211921cf462ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &769526133
 GameObject:
   m_ObjectHideFlags: 0
@@ -1279,7 +1267,7 @@ PrefabInstance:
     - target: {fileID: 4328766516951266094, guid: 8a6305489ddbe2443b2bb06860f9ff3b,
         type: 3}
       propertyPath: volumeSliders.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4328766516951266094, guid: 8a6305489ddbe2443b2bb06860f9ff3b,
         type: 3}
@@ -1295,7 +1283,7 @@ PrefabInstance:
         type: 3}
       propertyPath: volumeSliders.Array.data[2]
       value: 
-      objectReference: {fileID: 730466430}
+      objectReference: {fileID: 7303865204310190454}
     - target: {fileID: 4328766516951266094, guid: 8a6305489ddbe2443b2bb06860f9ff3b,
         type: 3}
       propertyPath: volumeSliders.Array.data[3]

@@ -26,13 +26,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5184350899139147776}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.36378467, y: 0.461277, z: -0.21509692, w: 0.78013945}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4730537959480629769}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 50, y: 61.19, z: 0}
 --- !u!108 &7392955181140255235
 Light:
   m_ObjectHideFlags: 0
@@ -146,8 +146,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5632414242766054641}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.082480535, y: -0, z: -0, w: 0.9965927}
-  m_LocalPosition: {x: -9, y: 1.7800001, z: -22}
+  m_LocalRotation: {x: 0.07037228, y: 0.5198085, z: -0.043020647, w: 0.85029185}
+  m_LocalPosition: {x: -15.610098, y: 1.7800001, z: -2.6076908}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -421,7 +421,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicPlaying: 1
   volumeSliders:
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
