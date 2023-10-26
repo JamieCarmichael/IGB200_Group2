@@ -45,6 +45,7 @@ public class Notepad : MonoBehaviour
     [Header("Map")]
     [Tooltip("The panel that the Map UI is on.")]
     [SerializeField] private GameObject mapPanel;
+    /*
     [Tooltip("The icon showing where the player is.")]
     [SerializeField] private RectTransform playerIconTransform;
     [Tooltip("The rect transform for the map image.")]
@@ -53,6 +54,7 @@ public class Notepad : MonoBehaviour
     [SerializeField] private Vector3 topRight;
     [Tooltip("The bottom left of the play area. Play area should be a square.")]
     [SerializeField] private Vector3 bottomLeft;
+    */
 
     /// <summary>
     /// The currrent page opened in the notepad.
@@ -209,12 +211,14 @@ public class Notepad : MonoBehaviour
         nextButton.SetActive(false);
         previousButton.SetActive(false);
 
+        /*
         // Get the players position and place the player icon on that position on the map.
         Vector3 relitivePosition = PlayerManager.Instance.PlayerTransform.position - bottomLeft; // The players position relitive to the bottom left of the play area.
         Vector3 normalizedPos = relitivePosition / (topRight - bottomLeft).x; // Player position in play area between 0 and 1.
         Vector2 normalPosV2 = new Vector2(normalizedPos.x, normalizedPos.z); // ^ but Vector 2
         float mapSideLength = mapTransform.rect.width; // The length of a side of the map
         playerIconTransform.localPosition = (normalPosV2 * mapSideLength) - (new Vector2(mapSideLength, mapSideLength) / 2); // Move the icon position on the map.
+        */
     }
 
     /// <summary>
