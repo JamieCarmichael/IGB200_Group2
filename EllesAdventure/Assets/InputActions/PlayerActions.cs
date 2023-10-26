@@ -31,7 +31,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""a8273a3e-7cd5-454c-9fa6-dcabc223a2cc"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -71,6 +71,15 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Raycast"",
+                    ""type"": ""Value"",
+                    ""id"": ""d5f13308-0945-4259-a7e8-3755202972b8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -227,6 +236,17 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4f51b30c-cc75-486a-b0a8-e6ad8c0e6bbe"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Raycast"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -321,6 +341,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         m_InGame_Jump = m_InGame.FindAction("Jump", throwIfNotFound: true);
         m_InGame_Sprint = m_InGame.FindAction("Sprint", throwIfNotFound: true);
         m_InGame_Interact = m_InGame.FindAction("Interact", throwIfNotFound: true);
+        m_InGame_Raycast = m_InGame.FindAction("Raycast", throwIfNotFound: true);
         // PauseGame
         m_PauseGame = asset.FindActionMap("PauseGame", throwIfNotFound: true);
         m_PauseGame_Pause = m_PauseGame.FindAction("Pause", throwIfNotFound: true);
@@ -391,6 +412,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_InGame_Jump;
     private readonly InputAction m_InGame_Sprint;
     private readonly InputAction m_InGame_Interact;
+    private readonly InputAction m_InGame_Raycast;
     public struct InGameActions
     {
         private @PlayerActions m_Wrapper;
@@ -400,6 +422,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_InGame_Jump;
         public InputAction @Sprint => m_Wrapper.m_InGame_Sprint;
         public InputAction @Interact => m_Wrapper.m_InGame_Interact;
+        public InputAction @Raycast => m_Wrapper.m_InGame_Raycast;
         public InputActionMap Get() { return m_Wrapper.m_InGame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -424,6 +447,9 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @Raycast.started += instance.OnRaycast;
+            @Raycast.performed += instance.OnRaycast;
+            @Raycast.canceled += instance.OnRaycast;
         }
 
         private void UnregisterCallbacks(IInGameActions instance)
@@ -443,6 +469,9 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @Raycast.started -= instance.OnRaycast;
+            @Raycast.performed -= instance.OnRaycast;
+            @Raycast.canceled -= instance.OnRaycast;
         }
 
         public void RemoveCallbacks(IInGameActions instance)
@@ -539,6 +568,7 @@ public partial class @PlayerActions: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnRaycast(InputAction.CallbackContext context);
     }
     public interface IPauseGameActions
     {

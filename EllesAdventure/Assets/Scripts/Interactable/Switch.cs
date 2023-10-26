@@ -43,7 +43,7 @@ public class Switch : MonoBehaviour, IIntertactable
     [Tooltip("The event called after the lever had been used.")]
     [SerializeField] private UnityEvent afterLeverEvent;
 
-    [SerializeField] bool isOpen = true;
+    [SerializeField] bool isOpen = false;
 
     [Header("Text Prompt")]
     [Tooltip("The transform of the object that the text prompt will apear over.")]
@@ -66,7 +66,7 @@ public class Switch : MonoBehaviour, IIntertactable
     private void Start()
     {
         thisCollider = gameObject.GetComponent<Collider>();
-        //animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
 
         //animator.SetBool("Open", isOpen);
 

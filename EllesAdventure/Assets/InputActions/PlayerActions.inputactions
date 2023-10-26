@@ -9,7 +9,7 @@
                     "name": "Move",
                     "type": "Value",
                     "id": "a8273a3e-7cd5-454c-9fa6-dcabc223a2cc",
-                    "expectedControlType": "",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -49,6 +49,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Raycast",
+                    "type": "Value",
+                    "id": "d5f13308-0945-4259-a7e8-3755202972b8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -203,6 +212,17 @@
                     "processors": "",
                     "groups": "Controller",
                     "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4f51b30c-cc75-486a-b0a8-e6ad8c0e6bbe",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Raycast",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
