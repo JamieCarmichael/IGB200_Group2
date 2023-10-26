@@ -436,9 +436,13 @@ MonoBehaviour:
   profileIndex: 1
   profileStages:
   - name: Laya Stein
-    bio: Scaffolding
-    details: Details 1
-    image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+    bio: Hardworking, very protective of her equipment, wants to keep others safe
+      on site.
+    details: "Laya\u2019s job is to handle putting up, altering and dismantling temporary
+      scaffolding across the whole site. So that other members of the construction
+      team can quickly, easily and safely access areas of the project off of the
+      ground. "
+    image: {fileID: 21300000, guid: aa6086d04850b384094c64eee89c7d20, type: 3}
 --- !u!1 &453578191938818843
 GameObject:
   m_ObjectHideFlags: 0
@@ -3266,10 +3270,6 @@ MonoBehaviour:
   taskTextField: {fileID: 7045988225174090829}
   profileManager: {fileID: 6521028426609347684}
   mapPanel: {fileID: 8944255212871713035}
-  playerIconTransform: {fileID: 5699863429395731095}
-  mapTransform: {fileID: 8772520848681331588}
-  topRight: {x: 40, y: 0, z: 45}
-  bottomLeft: {x: -50, y: 0, z: -45}
   updateNotepadSound:
     clip: {fileID: 8300000, guid: fde7ffc6b2384ba42adba40a3cb61287, type: 3}
     volume: 0.4
